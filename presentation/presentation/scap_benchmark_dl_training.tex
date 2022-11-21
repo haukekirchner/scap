@@ -1,4 +1,5 @@
-%pdflatex --shell-escape scap_benchmark_dl_training.tex
+%pdflatex --shell-escape scap_benchmark_dl_training
+%biber scap_benchmark_dl_training 
 
 \PassOptionsToPackage{hyphens}{url}
 \documentclass[compress,aspectratio=169]{beamer}
@@ -8,7 +9,7 @@
 \setlength{\marginparwidth}{2cm}
 \usepackage{todonotes}
 \presetkeys{todonotes}{inline}{}
-\usepackage[style=verbose,backend=biber,style=authortitle]{biblatex}
+\usepackage[style=verbose,backend=biber,style=authoryear, citestyle=authoryear ]{biblatex}
 \setbeamertemplate{bibliography item}{\insertbiblabel} % Ensure that cite labels appear in references section
 \addbibresource{ref.bib}
 \usepackage{../assets/beamerthemeGoettingen} % make sure the theme file is on this path
@@ -67,7 +68,7 @@
 % --- document configuration ---
 \newcommand{\mytitle}{Benchmarking tree species classification\\with synthetic data and deep learning}     
 % Leave empty for no subtitle
-\newcommand{\mysubtitle}{My Subtitle}   
+\newcommand{\mysubtitle}{State of the art and plan for Scalable Computing Systems and Applications in AI, Big Data and HPC}   
 \newcommand{\myauthor}{Hauke Kirchner}
 \newcommand{\myauthorurl}{\href{http://www.overleaf.com}{Something 
 Linky}}
@@ -89,7 +90,7 @@ Linky}}
 \title{\Large \mytitle}
 \venue{\myvenue}
 \date{\mydate}
-%\subtitle{\mysubtitle}
+\subtitle{\mysubtitle}
 %\authorURL{\myauthorurl}
 \author{{\myauthor}}
 \authorFooter{\myauthor \hspace{0.3cm} \includegraphics[height=1em]{\myfooterimage}}
@@ -148,28 +149,31 @@ Linky}}
               \end{tabular}
               }
 
+    \vspace{-3em}
+
     \begin{columns}
-        \begin{column}{0.4\textwidth}
+        \begin{column}{0.6\textwidth}
             \begin{itemize}
                 \item training of neural networks is computational intensive
-                \item $\Rightarrow$ workflow needs to be optimized for available hardware
+                \item[$\hookrightarrow$] workflow needs to be optimized for available hardware
                     \begin{itemize}
+                        \item How to make good use of clusters with heterogenous hardware?
                         \item How many GPUs are worth to request?
-                        \item What is the best set of software? (pytorch, cuda, ...)
                     \end{itemize}
-                \item $\Rightarrow$ high impact of deep learning applications on energy consumption
+                    \vspace{2em}
+                \item[$\Rightarrow$] optimisation for available accelerators is critical in ML/DL
             \end{itemize}
         \end{column}
-        \begin{column}{0.6\textwidth}
-            \includegraphics[width=1.1\textwidth]{assets/gwdg_scc.png}\\
+        \begin{column}{0.4\textwidth}
+            \vspace{-1em}
+            \begin{figure}
+                \includegraphics[width=0.9\textwidth]{assets/gwdg_scc.png}
+                \caption*{Structure and ressources of a part of the Scientific Compute Cluster.}
+            \end{figure}
         \end{column}
     \end{columns}
 
-    \vspace{1.5 em}
-
-    $\Rightarrow$ without optimisation for available accelerators future developments on ML/ deep learning will not be possible
-
-    \source{Image source: \url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}, Accessed on: 09.11.2022}
+    \source{Image source: Adapted from: \url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}, Accessed on: 09.11.2022}
 \end{frame}
 
 \begin{frame}{Energy efficiency 
@@ -184,11 +188,13 @@ Linky}}
         
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item asdfasdf
+                \item for different neural networks the required energy ranges from realtively low demands (finetuning) to very high demands (training of a complex network)
+                \item depends on used hardware and energy source
+                \item[$\Rightarrow$] As deep learning is emerging in several fields the impact on energy consumption and consequently our climate is growing
             \end{itemize}
 
 
-            $\Rightarrow$ as deep learning is emerging in several fields the impact on energy consumption and consequently our climate optimized training processes are essential
+            
         \end{column}
 
         \begin{column}{0.4\textwidth}
@@ -198,7 +204,7 @@ Linky}}
             \includegraphics[width=\textwidth]{assets/20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances-fig2-bert.png}
             \caption*{$CO_2$ Relative Size Comparison}
             \end{figure}
-            \source{Image source: Adapted from todo}
+            \source{Image source: Adapted from \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances}}
             
         \end{column}
     \end{columns}
@@ -210,22 +216,46 @@ Linky}}
 \begin{frame}{Use case}
     \begin{columns}
         \begin{column}{0.5\textwidth}
-            \begin{block}{Training of PointNet with synthetic data}
+            \vspace{-1em}
+            \begin{block}{Tree species classification from lidar}
                 \begin{itemize}
-                    \item lack of pre-trained models
+                    \item monitoring of tree species is essential for forest restructuring towards more resilient forests in changing environments under climate change condition~\footnote{\tiny{\url{https://www.umweltbundesamt.de/angepasster-waldumbau}}}
+                    \item lidar is already in use for forest inventories (\cite{white_2016_als-forest-inventory})
+                    \item Problem: lack of pre-trained models
                 \end{itemize}
             \end{block}
 
-            \begin{block}{Tree species classification}
-                \begin{itemize}
-                    \item 
-                \end{itemize}
-            \end{block}
         \end{column}
         \begin{column}{0.5\textwidth}
                 \centering
-                \vspace{-2em}
+                \vspace{-3em}
+                \begin{figure}
+                \includegraphics[width=0.9\textwidth]{assets/beech_drought}
+                \caption*{Spruce and beech stands close to the national park "Hainich".}
+                \end{figure}
+                \source{Image source: Adapted from \cite{henkel_2021}}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}{Use case}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+
+            \begin{block}{Pre-training with synthetic data}
+                \begin{enumerate}
+                    \item scene generation with Arbaro\footnote{\tiny{\url{https://github.com/wdiestel/arbaro}}}
+                    \item synthetic lidar data is generated with the  lidar operations simulator Helios++ (\cite{9906068})
+                    \item pre-training of PointNet, which is a very popular architecture for point cloud analysis (\cite{pointnet})
+                \end{enumerate}
+            \end{block}
+
+        \end{column}
+        \begin{column}{0.5\textwidth}
+                \centering
+                \vspace{-6em}
                 \includegraphics[width=\textwidth]{assets/workflow_synthetic_data}
+                \source{Image source: Adapted from \cite{9906068}}
         \end{column}
     \end{columns}
 \end{frame}
@@ -234,17 +264,31 @@ Linky}}
 \sectionIntroHidden % Show an outline of the current section with hidden subsections
 %\sectionIntro % Show an outline of the current section with subsections
 
-\begin{frame}{Methods}
+\begin{frame}{Metrics}
 
-    \begin{itemize}
-        \item data loading
-        \item trainin time
-    \end{itemize}
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+% \usepackage{multirow}
+\begin{table}[]
+\begin{tabular}{@{}ll@{}}
+\toprule
+metric                                                                                 & purpose                        \\ \midrule
+Execution time                                                                         & \multirow{2}{*}{traditionally} \\
+FLOPS                                                                                  &                                \\ \midrule
+Throughput: $\frac{images}{sec}$                                                       & with the advent of GPUs        \\ \midrule
+Time to Accuracy (TTA)                                                                 & \multirow{2}{*}{deep learning} \\
+\begin{tabular}[c]{@{}l@{}}Average Time to \\ Multiple Thresholds (ATTMT)\end{tabular} &                                \\ \bottomrule
+\end{tabular}
+\end{table}
+
+
+\source{Adapted from: \url{https://snehilverma41.github.io/Metrics_ML_FastPath19.pdf}}
 
 \end{frame}
 
 
 \section{Tools}
+\sectionIntroHidden
 
 \begin{frame}{Tools - Overview}
 
@@ -253,13 +297,31 @@ Linky}}
 \begin{table}[]
 \begin{tabular}{@{}ll@{}}
 \toprule
-tool               & purpose \\ \midrule
+tool               & metrics \\ \midrule
 tensorboard        &         \\
+\href{https://pytorch.org/tutorials/recipes/recipes/benchmark.html}{PyTorch Benchmark}
+ &         \\
+\href{https://github.com/facebookresearch/fvcore/blob/main/docs/flop_count.md}{Flop Counter} & FLOPS \\
 Vtune              &         \\
 likwid             &         \\
-PyTorch - built-in &         \\ \bottomrule
+\bottomrule
 \end{tabular}
 \end{table}
+
+
+$\Rightarrow$ very different tools for different use cases
+
+\end{frame}
+
+\section{Research Goals}
+
+\begin{frame}{Research Goals}
+
+\begin{itemize}
+    \item identify tools that can help to optimize 
+    \item least complex tools are preferred
+    \item not MLPerf Training benchmark suite as I am not interested in theoretical benchmarking hardware but where our existing workflow runs most optimally and what we can improve??? (different perspecitve)
+\end{itemize}
 
 \end{frame}
 
@@ -278,12 +340,16 @@ PyTorch - built-in &         \\ \bottomrule
         \end{column}
         \begin{column}{0.5\textwidth}
             \begin{itemize}
-                \item "Stable Diffusion v1 version of the model requires 150,000 A100 GPU Hours for a single training" session\footnote{\tiny{\url{https://syncedreview.com/2022/11/09/almost-7x-cheaper-colossal-ais-open-source-solution-accelerates-aigc-at-a-low-cost-diffusion-pretraining-and-hardware-fine-tuning-can-be/}}, Accessed on: 10.11.2022}
+                \item "Stable Diffusion v1 version of the model requires 150,000 A100 GPU Hours for a single training session"\footnote{\tiny{\url{https://syncedreview.com/2022/11/09/almost-7x-cheaper-colossal-ais-open-source-solution-accelerates-aigc-at-a-low-cost-diffusion-pretraining-and-hardware-fine-tuning-can-be/}}, Accessed on: 10.11.2022}
+                \vspace{1em}
+                \item[$\Rightarrow$] Optimisation of deep learning workflows is of growing importance
             \end{itemize}
         \end{column}
     \end{columns}
 
 \end{frame}
+
+\section{Appendix}
 
 \begin{frame}{References}
     % References slide in appendix
