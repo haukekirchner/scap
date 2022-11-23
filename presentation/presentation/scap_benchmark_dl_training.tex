@@ -154,26 +154,26 @@ Linky}}
     \begin{columns}
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item training of neural networks is computational intensive
+                \item training of neural networks is computationally intensive
                 \item[$\hookrightarrow$] workflow needs to be optimized for available hardware
                     \begin{itemize}
                         \item How to make good use of clusters with heterogenous hardware?
-                        \item How many GPUs are worth to request?
+                        \item How many GPUs are worth requesting?
                     \end{itemize}
                     \vspace{2em}
-                \item[$\Rightarrow$] optimisation for available accelerators is critical in ML/DL
+                \item[$\Rightarrow$] optimization for available accelerators is critical in ML/DL
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
             \vspace{-1em}
             \begin{figure}
                 \includegraphics[width=0.9\textwidth]{assets/gwdg_scc.png}
-                \caption*{Structure and ressources of a part of the Scientific Compute Cluster.}
+                \caption*{Structure and resources of a part of the Scientific Compute Cluster.}
             \end{figure}
         \end{column}
     \end{columns}
 
-    \source{Image source: Adapted from: \url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}, Accessed on: 09.11.2022}
+    \source{Image source: Adapted from \url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}, accessed on: 09.11.2022}
 \end{frame}
 
 \begin{frame}{Energy efficiency 
@@ -188,13 +188,10 @@ Linky}}
         
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item for different neural networks the required energy ranges from realtively low demands (finetuning) to very high demands (training of a complex network)
+                \item for different neural networks, the required energy ranges from relatively low demands (finetuning) to very high demands (training of a complex network)
                 \item depends on used hardware and energy source
-                \item[$\Rightarrow$] As deep learning is emerging in several fields the impact on energy consumption and consequently our climate is growing
+                \item[$\Rightarrow$] As deep learning is emerging in several fields, the impact on energy consumption and consequently, our climate is growing
             \end{itemize}
-
-
-            
         \end{column}
 
         \begin{column}{0.4\textwidth}
@@ -231,14 +228,18 @@ Linky}}
                 \vspace{-3em}
                 \begin{figure}
                 \includegraphics[width=0.9\textwidth]{assets/beech_drought}
-                \caption*{Spruce and beech stands close to the national park "Hainich".}
+                \caption*{Spruce and beech stand close to the national park "Hainich".}
                 \end{figure}
                 \source{Image source: Adapted from \cite{henkel_2021}}
         \end{column}
     \end{columns}
 \end{frame}
 
-\begin{frame}{Use case}
+\section{Methods}
+\sectionIntroHidden % Show an outline of the current section with hidden subsections
+%\sectionIntro % Show an outline of the current section with subsections
+
+\begin{frame}{Workflow}
     \begin{columns}
         \begin{column}{0.5\textwidth}
 
@@ -253,16 +254,12 @@ Linky}}
         \end{column}
         \begin{column}{0.5\textwidth}
                 \centering
-                \vspace{-6em}
+                \vspace{-4em}
                 \includegraphics[width=\textwidth]{assets/workflow_synthetic_data}
                 \source{Image source: Adapted from \cite{9906068}}
         \end{column}
     \end{columns}
 \end{frame}
-
-\section{Methods}
-\sectionIntroHidden % Show an outline of the current section with hidden subsections
-%\sectionIntro % Show an outline of the current section with subsections
 
 \begin{frame}{Metrics}
 
@@ -282,7 +279,7 @@ Time to Accuracy (TTA)                                                          
 \end{table}
 
 
-\source{Adapted from: \url{https://snehilverma41.github.io/Metrics_ML_FastPath19.pdf}}
+\source{Image source: Adapted from \url{https://snehilverma41.github.io/Metrics_ML_FastPath19.pdf}}
 
 \end{frame}
 
@@ -294,22 +291,93 @@ Time to Accuracy (TTA)                                                          
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
+% \usepackage{multirow}
 \begin{table}[]
-\begin{tabular}{@{}ll@{}}
+\begin{tabular}{@{}lll@{}}
 \toprule
-tool               & metrics \\ \midrule
-tensorboard        &         \\
-\href{https://pytorch.org/tutorials/recipes/recipes/benchmark.html}{PyTorch Benchmark}
- &         \\
-\href{https://github.com/facebookresearch/fvcore/blob/main/docs/flop_count.md}{Flop Counter} & FLOPS \\
-Vtune              &         \\
-likwid             &         \\
-\bottomrule
+tool                              & metrics                                                                                & scope                    \\ \midrule
+\href{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}{PyTorch Profiler With TensorBoard} & \begin{tabular}[c]{@{}l@{}}performance metrics\\ (e.g. time, memory)\end{tabular}      & \multirow{2}{*}{PyTorch} \\
+\href{https://github.com/facebookresearch/fvcore}{fvcore}                      & FLOPS                                                                                  &                          \\ \midrule
+\href{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}{Vtune}                             & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}general\\ performance metrics\end{tabular}} & Intel-only               \\
+\href{https://github.com/RRZE-HPC/likwid}{likwid}                            &                                                                                        & general                  \\ \bottomrule
 \end{tabular}
 \end{table}
 
 
-$\Rightarrow$ very different tools for different use cases
+
+\begin{itemize}
+    \item[$\Rightarrow$] different tools for different use cases
+    \item[$\Rightarrow$] Vtune and likwid can profile all kind of applications
+    \item[$\Rightarrow$] here I will focus on profiling tools optimized for PyTorch
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{PyTorch Profiler With TensorBoard}
+    \vspace{-1em}
+    \begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{assets/profiler_overview1}
+    \end{figure}
+    \end{center}
+\source{Image source: \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
+
+\end{frame}
+
+\begin{frame}{PyTorch Profiler With TensorBoard}
+    \vspace{-1em}
+    \begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{assets/profiler_overview_gpu_summary}
+    \end{figure}
+    \end{center}
+\source{Image source: Adapted from \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
+
+\end{frame}
+
+\begin{frame}{PyTorch Profiler With TensorBoard}
+    \vspace{-1em}
+    \begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{assets/profiler_overview_execution_time}
+    \end{figure}
+    \end{center}
+\source{Image source: Adapted from \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
+
+\end{frame}
+
+\begin{frame}{PyTorch Profiler With TensorBoard}
+    \vspace{-1em}
+    \begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{assets/profiler_overview_step_time_breakdown}
+    \end{figure}
+    \end{center}
+\source{Image source: Adapted from \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
+
+\end{frame}
+
+\end{frame}
+
+\begin{frame}{PyTorch Profiler With TensorBoard}
+    \vspace{-1em}
+    \begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{assets/profiler_overview_performance_reccomondation}
+    \end{figure}
+    \end{center}
+\source{Image source: Adapted from \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
+
+\end{frame}
+
+\begin{frame}{fvcore - Flop Counter for PyTorch Models}
+    \vspace{-1em}
+    \begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{assets/flop_counter_print}
+    \end{figure}
+    \end{center}
+\source{Image source: \url{https://github.com/facebookresearch/fvcore/blob/main/docs/flop_count.md}, accessed on: 22.11.2022}
 
 \end{frame}
 
@@ -318,9 +386,9 @@ $\Rightarrow$ very different tools for different use cases
 \begin{frame}{Research Goals}
 
 \begin{itemize}
-    \item identify tools that can help to optimize 
-    \item least complex tools are preferred
-    \item not MLPerf Training benchmark suite as I am not interested in theoretical benchmarking hardware but where our existing workflow runs most optimally and what we can improve??? (different perspecitve)
+    \item Identify \textbf{profiling tools} that can help to \textbf{optimize an existing PyTorch workflow}.
+    \item As this approach should help scientists, the \textbf{usibility is of high importance}. The simplest tool for doing the job is preferred.
+    \item In contrast to training benchmark suites, such as MLPerf, I do not focus on benchmarking hardware but on optimizing an existing PyTorch workflow (viewpoint of a scientist)
 \end{itemize}
 
 \end{frame}
@@ -340,16 +408,14 @@ $\Rightarrow$ very different tools for different use cases
         \end{column}
         \begin{column}{0.5\textwidth}
             \begin{itemize}
-                \item "Stable Diffusion v1 version of the model requires 150,000 A100 GPU Hours for a single training session"\footnote{\tiny{\url{https://syncedreview.com/2022/11/09/almost-7x-cheaper-colossal-ais-open-source-solution-accelerates-aigc-at-a-low-cost-diffusion-pretraining-and-hardware-fine-tuning-can-be/}}, Accessed on: 10.11.2022}
+                \item "Stable Diffusion v1 version of the model requires 150,000 A100 GPU Hours for a single training session"\footnote{\tiny{\url{https://syncedreview.com/2022/11/09/almost-7x-cheaper-colossal-ais-open-source-solution-accelerates-aigc-at-a-low-cost-diffusion-pretraining-and-hardware-fine-tuning-can-be/}}, accessed on: 10.11.2022}
                 \vspace{1em}
-                \item[$\Rightarrow$] Optimisation of deep learning workflows is of growing importance
+                \item[$\Rightarrow$] Optimization of deep learning workflows is of growing importance for energy efficiency.
             \end{itemize}
         \end{column}
     \end{columns}
 
 \end{frame}
-
-\section{Appendix}
 
 \begin{frame}{References}
     % References slide in appendix
