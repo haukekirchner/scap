@@ -134,13 +134,14 @@ def train(model, train_loader, val_loader, optimizer, num_training_epochs = 100,
 if __name__ == "__main__":
 
     logdir = ''
+    argv = sys.argv[1:]
     opts, args = getopt.getopt(argv,"hl:",["logdir="])
     for opt, arg in opts:
         if opt == '-h':
-            print ('test.py -l <logdir>')
+            print ('train.py -l <logdir>')
             sys.exit()
-        elif opt in ("-i", "--ifile"):
-            inputfile = arg
+        elif opt in ("-l", "--logdir"):
+            logdir = arg
     print ('logdir is ', logdir)
 
     print("Start training")

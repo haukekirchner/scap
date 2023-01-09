@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=train-forest-script
+#SBATCH --job-name=scap_gtx1080
 #SBATCH -o /usr/users/%u/%x-%A-%a.log
 #SBATCH -p gpu                       # request gpu node for the training
-#SBATCH -t 02:00:00                  # TODO: estimate the time you will need
+#SBATCH -t 05:00:00                  # TODO: estimate the time you will need
 #SBATCH -G gtx1080                   # requesting specific GPU, run sinfo -p gpu --format=%N,%G # to see what is available
 #SBATCH --nodes=1                    # total number of nodes
 #SBATCH --ntasks=1                   # total number of tasks
@@ -14,7 +14,7 @@
 module load python/3.9
 module load anaconda3
 module load cuda
-source activate test_pointnet
+source activate /scratch1/users/hgronen/.conda/scap
 
 # Printing out some info.
 echo "Submitting job with sbatch from directory: ${SLURM_SUBMIT_DIR}"
@@ -28,7 +28,7 @@ python -m torch.utils.collect_env
 nvcc -V
 
 echo "logdir"
-echo /scratch1/users/hgronen/torch-log/$SLURM_JOB_NAME
+echo /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID}
 
 # Run the script.
-python -u train.py -l /scratch1/users/hgronen/torch-log/pointnet
+python -u train.py -l /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID}

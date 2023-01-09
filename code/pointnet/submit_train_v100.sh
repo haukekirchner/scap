@@ -1,7 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=scap_cpu
+#SBATCH --job-name=scap_v100
 #SBATCH -o /usr/users/%u/%x-%A-%a.log
+#SBATCH -p gpu                       # request gpu node for the training
 #SBATCH -t 05:00:00                  # TODO: estimate the time you will need
+#SBATCH -G v100                   # requesting specific GPU, run sinfo -p gpu --format=%N,%G # to see what is available
 #SBATCH --nodes=1                    # total number of nodes
 #SBATCH --ntasks=1                   # total number of tasks
 #SBATCH --mail-type=begin            # send mail when job begins
