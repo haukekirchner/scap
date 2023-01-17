@@ -26,15 +26,20 @@ def fix_random_seed(seed: int, device=None) -> None:
         torch.cuda.manual_seed_all(seed) 
     # For now, do not set torch.backends.cudnn.deterministic to True and cudnn.benchmark to False (it is faster without).
     
-def create_dataloader(data_folder : str, validation_percentage = 0.15, verbose=True):
+def create_dataloader(data_folder : str,batch_size, validation_percentage = 0.15, verbose=True, do_sample_points = True):
     """Return two dataloaders, one for train and one for validation (with validation_percentage of all data samples)."""
-    transformations = transforms.Compose(
-        [SamplePoints(1024, sample_method="random")])
-    # It would be also possible to sample the farthest points:
-    # transformations = transforms.Compose([SamplePoints(1024, sample_method = "farthest_points")])
     
-    data = PointCloudDataSet(data_folder, train=True,
+    if do_sample_points:
+        transformations = transforms.Compose(
+            [SamplePoints(1024, sample_method="random")])
+        # It would be also possible to sample the farthest points:
+        # transformations = transforms.Compose([SamplePoints(1024, sample_method = "farthest_points")])
+        
+        data = PointCloudDataSet(data_folder, train=True,
                              transform=transformations)
+    else:
+        data = PointCloudDataSet(data_folder, train=True)
+
     dataset_size = len(data)
     idx = list(range(dataset_size))
     split = int(np.floor(validation_percentage * dataset_size))
@@ -53,7 +58,7 @@ def create_dataloader(data_folder : str, validation_percentage = 0.15, verbose=T
     
     return train_loader, val_loader
     
-def train(model, train_loader, val_loader, optimizer, num_training_epochs = 100, saved_models_path=None, logdir=None):
+def train(model, train_loader, val_loader, optimizer, device, num_training_epochs = 100, saved_models_path=None, logdir=None):
     """The training loop."""
     for epoch in range(num_training_epochs):
         model.train()
@@ -159,7 +164,7 @@ if __name__ == "__main__":
     
     learning_rate = 0.001
     batch_size = 32
-    num_training_epochs = 100
+    num_training_epochs = 15
     
     
     ### FIX SEEDS ###
@@ -169,7 +174,7 @@ if __name__ == "__main__":
     ### DATA ####
     
     data_folder = "/scratch/projects/workshops/forest/synthetic_trees_ten"
-    train_loader, val_loader = create_dataloader(data_folder)
+    train_loader, val_loader = create_dataloader(data_folder, do_sample_points=False, batch_size=batch_size)
     
     ### MODEL ####
     
@@ -177,6 +182,6 @@ if __name__ == "__main__":
     optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
 
     ### TRAINING LOOP ###
-    model = train(model, train_loader, val_loader, optimizer, num_training_epochs = num_training_epochs, saved_models_path=saved_models_path, logdir=logdir)
+    model = train(model, train_loader, val_loader, optimizer, num_training_epochs = num_training_epochs, saved_models_path=saved_models_path, logdir=logdir, device=device)
     
     print("Finished training.")
