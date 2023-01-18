@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=sample_points
 #SBATCH -o /usr/users/%u/%x-%A-%a.log
-#SBATCH -t 00:05:00                  # TODO: estimate the time you will need
+#SBATCH -t 04:00:00                  # TODO: estimate the time you will need
 #SBATCH --nodes=1                    # total number of nodes
 #SBATCH --ntasks=1                   # total number of tasks
 #SBATCH --mail-type=begin            # send mail when job begins
