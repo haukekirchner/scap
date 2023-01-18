@@ -173,7 +173,7 @@ if __name__ == "__main__":
 
     ### DATA ####
     
-    data_folder = "/scratch/projects/workshops/forest/synthetic_trees_ten"
+    data_folder = "/scratch/projects/workshops/forest/synthetic_trees_ten_sampled"
     train_loader, val_loader = create_dataloader(data_folder, do_sample_points=False, batch_size=batch_size)
     
     ### MODEL ####
