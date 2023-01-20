@@ -15,6 +15,8 @@ from model import PointNet, pointnetloss
 from utils import PointCloudDataSet, SamplePoints, TREE_SPECIES, classes_to_tensor
 import sys, getopt
 
+from torch.utils.tensorboard import SummaryWriter
+
 def fix_random_seed(seed: int, device=None) -> None:
     """Fix random seeds for reproducibility of all experiments."""
     random.seed(seed) # Python pseudo-random generator
@@ -60,6 +62,7 @@ def create_dataloader(data_folder : str,batch_size, validation_percentage = 0.15
     
 def train(model, train_loader, val_loader, optimizer, device, num_training_epochs = 100, saved_models_path=None, logdir=None):
     """The training loop."""
+    loss_idx_value = 0
     for epoch in range(num_training_epochs):
         model.train()
         running_loss = 0.0
@@ -67,7 +70,7 @@ def train(model, train_loader, val_loader, optimizer, device, num_training_epoch
         # profiler #####################################################
         with torch.profiler.profile(
                 schedule=torch.profiler.schedule(wait=1, warmup=1, active=3, repeat=2),
-                on_trace_ready=torch.profiler.tensorboard_trace_handler(logdir),
+                on_trace_ready=torch.profiler.tensorboard_trace_handler(logdir + "/profiler"),
                 record_shapes=True,
                 profile_memory=True,
                 with_stack=True
@@ -78,12 +81,11 @@ def train(model, train_loader, val_loader, optimizer, device, num_training_epoch
                 if i >= (1 + 1 + 3) * 2:
                     break
                 ########################################################
-                
+               
                 # Load data.
                 labels = batch["label"]
                 labels = classes_to_tensor(labels).to(device)
                 points = batch["points"].to(device)
-                
                 optimizer.zero_grad()
                 
                 predictions = model(points)
@@ -98,9 +100,13 @@ def train(model, train_loader, val_loader, optimizer, device, num_training_epoch
                 ##########
 
                 running_loss += loss.item()
+                writer.add_scalar("Loss/Minibatches", running_loss, loss_idx_value)
+                loss_idx_value += 1
                 if i % 500 == 499: # print every n-th minibatch
                     print(f"Epoch {epoch + 1} | running loss {running_loss/500}")
                     running_loss = 0.0
+        # Write loss for epoch
+        writer.add_scalar("Loss/Epochs", running_loss, epoch)
             
         # Validation.
         model.eval()
@@ -120,6 +126,7 @@ def train(model, train_loader, val_loader, optimizer, device, num_training_epoch
                     total_pred += len(labels)
                     
                 percent_correct = total_correct / total_pred * 100
+                writer.add_scalar("Accuracy", percent_correct, epoch)
                 print(f"Epoch {epoch + 1} | validation accuracy {percent_correct}")
 
         if saved_models_path:
@@ -138,6 +145,10 @@ def train(model, train_loader, val_loader, optimizer, device, num_training_epoch
 
 if __name__ == "__main__":
 
+
+    # Initialize the SummaryWriter for TensorBoard
+    # Its output will be written to ./runs/
+
     logdir = ''
     argv = sys.argv[1:]
     opts, args = getopt.getopt(argv,"hl:",["logdir="])
@@ -148,6 +159,9 @@ if __name__ == "__main__":
         elif opt in ("-l", "--logdir"):
             logdir = arg
     print ('logdir is ', logdir)
+
+
+    writer = SummaryWriter(log_dir=logdir + "/tensorboard")
 
     print("Start training")
     
