@@ -1,0 +1,17 @@
+run;node;tool; job_id;elapsed_time
+1;scc_cpu;no-tool;;
+2;scc_cpu;tensorboard;;
+3;scc_cpu;profiler-torch;14617520;00:13:19
+4;scc_cpu;deepspeed;14617521;Na
+5;scc_gtx1080;no-tool;;
+6;scc_gtx1080;tensorboard;14615343;00:11:10
+7;scc_gtx1080;profiler-torch;14615562;00:04:48
+8;scc_gtx1080;deepspeed;14615344;00:11:22
+9;scc_rtx5000;no-tool;;
+10;scc_rtx5000;tensorboard;14617172;00:06:22
+11;scc_rtx5000;profiler-torch;14617173;00:03:36
+12;scc_rtx5000;deepspeed;14617171;00:06:28
+13;scc_v100;no-tool;;
+14;scc_v100;tensorboard;;
+15;scc_v100;profiler-torch;;
+16;scc_v100;deepspeed;;
