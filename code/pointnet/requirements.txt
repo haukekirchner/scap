@@ -113,3 +113,4 @@ websocket-client==1.4.2
 wheel==0.37.1
 widgetsnbextension==4.0.3
 zipp==3.11.0
+deepspeed-0.8.0

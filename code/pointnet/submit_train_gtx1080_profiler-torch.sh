@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=scap_v100
+#SBATCH --job-name=scap_gtx1080_profiler-torch
 #SBATCH -o /usr/users/%u/%x-%A-%a.log
 #SBATCH -p gpu                       # request gpu node for the training
-#SBATCH -t 05:00:00                  # TODO: estimate the time you will need
-#SBATCH -G v100                   # requesting specific GPU, run sinfo -p gpu --format=%N,%G # to see what is available
+#SBATCH -t 00:20:00                  # TODO: estimate the time you will need
+#SBATCH -G gtx1080                   # requesting specific GPU, run sinfo -p gpu --format=%N,%G # to see what is available
 #SBATCH --nodes=1                    # total number of nodes
 #SBATCH --ntasks=1                   # total number of tasks
 #SBATCH --mail-type=begin            # send mail when job begins
@@ -17,6 +17,7 @@ module load cuda
 source activate /scratch1/users/hgronen/.conda/scap
 
 # Printing out some info.
+echo "Job name: ${SLURM_JOB_NAME}"
 echo "Submitting job with sbatch from directory: ${SLURM_SUBMIT_DIR}"
 echo "Home directory: ${HOME}"
 echo "Working directory: $PWD"
@@ -31,4 +32,4 @@ echo "logdir"
 echo /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID}
 
 # Run the script.
-python -u train.py -l /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID}
+python -u train.py -l /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID} -t False -p True -d False

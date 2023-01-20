@@ -1,7 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=scap_cpu
-#SBATCH -o /usr/users/%u/%x-%A-%a.log
-#SBATCH -t 05:00:00                  # TODO: estimate the time you will need
+#SBATCH --job-name=scap_cpu_deepspeed
+#SBATCH -o /usr/users/%u/%x_%A_%a.log
+#SBATCH -t 01:30:00                  # TODO: estimate the time you will need
+#SBATCH -w amp009
 #SBATCH --nodes=1                    # total number of nodes
 #SBATCH --ntasks=1                   # total number of tasks
 #SBATCH --mail-type=begin            # send mail when job begins
@@ -11,10 +12,10 @@
 # Prepare the environment.
 module load python/3.9
 module load anaconda3
-module load cuda
 source activate /scratch1/users/hgronen/.conda/scap
 
 # Printing out some info.
+echo "Job name: ${SLURM_JOB_NAME}"
 echo "Submitting job with sbatch from directory: ${SLURM_SUBMIT_DIR}"
 echo "Home directory: ${HOME}"
 echo "Working directory: $PWD"
@@ -29,4 +30,4 @@ echo "logdir"
 echo /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID}
 
 # Run the script.
-python -u train.py -l /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID}
+python -u train.py -l /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID} -t False -p False -d False
