@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=scap_rtx5000_deepspeed
+#SBATCH --job-name=scap_rtx5000_no-tool
 #SBATCH -o /usr/users/%u/%x_%A_%a.log
 #SBATCH -p gpu                       # request gpu node for the training
 #SBATCH -t 00:40:00                  # TODO: estimate the time you will need

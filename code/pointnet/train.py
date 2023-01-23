@@ -197,9 +197,12 @@ if __name__ == "__main__":
     # Initialize the SummaryWriter for TensorBoard
     # Its output will be written to ./runs/
 
+    batch_size = 32
+    do_sample_points = False
+    
     logdir = ''
     argv = sys.argv[1:]
-    opts, args = getopt.getopt(argv,"hl:t:p:d:",["logdir=","tensorboard=","profiler_torch","deepspeed="])
+    opts, args = getopt.getopt(argv,"hl:t:p:d:s:b:",["logdir=","tensorboard=","profiler_torch","deepspeed=","sample_points=","batch_size="])
     for opt, arg in opts:
         if opt == '-h':
             print ('train.py -l <logdir>')
@@ -212,7 +215,12 @@ if __name__ == "__main__":
             profiler_torch = str_to_bool(arg)
         elif opt in ("-d", "--deepspeed"):
             deepspeed = str_to_bool(arg)
-    
+        elif opt in ("-s", "--sample_points"):
+            do_sample_points = str_to_bool(arg)
+        elif opt in ("-b", "--batch_size"):
+            print(arg)
+            print(type(arg))
+            batch_size = int(arg)
     print ('logdir is ', logdir)
 
     print("Tensorboard : ", tensorboard, " ", type(tensorboard))
@@ -237,7 +245,6 @@ if __name__ == "__main__":
     #    print(f"Created path for models in {saved_models_path}")
     
     learning_rate = 0.001
-    batch_size = 32
     num_training_epochs = 15
     
     
@@ -247,8 +254,12 @@ if __name__ == "__main__":
 
     ### DATA ####
     
-    data_folder = "/scratch/projects/workshops/forest/synthetic_trees_ten_sampled"
-    train_loader, val_loader = create_dataloader(data_folder, do_sample_points=False, batch_size=batch_size)
+    if do_sample_points:
+        data_folder = "/scratch/projects/workshops/forest/synthetic_trees_ten"
+    else:
+        data_folder = "/scratch/projects/workshops/forest/synthetic_trees_ten_sampled"
+
+    train_loader, val_loader = create_dataloader(data_folder, do_sample_points=do_sample_points, batch_size=batch_size)
     
     ### MODEL ####
     

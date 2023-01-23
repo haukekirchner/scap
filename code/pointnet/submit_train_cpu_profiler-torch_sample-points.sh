@@ -1,9 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=scap_v100_no-tool
-#SBATCH -o /usr/users/%u/%x_%A_%a.log
-#SBATCH -p gpu                       # request gpu node for the training
-#SBATCH -t 00:20:00                  # TODO: estimate the time you will need
-#SBATCH -G v100                   # requesting specific GPU, run sinfo -p gpu --format=%N,%G # to see what is available
+#SBATCH --job-name=scap_cpu_profiler-torch_sample-points
+#SBATCH -o /usr/users/%u/%x-%A-%a.log
+#SBATCH -t 06:00:00                  # TODO: estimate the time you will need
+#SBATCH -w amp078
 #SBATCH --nodes=1                    # total number of nodes
 #SBATCH --ntasks=1                   # total number of tasks
 #SBATCH --mail-type=begin            # send mail when job begins
@@ -13,7 +12,6 @@
 # Prepare the environment.
 module load python/3.9
 module load anaconda3
-module load cuda
 source activate /scratch1/users/hgronen/.conda/scap
 
 # Printing out some info.
@@ -32,5 +30,4 @@ echo "logdir"
 echo /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID}
 
 # Run the script.
-python -u train.py -l /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID} -t False -p False -d False
-
+python -u train.py -l /scratch1/users/hgronen/torch-log/${SLURM_JOB_NAME}_${SLURM_JOB_ID} -t False -p True -d False -s True

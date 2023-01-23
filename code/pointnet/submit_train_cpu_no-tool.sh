@@ -1,8 +1,8 @@
 #!/bin/bash
-#SBATCH --job-name=scap_cpu_deepspeed
+#SBATCH --job-name=scap_cpu_no-tool
 #SBATCH -o /usr/users/%u/%x_%A_%a.log
-#SBATCH -t 01:30:00                  # TODO: estimate the time you will need
-#SBATCH -w amp009
+#SBATCH -t 06:00:00                  # TODO: estimate the time you will need
+#SBATCH -w amp078
 #SBATCH --nodes=1                    # total number of nodes
 #SBATCH --ntasks=1                   # total number of tasks
 #SBATCH --mail-type=begin            # send mail when job begins
