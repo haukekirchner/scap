@@ -1,0 +1,88 @@
+-------------------------- DeepSpeed Flops Profiler --------------------------
+Profile Summary at step 5:
+Notations:
+data parallel size (dp_size), model parallel size(mp_size),
+number of parameters (params), number of multiply-accumulate operations(MACs),
+number of floating-point operations (flops), floating-point operations per second (FLOPS),
+fwd latency (forward propagation latency), bwd latency (backward propagation latency),
+step (weights update latency), iter latency (sum of fwd, bwd and step latency)
+
+params per gpu:                                               3.46 M  
+params of model = params per GPU * mp_size:                   3.46 M  
+fwd MACs per GPU:                                             14.07 GMACs
+fwd flops per GPU:                                            29.04 G 
+fwd flops of model = fwd flops per GPU * mp_size:             29.04 G 
+fwd latency:                                                  83.19 ms
+fwd FLOPS per GPU = fwd flops per GPU / fwd latency:          349.1 GFLOPS
+
+----------------------------- Aggregated Profile per GPU -----------------------------
+Top 1 modules in terms of params, MACs or fwd latency at different model depths:
+depth 0:
+    params      - {'PointNet': '3.46 M'}
+    MACs        - {'PointNet': '14.07 GMACs'}
+    fwd latency - {'PointNet': '83.19 ms'}
+depth 1:
+    params      - {'Transform': '2.8 M'}
+    MACs        - {'Transform': '14.05 GMACs'}
+    fwd latency - {'Transform': '82.08 ms'}
+depth 2:
+    params      - {'Tnet': '2.66 M'}
+    MACs        - {'Tnet': '9.34 GMACs'}
+    fwd latency - {'Tnet': '58.43 ms'}
+
+------------------------------ Detailed Profile per GPU ------------------------------
+Each module profile is listed after its name in the following order: 
+params, percentage of total params, MACs, percentage of total MACs, fwd latency, percentage of total fwd latency, fwd FLOPS
+
+Note: 1. A module can have torch.nn.module or torch.nn.functional to compute logits (e.g. CrossEntropyLoss). They are not counted as submodules, thus not to be printed out. However they make up the difference between a parent's MACs (or latency) and the sum of its submodules'.
+2. Number of floating-point operations is a theoretical estimation, thus FLOPS computed using that could be larger than the maximum system throughput.
+3. The fwd latency listed in the top module's profile is directly captured at the module forward function in PyTorch, thus it's less than the fwd latency shown above which is captured in DeepSpeed.
+
+PointNet(
+  3.46 M, 100.00% Params, 14.07 GMACs, 100.00% MACs, 83.19 ms, 100.00% latency, 349.1 GFLOPS, 
+  (transform): Transform(
+    2.8 M, 80.94% Params, 14.05 GMACs, 99.85% MACs, 82.08 ms, 98.67% latency, 353.28 GFLOPS, 
+    (input_transform): Tnet(
+      803.08 k, 23.19% Params, 4.59 GMACs, 32.63% MACs, 27.06 ms, 32.53% latency, 350.87 GFLOPS, 
+      (conv1): Conv1d(256, 0.01% Params, 6.29 MMACs, 0.04% MACs, 313.28 us, 0.38% latency, 46.86 GFLOPS, 3, 64, kernel_size=(1,), stride=(1,))
+      (conv2): Conv1d(8.32 k, 0.24% Params, 268.44 MMACs, 1.91% MACs, 374.32 us, 0.45% latency, 1.45 TFLOPS, 64, 128, kernel_size=(1,), stride=(1,))
+      (conv3): Conv1d(132.1 k, 3.81% Params, 4.29 GMACs, 30.53% MACs, 2.78 ms, 3.34% latency, 3.1 TFLOPS, 128, 1024, kernel_size=(1,), stride=(1,))
+      (fc1): Linear(524.8 k, 15.15% Params, 16.78 MMACs, 0.12% MACs, 124.45 us, 0.15% latency, 269.61 GFLOPS, in_features=1024, out_features=512, bias=True)
+      (fc2): Linear(131.33 k, 3.79% Params, 4.19 MMACs, 0.03% MACs, 92.27 us, 0.11% latency, 90.92 GFLOPS, in_features=512, out_features=256, bias=True)
+      (fc3): Linear(2.31 k, 0.07% Params, 73.73 KMACs, 0.00% MACs, 94.18 us, 0.11% latency, 1.57 GFLOPS, in_features=256, out_features=9, bias=True)
+      (bn1): BatchNorm1d(128, 0.00% Params, 0 MACs, 0.00% MACs, 238.42 us, 0.29% latency, 43.98 GFLOPS, 64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (bn2): BatchNorm1d(256, 0.01% Params, 0 MACs, 0.00% MACs, 325.2 us, 0.39% latency, 64.49 GFLOPS, 128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (bn3): BatchNorm1d(2.05 k, 0.06% Params, 0 MACs, 0.00% MACs, 1.81 ms, 2.17% latency, 92.85 GFLOPS, 1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (bn4): BatchNorm1d(1.02 k, 0.03% Params, 0 MACs, 0.00% MACs, 153.3 us, 0.18% latency, 534.37 MFLOPS, 512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (bn5): BatchNorm1d(512, 0.01% Params, 0 MACs, 0.00% MACs, 130.41 us, 0.16% latency, 314.07 MFLOPS, 256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (feature_transform): Tnet(
+      1.86 M, 53.62% Params, 4.75 GMACs, 33.78% MACs, 31.37 ms, 37.71% latency, 312.94 GFLOPS, 
+      (conv1): Conv1d(4.16 k, 0.12% Params, 134.22 MMACs, 0.95% MACs, 247.48 us, 0.30% latency, 1.09 TFLOPS, 64, 64, kernel_size=(1,), stride=(1,))
+      (conv2): Conv1d(8.32 k, 0.24% Params, 268.44 MMACs, 1.91% MACs, 371.46 us, 0.45% latency, 1.46 TFLOPS, 64, 128, kernel_size=(1,), stride=(1,))
+      (conv3): Conv1d(132.1 k, 3.81% Params, 4.29 GMACs, 30.53% MACs, 2.77 ms, 3.33% latency, 3.12 TFLOPS, 128, 1024, kernel_size=(1,), stride=(1,))
+      (fc1): Linear(524.8 k, 15.15% Params, 16.78 MMACs, 0.12% MACs, 115.87 us, 0.14% latency, 289.58 GFLOPS, in_features=1024, out_features=512, bias=True)
+      (fc2): Linear(131.33 k, 3.79% Params, 4.19 MMACs, 0.03% MACs, 92.51 us, 0.11% latency, 90.68 GFLOPS, in_features=512, out_features=256, bias=True)
+      (fc3): Linear(1.05 M, 30.39% Params, 33.55 MMACs, 0.24% MACs, 118.97 us, 0.14% latency, 564.08 GFLOPS, in_features=256, out_features=4096, bias=True)
+      (bn1): BatchNorm1d(128, 0.00% Params, 0 MACs, 0.00% MACs, 216.01 us, 0.26% latency, 48.54 GFLOPS, 64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (bn2): BatchNorm1d(256, 0.01% Params, 0 MACs, 0.00% MACs, 312.09 us, 0.38% latency, 67.2 GFLOPS, 128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (bn3): BatchNorm1d(2.05 k, 0.06% Params, 0 MACs, 0.00% MACs, 1.82 ms, 2.18% latency, 92.43 GFLOPS, 1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (bn4): BatchNorm1d(1.02 k, 0.03% Params, 0 MACs, 0.00% MACs, 144.0 us, 0.17% latency, 568.87 MFLOPS, 512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+      (bn5): BatchNorm1d(512, 0.01% Params, 0 MACs, 0.00% MACs, 133.51 us, 0.16% latency, 306.78 MFLOPS, 256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    )
+    (conv1): Conv1d(256, 0.01% Params, 6.29 MMACs, 0.04% MACs, 231.27 us, 0.28% latency, 63.48 GFLOPS, 3, 64, kernel_size=(1,), stride=(1,))
+    (conv2): Conv1d(8.32 k, 0.24% Params, 268.44 MMACs, 1.91% MACs, 452.52 us, 0.54% latency, 1.2 TFLOPS, 64, 128, kernel_size=(1,), stride=(1,))
+    (conv3): Conv1d(132.1 k, 3.81% Params, 4.29 GMACs, 30.53% MACs, 2.77 ms, 3.34% latency, 3.11 TFLOPS, 128, 1024, kernel_size=(1,), stride=(1,))
+    (bn1): BatchNorm1d(128, 0.00% Params, 0 MACs, 0.00% MACs, 208.14 us, 0.25% latency, 50.38 GFLOPS, 64, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (bn2): BatchNorm1d(256, 0.01% Params, 0 MACs, 0.00% MACs, 319.24 us, 0.38% latency, 65.69 GFLOPS, 128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (bn3): BatchNorm1d(2.05 k, 0.06% Params, 0 MACs, 0.00% MACs, 1.82 ms, 2.18% latency, 92.32 GFLOPS, 1024, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  )
+  (fc1): Linear(524.8 k, 15.15% Params, 16.78 MMACs, 0.12% MACs, 111.82 us, 0.13% latency, 300.08 GFLOPS, in_features=1024, out_features=512, bias=True)
+  (fc2): Linear(131.33 k, 3.79% Params, 4.19 MMACs, 0.03% MACs, 93.7 us, 0.11% latency, 89.53 GFLOPS, in_features=512, out_features=256, bias=True)
+  (fc3): Linear(2.57 k, 0.07% Params, 81.92 KMACs, 0.00% MACs, 89.88 us, 0.11% latency, 1.82 GFLOPS, in_features=256, out_features=10, bias=True)
+  (bn1): BatchNorm1d(1.02 k, 0.03% Params, 0 MACs, 0.00% MACs, 145.2 us, 0.17% latency, 564.2 MFLOPS, 512, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (bn2): BatchNorm1d(512, 0.01% Params, 0 MACs, 0.00% MACs, 133.28 us, 0.16% latency, 307.33 MFLOPS, 256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+  (dropout): Dropout(0, 0.00% Params, 0 MACs, 0.00% MACs, 87.02 us, 0.10% latency, 0.0 FLOPS, p=0.3, inplace=False)
+  (logsoftmax): LogSoftmax(0, 0.00% Params, 0 MACs, 0.00% MACs, 66.04 us, 0.08% latency, 0.0 FLOPS, dim=1)
+)
+------------------------------------------------------------------------------

@@ -18,6 +18,28 @@
 \usepackage{booktabs}
 
 \usepackage{listings}
+\lstset{
+    autogobble,
+    columns=fullflexible,
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    escapeinside={(*@}{@*)},
+    commentstyle=\color{greencomments},
+    keywordstyle=\color{bluekeywords},
+    stringstyle=\color{redstrings},
+    numberstyle=\color{graynumbers},
+    basicstyle=\ttfamily\footnotesize,
+    frame=l,
+    framesep=12pt,
+    xleftmargin=12pt,
+    tabsize=4,
+    captionpos=b
+}
+
+\usepackage{fancyvrb}
 
 \hypersetup{
     colorlinks,
@@ -395,6 +417,26 @@ tool                              & metrics                                     
 
 \end{frame}
 
+\section{Methods}
+
+\begin{frame}[fragile]{Tensorboard}
+    \begin{tcolorbox}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,9-12,14-16}]{python}{../../data/tensorboard.py}
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[fragile]{Torch profiler}
+    \begin{tcolorbox}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,12,13,16}]{python}{../../data/profiler-torch.py}
+    \end{tcolorbox}
+\end{frame}
+
+\begin{frame}[fragile]{Deepspeed - FlopsProfiler}
+    \begin{tcolorbox}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{../../data/deepspeed.py}
+    \end{tcolorbox}
+\end{frame}
+
 \section{Results}
 
 \begin{frame}{First attempt using PyTorch Profiler}
@@ -461,33 +503,30 @@ tool                              & metrics                                     
 \begin{frame}{Test runs - table}
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
+\scriptsize{
 \begin{table}[]
-\resizebox{1.2\textheight}{!}{
 \begin{tabular}{@{}llllll@{}}
 \toprule
-run & node         & tool           & job\_id  & is\_valid & experiment    \\ \midrule
-1   & scc\_cpu     & no-tool        &          & TRUE      &               \\
-2   & scc\_cpu     & tensorboard    &          & TRUE      &               \\
-3   & scc\_cpu     & profiler-torch & 14629425 & TRUE      &               \\
-4   & scc\_cpu     & deepspeed      & 14617521 & FALSE     &               \\
-5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE      &               \\
-6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE      &               \\
-7   & scc\_gtx1080 & profiler-torch & 14615562 & TRUE      &               \\
-8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE      &               \\
-9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE      &               \\
-10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE      &               \\
-11  & scc\_rtx5000 & profiler-torch & 14617173 & TRUE      &               \\
-12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE      &               \\
-13  & scc\_v100    & no-tool        & 14619619 & TRUE      &               \\
-14  & scc\_v100    & tensorboard    & 14617203 & TRUE      &               \\
-15  & scc\_v100    & profiler-torch & 14617204 & TRUE      &               \\
-16  & scc\_v100    & deepspeed      & 14617202 & TRUE      &               \\
-17  & scc\_gtx1080 & profiler-torch & 14629008 & TRUE      & batch-size-64 \\
-18  & scc\_gtx1080 & profiler-torch & 14628864 & TRUE      & sample-points \\
-19  & scc\_cpu     & profiler-torch & 14629422 & TRUE      & sample-points \\ \bottomrule
+run & node         & tool           & job\_id  & is\_valid \\ \midrule
+1   & scc\_cpu     & no-tool        & 14629421 & TRUE      \\
+2   & scc\_cpu     & tensorboard    & 14629426 & TRUE      \\
+3   & scc\_cpu     & profiler-torch & 14629425 & TRUE      \\
+4   & scc\_cpu     & deepspeed      & 14617521 & FALSE     \\
+5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE      \\
+6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE      \\
+7   & scc\_gtx1080 & profiler-torch & 14615562 & TRUE      \\
+8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE      \\
+9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE      \\
+10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE      \\
+11  & scc\_rtx5000 & profiler-torch & 14617173 & TRUE      \\
+12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE      \\
+13  & scc\_v100    & no-tool        & 14619619 & TRUE      \\
+14  & scc\_v100    & tensorboard    & 14617203 & TRUE      \\
+15  & scc\_v100    & profiler-torch & 14617204 & TRUE      \\
+16  & scc\_v100    & deepspeed      & 14617202 & TRUE      \\ \bottomrule
 \end{tabular}
-}
 \end{table}
+}
 \end{frame}
 
 \begin{frame}{Overview - runtime on HPC}
@@ -508,14 +547,17 @@ run & node         & tool           & job\_id  & is\_valid & experiment    \\ \m
     \end{center}
 \end{frame}
 
-\begin{frame}{Until now everything was achieved with sacct}
+\begin{frame}[fragile]{Until now everything was achieved with sacct}
+\begin{columns}
+\begin{column}{0.7\textwidth}
+        \begin{minted}[breaklines, fontsize=\scriptsize ]{python}
+sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615344, 14617172, 14617173, 14617171, 14618941, 14617203, 14619619, 14617204, 14619618, 14619617, 14617202, 14628864, 14629008, 14629421, 14629426, 14629425 -X
+        \end{minted}
+\end{column}
 
-    \begin{listings}
-sacct --format=jobid,elapsed -P -j 14629422,14617521,14615343,14615562,14615344,14617172,14617173,\
-14617171,14618941,14617203,14619619,14617204,14619618,14619617,\
-14617202,14628864,14629008,14629421,14629426,14629425 -X
-
-
+\begin{column}{0.3\textwidth}
+    \vspace{-2em}
+        \begin{minted}[breaklines, fontsize=\scriptsize ]{python}
     JobID|Elapsed
 14615343|00:11:10
 14615344|00:11:22
@@ -537,10 +579,11 @@ sacct --format=jobid,elapsed -P -j 14629422,14617521,14615343,14615562,14615344,
 14629422|01:10:40
 14629425|00:13:55
 14629426|02:36:55
-\end{listings}
+        \end{minted}
+\end{column}
+\end{columns}
 
 \end{frame}
-
 
 \begin{frame}{lets look at the pytorch profiler hint section}
 
@@ -615,6 +658,31 @@ sacct --format=jobid,elapsed -P -j 14629422,14617521,14615343,14615562,14615344,
 
 %%%%%%%%%%%%%%%%
 
+\section{Results - Deepspeed/Flops-Profiler}
+
+\begin{frame}[fragile]{Code listings}
+    \begin{tcolorbox}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+    \end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}[fragile]{Code listings}
+    \begin{tcolorbox}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=18,lastline=31]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+    \end{tcolorbox}
+
+\end{frame}
+
+\begin{frame}[fragile]{Code listings}
+    \begin{tcolorbox}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\tiny, firstline=33,lastline=48, breaklines]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+    \end{tcolorbox}
+
+\end{frame}
+
+
+\section{Conclusion}
 \begin{frame}{Benchmarking is the first step of optimizing}
 \label{pg:lastpage} % Label on last frame to get the page number for footer
 
@@ -639,10 +707,55 @@ sacct --format=jobid,elapsed -P -j 14629422,14617521,14615343,14615562,14615344,
 
 \end{frame}
 
+\section{Appendix}
+
 \begin{frame}{References}
     % References slide in appendix
     \renewcommand*{\bibfont}{\normalfont\scriptsize}
     \printbibliography[heading=none]
+\end{frame}
+
+\begin{frame}{All runs}
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+\tiny{
+\begin{table}[]
+\begin{tabular}{@{}llllll@{}}
+\toprule
+run & node         & tool           & job\_id  & is\_valid & experiment     \\ \midrule
+1   & scc\_cpu     & no-tool        & 14629421 & TRUE      &                \\
+2   & scc\_cpu     & tensorboard    & 14629426 & TRUE      &                \\
+3   & scc\_cpu     & profiler-torch & 14629425 & TRUE      &                \\
+4   & scc\_cpu     & deepspeed      & 14617521 & FALSE     &                \\
+5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE      &                \\
+6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE      &                \\
+7   & scc\_gtx1080 & profiler-torch & 14615562 & TRUE      &                \\
+8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE      &                \\
+9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE      &                \\
+10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE      &                \\
+11  & scc\_rtx5000 & profiler-torch & 14617173 & TRUE      &                \\
+12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE      &                \\
+13  & scc\_v100    & no-tool        & 14619619 & TRUE      &                \\
+14  & scc\_v100    & tensorboard    & 14617203 & TRUE      &                \\
+15  & scc\_v100    & profiler-torch & 14617204 & TRUE      &                \\
+16  & scc\_v100    & deepspeed      & 14617202 & TRUE      &                \\
+17  & scc\_gtx1080 & profiler-torch & 14629008 & TRUE      & batch-size-64  \\
+18  & scc\_gtx1080 & profiler-torch & 14628864 & TRUE      & sample-points  \\
+19  & scc\_cpu     & profiler-torch & 14629422 & TRUE      & sample-points  \\
+20  & scc\_gtx1080 & profiler-torch & 14633534 & TRUE      & batch-size-128 \\ \bottomrule
+\end{tabular}
+\end{table}
+}
+\end{frame}
+
+\begin{frame}{Tensorboard for run with GTX1080}
+
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_tensorboard_14615343}
+    \end{figure}
+    \end{center}
+
 \end{frame}
 
 \end{document}
