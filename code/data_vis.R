@@ -79,14 +79,16 @@ g
 export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_no-experiment.png", ratio = 1)
 
 
-g <-ggplot(filter(data, tool=="profiler-torch" & experiment != "batch-size-64" & (node =="scc_gtx1080" | node == "scc_cpu")), aes(factor(node), duration)) + 
+g <-ggplot(filter(data, tool=="profiler-torch" & experiment != "batch-size-64" & experiment != "batch-size-128"   & (node =="scc_gtx1080" | node == "scc_cpu")), aes(factor(node), duration)) + 
   geom_bar(aes(fill = experiment),stat="identity", position = "dodge") + 
-  scale_alpha_discrete("Is a valid run.")+
-  scale_fill_brewer(palette = "Set1")+
+  scale_fill_brewer("Sample points ...",
+                    breaks = c("", "sample-points"),
+                    labels = c("before training","during training"),
+                    palette = "Set1")+
   xlab("Compute Nodes")+
   ylab("Elapsed time [sec]")
 g
-export_ggplot(g, target_size = "half", name = "~/projects/scap/data/sacct_barplot_by_nodes_sample-points-effect.png", ratio = 1)
+export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_sample-points-effect.png", ratio = 0.6)
 
 
 g <-ggplot(data, aes(factor(node), log(duration), fill = tool, alpha = is_valid)) + 
@@ -120,11 +122,17 @@ g
 
 export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_no-experiment_gpu.png", ratio = 0.5)
 
+
+level_order <- c('', 'batch-size-64', 'batch-size-128') 
 g <-ggplot(filter(data, tool=="profiler-torch" & experiment != "sample-points" & node =="scc_gtx1080"), aes(factor(node), duration)) + 
-  geom_bar(aes(fill = experiment),stat="identity", position = "dodge") + 
-  scale_alpha_discrete("Is a valid run.")+
-  scale_fill_brewer(palette = "Set1")+
+  geom_bar(aes(fill = factor(experiment, level_order)),stat="identity", position = "dodge") + 
+  #scale_fill_discrete()+
+  scale_fill_brewer("Batch size",
+  breaks= c('', 'batch-size-64', 'batch-size-128'),
+labels=c('batch-size: 32 \n(default)', 'batch-size: 64', 'batch-size: 128'),
+    palette = "Set1")+
   xlab("Compute Nodes")+
   ylab("Elapsed time [sec]")
 g
-export_ggplot(g, target_size = "half", name = "~/projects/scap/data/sacct_barplot_by_nodes_batch-size-effect.png", ratio = 1)
+
+export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_batch-size-effect.png", ratio = 0.6)

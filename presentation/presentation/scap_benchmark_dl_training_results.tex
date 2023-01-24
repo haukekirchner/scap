@@ -408,7 +408,15 @@ tool                              & metrics                                     
 \begin{frame}{Trying to use the PyTorch Profiler to find the reason}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.5\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Trying to use the PyTorch Profiler to find the reason}
+    \begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864_zoom}
     \end{figure}
     \end{center}
 \end{frame}
@@ -418,9 +426,10 @@ tool                              & metrics                                     
 \end{frame}
 
 \begin{frame}{Effect of sample points}
+    \vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.5\textwidth]{../../data/sacct_barplot_by_nodes_sample-points-effect}
+        \includegraphics[width=0.85\textwidth]{../../data/sacct_barplot_by_nodes_sample-points-effect}
     \end{figure}
     \end{center}
 \end{frame}
@@ -547,22 +556,13 @@ sacct --format=jobid,elapsed -P -j 14629422,14617521,14615343,14615562,14615344,
 
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_14615562}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_14615562_zoom}
     \end{figure}
 \end{center}
 
 \end{frame}
 
-\begin{frame}{result of increasing batch size}
-    \begin{center}
-        \begin{figure}
-            \includegraphics[width=1\textwidth]{../../data/sacct_barplot_by_nodes_batch-size-effect}
-
-        \end{figure}
-    \end{center}
-\end{frame}
-
-\begin{frame}{result of increasing batch size}
+\begin{frame}{result of increasing batch size - 64}
 
 \begin{center}
     \begin{figure}
@@ -570,6 +570,47 @@ sacct --format=jobid,elapsed -P -j 14629422,14617521,14615343,14615562,14615344,
     \end{figure}
     \end{center}
 
+\end{frame}
+
+\begin{frame}{result of increasing batch size - 64}
+
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14629008_zoom}
+    \end{figure}
+    \end{center}
+
+\end{frame}
+
+
+\begin{frame}{result of increasing batch size - 128}
+
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14633534}
+    \end{figure}
+    \end{center}
+
+\end{frame}
+
+\begin{frame}{result of increasing batch size - 128}
+
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14633534_zoom}
+    \end{figure}
+    \end{center}
+
+\end{frame}
+
+\begin{frame}{result of increasing batch size}
+    \vspace{-1em}
+    \begin{center}
+        \begin{figure}
+            \includegraphics[width=0.85\textwidth]{../../data/sacct_barplot_by_nodes_batch-size-effect}
+
+        \end{figure}
+    \end{center}
 \end{frame}
 
 %%%%%%%%%%%%%%%%
