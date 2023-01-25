@@ -9,8 +9,7 @@ for epoch in range(num_training_epochs):
             with_stack=True)
     prof.start()
     for i, batch in enumerate(train_loader):
-        if i >= (1 + 1 + 3) * 2:
-                    break
         [...] # Load data, classify data, calculate loss
         loss.backward(); optimizer.step()
         prof.step()
+    prof.stop()
