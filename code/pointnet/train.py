@@ -19,6 +19,8 @@ import sys, getopt
 
 from torch.utils.tensorboard import SummaryWriter
 
+from torch.profiler import profile, record_function, ProfilerActivity
+
 def fix_random_seed(seed: int, device=None) -> None:
     """Fix random seeds for reproducibility of all experiments."""
     random.seed(seed) # Python pseudo-random generator
@@ -97,10 +99,10 @@ def train(model, train_loader, val_loader, optimizer, device, num_training_epoch
                 if i == profile_step:
                     flop_prof.start_profile()
 
-            if profiler_torch:
-                # profiler #############################################
-                if i >= (1 + 1 + 3) * 2:
-                    break
+            #if profiler_torch:
+            #    # profiler #############################################
+            #    if i >= (1 + 1 + 3) * 2:
+            #        break
                 ########################################################
                
             # Load data.
@@ -145,7 +147,11 @@ def train(model, train_loader, val_loader, optimizer, device, num_training_epoch
         # Write loss for epoch
         if tensorboard:
             writer.add_scalar("Loss/Epochs", running_loss, epoch)
-            
+        
+
+        if profiler_torch:
+            prof.stop()
+
         # Validation.
         model.eval()
         if epoch % 5 == 4: # get validation accuracy every 5 epochs
