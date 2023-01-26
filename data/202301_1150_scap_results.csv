@@ -9,7 +9,7 @@ run;node;tool; job_id;is_valid;experiment
 8;scc_gtx1080;deepspeed;14615344;TRUE;
 9;scc_rtx5000;no-tool;14619618;TRUE;
 10;scc_rtx5000;tensorboard;14617172;TRUE;
-11;scc_rtx5000;profiler-torch;14617173;TRUE;
+11;scc_rtx5000;profiler-torch;14650079;TRUE;
 12;scc_rtx5000;deepspeed;14617171;TRUE;
 13;scc_v100;no-tool;14619619;TRUE;
 14;scc_v100;tensorboard;14617203;TRUE;

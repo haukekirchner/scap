@@ -420,21 +420,15 @@ tool                              & metrics                                     
 \section{Methods}
 
 \begin{frame}[fragile]{Tensorboard}
-    \begin{tcolorbox}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,9-12,14-16}]{python}{../../data/tensorboard.py}
-    \end{tcolorbox}
 \end{frame}
 
 \begin{frame}[fragile]{Torch profiler}
-    \begin{tcolorbox}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,12,13,16}]{python}{../../data/profiler-torch.py}
-    \end{tcolorbox}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,14,15}]{python}{../../data/profiler-torch.py}
 \end{frame}
 
 \begin{frame}[fragile]{Deepspeed - FlopsProfiler}
-    \begin{tcolorbox}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{../../data/deepspeed.py}
-    \end{tcolorbox}
 \end{frame}
 
 \section{Results}
@@ -448,17 +442,19 @@ tool                              & metrics                                     
 \end{frame}
 
 \begin{frame}{Trying to use the PyTorch Profiler to find the reason}
+	\vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864}
     \end{figure}
     \end{center}
 \end{frame}
 
 \begin{frame}{Trying to use the PyTorch Profiler to find the reason}
+    \vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864_zoom}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864_zoom}
     \end{figure}
     \end{center}
 \end{frame}
@@ -530,7 +526,7 @@ run & node         & tool           & job\_id  & is\_valid \\ \midrule
 \end{frame}
 
 \begin{frame}{Overview - runtime on HPC}
-    \vspace{-1.35em}
+    \vspace{-1em}
     \begin{center}
     \begin{figure}
         \includegraphics[width=1\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment}
@@ -539,10 +535,10 @@ run & node         & tool           & job\_id  & is\_valid \\ \midrule
 \end{frame}
 
 \begin{frame}{Overview - runtime on HPC - GPU-only}
-    \vspace{-1.35em}
+    \vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment_gpu}
+        \includegraphics[width=0.87\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment_gpu}
     \end{figure}
     \end{center}
 \end{frame}
@@ -586,10 +582,10 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 \end{frame}
 
 \begin{frame}{lets look at the pytorch profiler hint section}
-
+	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_14615562}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_14615562}
     \end{figure}
 \end{center}
 
@@ -606,17 +602,17 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 \end{frame}
 
 \begin{frame}{result of increasing batch size - 64}
-
+	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14629008}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14629008}
     \end{figure}
     \end{center}
 
 \end{frame}
 
 \begin{frame}{result of increasing batch size - 64}
-
+	\vspace{-1em}
 \begin{center}
     \begin{figure}
         \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14629008_zoom}
@@ -627,17 +623,17 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 
 
 \begin{frame}{result of increasing batch size - 128}
-
+	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14633534}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14633534}
     \end{figure}
     \end{center}
 
 \end{frame}
 
 \begin{frame}{result of increasing batch size - 128}
-
+	\vspace{-1em}
 \begin{center}
     \begin{figure}
         \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14633534_zoom}
@@ -661,23 +657,17 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 \section{Results - Deepspeed/Flops-Profiler}
 
 \begin{frame}[fragile]{Code listings}
-    \begin{tcolorbox}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
-    \end{tcolorbox}
 
 \end{frame}
 
 \begin{frame}[fragile]{Code listings}
-    \begin{tcolorbox}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=18,lastline=31]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
-    \end{tcolorbox}
 
 \end{frame}
 
 \begin{frame}[fragile]{Code listings}
-    \begin{tcolorbox}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\tiny, firstline=33,lastline=48, breaklines]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
-    \end{tcolorbox}
 
 \end{frame}
 
