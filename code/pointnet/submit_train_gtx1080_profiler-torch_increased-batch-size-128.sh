@@ -2,7 +2,7 @@
 #SBATCH --job-name=scap_gtx1080_profiler-torch_batch-size-128
 #SBATCH -o /usr/users/%u/%x-%A-%a.log
 #SBATCH -p gpu                       # request gpu node for the training
-#SBATCH -t 00:20:00                  # TODO: estimate the time you will need
+#SBATCH -t 01:20:00                  # TODO: estimate the time you will need
 #SBATCH -G gtx1080                   # requesting specific GPU, run sinfo -p gpu --format=%N,%G # to see what is available
 #SBATCH --nodes=1                    # total number of nodes
 #SBATCH --ntasks=1                   # total number of tasks
