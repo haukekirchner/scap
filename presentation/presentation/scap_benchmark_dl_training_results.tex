@@ -445,7 +445,7 @@ tool                              & metrics                                     
 	\vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750}
     \end{figure}
     \end{center}
 \end{frame}
@@ -454,7 +454,7 @@ tool                              & metrics                                     
     \vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14628864_zoom}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750_execution-time}
     \end{figure}
     \end{center}
 \end{frame}
@@ -463,7 +463,7 @@ tool                              & metrics                                     
     
 \end{frame}
 
-\begin{frame}{Effect of sample points}
+\begin{frame}{Effect of sample points on walltime}
     \vspace{-1em}
     \begin{center}
     \begin{figure}
@@ -585,7 +585,7 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_14615562}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_14650076}
     \end{figure}
 \end{center}
 
@@ -595,7 +595,7 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_14615562_zoom}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_14650076_zoom}
     \end{figure}
 \end{center}
 
@@ -605,7 +605,7 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14629008}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758}
     \end{figure}
     \end{center}
 
@@ -615,7 +615,7 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14629008_zoom}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_zoom}
     \end{figure}
     \end{center}
 
@@ -626,35 +626,133 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14633534}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14650759}
     \end{figure}
     \end{center}
 
 \end{frame}
 
-\begin{frame}{result of increasing batch size - 128}
-	\vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14633534_zoom}
-    \end{figure}
-    \end{center}
 
-\end{frame}
-
-\begin{frame}{result of increasing batch size}
+\begin{frame}{result of increasing batch size - comparison}
     \vspace{-1em}
-    \begin{center}
-        \begin{figure}
-            \includegraphics[width=0.85\textwidth]{../../data/sacct_barplot_by_nodes_batch-size-effect}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_comparison-batch-size}
+    \end{figure}
+    \end{center}
 
-        \end{figure}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+Operator View
+\end{center}
+\end{frame}
+
+\begin{frame}{Operator View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Operator View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+GPU Kernel View
+\end{center}
+\end{frame}
+
+\begin{frame}{GPU Kernel View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+
+\begin{frame}
+\begin{center}
+Trace View
+\end{center}
+\end{frame}
+
+\begin{frame}{Trace View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Trace View - Laspy with presampled lidar data}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.8\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Trace View - Laspy with raw lidar data}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.8\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+Memory View
+\end{center}
+\end{frame}
+
+\begin{frame}{Memory View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}
+\begin{center}
+Module View
+\end{center}
+\end{frame}
+
+\begin{frame}{Module View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
+    \end{figure}
     \end{center}
 \end{frame}
 
 %%%%%%%%%%%%%%%%
 
 \section{Results - Deepspeed/Flops-Profiler}
+
+\begin{frame}
+Deepspeed/Flops-Profiler
+\end{frame}
 
 \begin{frame}[fragile]{Code listings}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
@@ -746,6 +844,16 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \end{figure}
     \end{center}
 
+\end{frame}
+
+\begin{frame}{result of increasing batch size on walltime}
+    \vspace{-1em}
+    \begin{center}
+        \begin{figure}
+            \includegraphics[width=0.85\textwidth]{../../data/sacct_barplot_by_nodes_batch-size-effect}
+
+        \end{figure}
+    \end{center}
 \end{frame}
 
 \end{document}

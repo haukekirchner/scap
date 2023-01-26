@@ -40,7 +40,6 @@ data_jobs
 
 data_sacct <- read.csv(file = '~/projects/scap/data/sacct.out', sep="|")
 names(data_sacct)[names(data_sacct) == 'JobID'] <- 'job_id'
-data_sacct
 
 data <- merge(data_jobs,data_sacct,by="job_id")
 data
@@ -67,6 +66,8 @@ g <-ggplot(filter(data, experiment =="sample-points"), aes(factor(node), duratio
   ylab("Elapsed time [sec]")
 
 g
+export_ggplot(g, target_size = "half", name = "~/projects/scap/data/sacct_barplot_by_nodes_profiler-torch_sample-points.png", ratio = 1)
+
 
 
 g <-ggplot(filter(data, experiment ==""), aes(factor(node), duration, fill = tool, alpha = is_valid)) + 

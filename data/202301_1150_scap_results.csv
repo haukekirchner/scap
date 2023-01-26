@@ -1,11 +1,11 @@
 run;node;tool; job_id;is_valid;experiment
 1;scc_cpu;no-tool;14629421;TRUE;
 2;scc_cpu;tensorboard;14629426;TRUE;
-3;scc_cpu;profiler-torch;14629425;TRUE;
+3;scc_cpu;profiler-torch;14650740;TRUE;
 4;scc_cpu;deepspeed;14617521;FALSE;
 5;scc_gtx1080;no-tool;14619617;TRUE;
 6;scc_gtx1080;tensorboard;14615343;TRUE;
-7;scc_gtx1080;profiler-torch;14615562;TRUE;
+7;scc_gtx1080;profiler-torch;14650076;TRUE;
 8;scc_gtx1080;deepspeed;14615344;TRUE;
 9;scc_rtx5000;no-tool;14619618;TRUE;
 10;scc_rtx5000;tensorboard;14617172;TRUE;
@@ -13,9 +13,9 @@ run;node;tool; job_id;is_valid;experiment
 12;scc_rtx5000;deepspeed;14617171;TRUE;
 13;scc_v100;no-tool;14619619;TRUE;
 14;scc_v100;tensorboard;14617203;TRUE;
-15;scc_v100;profiler-torch;14617204;TRUE;
+15;scc_v100;profiler-torch;14650080;TRUE;
 16;scc_v100;deepspeed;14617202;TRUE;
-17;scc_gtx1080;profiler-torch;14629008;TRUE;batch-size-64
-18;scc_gtx1080;profiler-torch;14628864;TRUE;sample-points
-19;scc_cpu;profiler-torch;14629422;TRUE;sample-points
-20;scc_gtx1080;profiler-torch;14633534;TRUE;batch-size-128
+17;scc_gtx1080;profiler-torch;14650758;TRUE;batch-size-64
+18;scc_gtx1080;profiler-torch;14650750;TRUE;sample-points
+19;scc_cpu;profiler-torch;14629422;FALSE;sample-points
+20;scc_gtx1080;profiler-torch;14650759;TRUE;batch-size-128
