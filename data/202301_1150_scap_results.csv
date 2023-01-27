@@ -17,5 +17,5 @@ run;node;tool; job_id;is_valid;experiment
 16;scc_v100;deepspeed;14617202;TRUE;
 17;scc_gtx1080;profiler-torch;14650758;TRUE;batch-size-64
 18;scc_gtx1080;profiler-torch;14650750;TRUE;sample-points
-19;scc_cpu;profiler-torch;14629422;FALSE;sample-points
+19;scc_cpu;profiler-torch;14657599;TRUE;sample-points
 20;scc_gtx1080;profiler-torch;14650759;TRUE;batch-size-128

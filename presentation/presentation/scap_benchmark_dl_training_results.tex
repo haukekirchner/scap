@@ -40,6 +40,7 @@
 }
 
 \usepackage{fancyvrb}
+\usepackage[normalem]{ulem}
 
 \hypersetup{
     colorlinks,
@@ -259,6 +260,18 @@ Linky}}
     \end{columns}
 \end{frame}
 
+\section{Research Goals}
+\sectionIntroHidden
+\begin{frame}{Research Goals}
+
+\begin{itemize}
+    \item Identify \textbf{profiling tools} that can help to \textbf{optimize an existing PyTorch workflow}.
+    \item As this approach should help scientists, the \textbf{usibility is of high importance}. The simplest tool for doing the job is preferred.
+    \item In contrast to training benchmark suites, such as MLPerf, I do not focus on benchmarking hardware but on optimizing an existing PyTorch workflow (viewpoint of a scientist)
+\end{itemize}
+
+\end{frame}
+
 \section{Methods}
 \sectionIntroHidden % Show an outline of the current section with hidden subsections
 %\sectionIntro % Show an outline of the current section with subsections
@@ -296,9 +309,7 @@ Linky}}
 metric                                                                                 & purpose                        \\ \midrule
 Execution time                                                                         & \multirow{2}{*}{traditionally} \\
 FLOPS                                                                                  &                                \\ \midrule
-Throughput: $\frac{images}{sec}$                                                       & with the advent of GPUs        \\ \midrule
-Time to Accuracy (TTA)                                                                 & \multirow{2}{*}{deep learning} \\
-\begin{tabular}[c]{@{}l@{}}Average Time to \\ Multiple Thresholds (ATTMT)\end{tabular} &                                \\ \bottomrule
+Throughput: $\frac{images}{sec}$                                                       & with the advent of GPUs        \\ \bottomrule
 \end{tabular}
 \end{table}
 
@@ -307,131 +318,40 @@ Time to Accuracy (TTA)                                                          
 
 \end{frame}
 
-
-\section{Tools}
-\sectionIntroHidden
-
 \begin{frame}{Tools - Overview}
+    \begin{column}{0.5\textwidth}
+        \begin{block}{\centering \includegraphics[height=4em,keepaspectratio,]{../../data/Pytorch_logo}}
 
-% Please add the following required packages to your document preamble:
-% \usepackage{booktabs}
-% \usepackage{multirow}
-\begin{table}[]
-\begin{tabular}{@{}lll@{}}
-\toprule
-tool                              & metrics                                                                                & scope                    \\ \midrule
-\href{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}{PyTorch Profiler With TensorBoard} & \begin{tabular}[c]{@{}l@{}}performance metrics\\ (e.g. time, memory)\end{tabular}      & \multirow{2}{*}{PyTorch} \\
-\href{https://github.com/facebookresearch/fvcore}{fvcore}                      & FLOPS                                                                                  &                          \\ \midrule
-\href{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}{Vtune}                             & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}general\\ performance metrics\end{tabular}} & Intel-only               \\
-\href{https://github.com/RRZE-HPC/likwid}{likwid}                            &                                                                                        & general                  \\ \bottomrule
-\end{tabular}
-\end{table}
+                \begin{itemize}
+                    \item PyTorch - Profiler~\footnote{\tiny{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}}}
+                    \item collection of performance metrics during training/inference
+                    \item indentification of expensive operators and 
+                    \item tracking of the kernel activity
+                \end{itemize}
+            \end{block}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+        \begin{block}{\centering \includegraphics[height=4em,keepaspectratio,]{../../data/deepspeed-logo-uppercase-bold-white-1.15}}
+                
+                \begin{itemize}
+                    \item FlopsProfiler is part of the deep learning optimization software suit DeepSpeed~\footnote{\tiny{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}}}
+                    \item model training/inference speed (latency, throughput)
+                    \item efficiency (floating-point operations per second)
+                \end{itemize}
+            \end{block}
+    \end{column}
+\end{frame}
 
+\section{First attempts}
 
-
+\begin{frame}{Training setup}
 \begin{itemize}
-    \item[$\Rightarrow$] different tools for different use cases
-    \item[$\Rightarrow$] Vtune and likwid can profile all kind of applications
-    \item[$\Rightarrow$] here I will focus on profiling tools optimized for PyTorch
+    \item number of trees for training: 8000 (740 GB)
+    \item number of trees for test: 2000 (191GB)
+    \item trained for 15 epochs
 \end{itemize}
-
 \end{frame}
 
-\begin{frame}{PyTorch Profiler With TensorBoard}
-    \vspace{-1em}
-    \begin{center}
-    \begin{figure}
-        \includegraphics[width=1\textwidth]{assets/profiler_overview1}
-    \end{figure}
-    \end{center}
-\source{Image source: \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
-
-\end{frame}
-
-\begin{frame}{PyTorch Profiler With TensorBoard}
-    \vspace{-1em}
-    \begin{center}
-    \begin{figure}
-        \includegraphics[width=1\textwidth]{assets/profiler_overview_gpu_summary}
-    \end{figure}
-    \end{center}
-\source{Image source: Adapted from \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
-
-\end{frame}
-
-\begin{frame}{PyTorch Profiler With TensorBoard}
-    \vspace{-1em}
-    \begin{center}
-    \begin{figure}
-        \includegraphics[width=1\textwidth]{assets/profiler_overview_execution_time}
-    \end{figure}
-    \end{center}
-\source{Image source: Adapted from \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
-
-\end{frame}
-
-\begin{frame}{PyTorch Profiler With TensorBoard}
-    \vspace{-1em}
-    \begin{center}
-    \begin{figure}
-        \includegraphics[width=1\textwidth]{assets/profiler_overview_step_time_breakdown}
-    \end{figure}
-    \end{center}
-\source{Image source: Adapted from \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
-
-\end{frame}
-
-\end{frame}
-
-\begin{frame}{PyTorch Profiler With TensorBoard}
-    \vspace{-1em}
-    \begin{center}
-    \begin{figure}
-        \includegraphics[width=1\textwidth]{assets/profiler_overview_performance_reccomondation}
-    \end{figure}
-    \end{center}
-\source{Image source: Adapted from \url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
-
-\end{frame}
-
-\begin{frame}{fvcore - Flop Counter for PyTorch Models}
-    \vspace{-1em}
-    \begin{center}
-    \begin{figure}
-        \includegraphics[width=0.9\textwidth]{assets/flop_counter_print}
-    \end{figure}
-    \end{center}
-\source{Image source: \url{https://github.com/facebookresearch/fvcore/blob/main/docs/flop_count.md}, accessed on: 22.11.2022}
-
-\end{frame}
-
-\section{Research Goals}
-
-\begin{frame}{Research Goals}
-
-\begin{itemize}
-    \item Identify \textbf{profiling tools} that can help to \textbf{optimize an existing PyTorch workflow}.
-    \item As this approach should help scientists, the \textbf{usibility is of high importance}. The simplest tool for doing the job is preferred.
-    \item In contrast to training benchmark suites, such as MLPerf, I do not focus on benchmarking hardware but on optimizing an existing PyTorch workflow (viewpoint of a scientist)
-\end{itemize}
-
-\end{frame}
-
-\section{Methods}
-
-\begin{frame}[fragile]{Tensorboard}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,9-12,14-16}]{python}{../../data/tensorboard.py}
-\end{frame}
-
-\begin{frame}[fragile]{Torch profiler}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,14,15}]{python}{../../data/profiler-torch.py}
-\end{frame}
-
-\begin{frame}[fragile]{Deepspeed - FlopsProfiler}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{../../data/deepspeed.py}
-\end{frame}
-
-\section{Results}
 
 \begin{frame}{First attempt using PyTorch Profiler}
     \begin{center}
@@ -472,61 +392,72 @@ tool                              & metrics                                     
     \end{center}
 \end{frame}
 
+\section{Experiments}
+
+\begin{frame}{Training setup - new}
+\begin{itemize}
+    \item number of trees for training: 8000 (\sout{740 GB} 434 MB)
+    \item number of trees for test: 2000 (\sout{191 GB} 109M)
+    \item trained for 15 epochs
+    \item[$\rightarrow$] reduced hardware usage (energy + money savings)
+    \item[$\rightarrow$] more variations of hardware and tools can be tested
+\end{itemize}
+\end{frame}
 
 \begin{frame}{Test runs}
-\label{pg:lastpage} % Label on last frame to get the page number for footer
-
 \begin{columns}
         \begin{column}{0.5\textwidth}
             \centering
             \vspace{-1em}
             \begin{figure}
             \includegraphics[width=0.85\textwidth]{../../data/runs.png}
-            \caption*{abc}
+            \caption*{Experiments}
             \end{figure}
         \end{column}
         \begin{column}{0.5\textwidth}
             \begin{itemize}
-                \item "Stable Diffusion v1 version of the model requires 150,000 A100 GPU Hours for a single training session"\footnote{\tiny{\url{https://syncedreview.com/2022/11/09/almost-7x-cheaper-colossal-ais-open-source-solution-accelerates-aigc-at-a-low-cost-diffusion-pretraining-and-hardware-fine-tuning-can-be/}}, accessed on: 10.11.2022}
-                \vspace{1em}
-                \item[$\Rightarrow$] Optimization of deep learning workflows is of growing importance for energy efficiency.
+                \item 4 different nodes of the Scientific Compute Cluster
+                \item 4 different setups regarding tool usage (only one at a time)
+                \item Tensorflow was included to inspect resulting overhead
+                \item[$\Rightarrow$] 16 runs
             \end{itemize}
         \end{column}
     \end{columns}
 
 \end{frame}
 
-\begin{frame}{Test runs - table}
+\begin{frame}{Test runs - tabular overview}
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 \scriptsize{
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
 \begin{table}[]
 \begin{tabular}{@{}llllll@{}}
 \toprule
-run & node         & tool           & job\_id  & is\_valid \\ \midrule
-1   & scc\_cpu     & no-tool        & 14629421 & TRUE      \\
-2   & scc\_cpu     & tensorboard    & 14629426 & TRUE      \\
-3   & scc\_cpu     & profiler-torch & 14629425 & TRUE      \\
-4   & scc\_cpu     & deepspeed      & 14617521 & FALSE     \\
-5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE      \\
-6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE      \\
-7   & scc\_gtx1080 & profiler-torch & 14615562 & TRUE      \\
-8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE      \\
-9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE      \\
-10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE      \\
-11  & scc\_rtx5000 & profiler-torch & 14617173 & TRUE      \\
-12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE      \\
-13  & scc\_v100    & no-tool        & 14619619 & TRUE      \\
-14  & scc\_v100    & tensorboard    & 14617203 & TRUE      \\
-15  & scc\_v100    & profiler-torch & 14617204 & TRUE      \\
-16  & scc\_v100    & deepspeed      & 14617202 & TRUE      \\ \bottomrule
+run & node         & tool           & job\_id  & is\_valid & experiment \\ \midrule
+1   & scc\_cpu     & no-tool        & 14629421 & TRUE      &            \\
+2   & scc\_cpu     & tensorboard    & 14629426 & TRUE      &            \\
+3   & scc\_cpu     & profiler-torch & 14650740 & TRUE      &            \\
+4   & scc\_cpu     & deepspeed      & 14617521 & FALSE     &            \\
+5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE      &            \\
+6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE      &            \\
+7   & scc\_gtx1080 & profiler-torch & 14650076 & TRUE      &            \\
+8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE      &            \\
+9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE      &            \\
+10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE      &            \\
+11  & scc\_rtx5000 & profiler-torch & 14650079 & TRUE      &            \\
+12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE      &            \\
+13  & scc\_v100    & no-tool        & 14619619 & TRUE      &            \\
+14  & scc\_v100    & tensorboard    & 14617203 & TRUE      &            \\
+15  & scc\_v100    & profiler-torch & 14650080 & TRUE      &            \\
+16  & scc\_v100    & deepspeed      & 14617202 & TRUE      &           
 \end{tabular}
 \end{table}
 }
 \end{frame}
 
 \begin{frame}{Overview - runtime on HPC}
-    \vspace{-1em}
     \begin{center}
     \begin{figure}
         \includegraphics[width=1\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment}
@@ -535,7 +466,6 @@ run & node         & tool           & job\_id  & is\_valid \\ \midrule
 \end{frame}
 
 \begin{frame}{Overview - runtime on HPC - GPU-only}
-    \vspace{-1em}
     \begin{center}
     \begin{figure}
         \includegraphics[width=0.87\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment_gpu}
@@ -547,45 +477,24 @@ run & node         & tool           & job\_id  & is\_valid \\ \midrule
 \begin{columns}
 \begin{column}{0.7\textwidth}
         \begin{minted}[breaklines, fontsize=\scriptsize ]{python}
-sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615344, 14617172, 14617173, 14617171, 14618941, 14617203, 14619619, 14617204, 14619618, 14619617, 14617202, 14628864, 14629008, 14629421, 14629426, 14629425 -X
+sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615344, 14617172, 14650079, 14617171, 14618941, 14617203, 14619619, 14650080, 14619618,14619617, 14617202, 14650750, 14650758, 14629421, 14629426, 14650740, 14650759 -X
         \end{minted}
 \end{column}
 
 \begin{column}{0.3\textwidth}
     \vspace{-2em}
-        \begin{minted}[breaklines, fontsize=\scriptsize ]{python}
-    JobID|Elapsed
-14615343|00:11:10
-14615344|00:11:22
-14615562|00:04:48
-14617171|00:06:28
-14617172|00:06:22
-14617173|00:03:36
-14617202|00:04:24
-14617203|00:04:19
-14617204|00:04:31
-14617521|00:01:40
-14618941|00:20:02
-14619617|00:13:25
-14619618|00:08:40
-14619619|00:04:06
-14628864|01:07:19
-14629008|00:06:45
-14629421|02:37:14
-14629422|01:10:40
-14629425|00:13:55
-14629426|02:36:55
-        \end{minted}
+        \inputminted[xleftmargin=1em,linenos,fontsize=\tiny,]{python}{../../data/sacct.out}
 \end{column}
 \end{columns}
-
 \end{frame}
 
-\begin{frame}{lets look at the pytorch profiler hint section}
+\section{Pytorch - Profiler}
+
+\begin{frame}{PyTorch-Profiler: Overview}
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_14650076}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_14650076}
     \end{figure}
 \end{center}
 
@@ -595,7 +504,7 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_14650076_zoom}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_14650076_zoom}
     \end{figure}
 \end{center}
 
@@ -605,7 +514,7 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758}
     \end{figure}
     \end{center}
 
@@ -615,7 +524,7 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_zoom}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_zoom}
     \end{figure}
     \end{center}
 
@@ -626,7 +535,7 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14650759}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14650759}
     \end{figure}
     \end{center}
 
@@ -637,16 +546,10 @@ sacct --format=jobid,elapsed -P -j 14629422, 14617521, 14615343, 14615562, 14615
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_comparison-batch-size}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_comparison-batch-size}
     \end{figure}
     \end{center}
 
-\end{frame}
-
-\begin{frame}
-\begin{center}
-Operator View
-\end{center}
 \end{frame}
 
 \begin{frame}{Operator View}
@@ -682,18 +585,11 @@ GPU Kernel View
     \end{center}
 \end{frame}
 
-
-\begin{frame}
-\begin{center}
-Trace View
-\end{center}
-\end{frame}
-
 \begin{frame}{Trace View}
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
     \end{figure}
     \end{center}
 \end{frame}
@@ -702,7 +598,7 @@ Trace View
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.8\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
     \end{figure}
     \end{center}
 \end{frame}
@@ -711,15 +607,9 @@ Trace View
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.8\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
     \end{figure}
     \end{center}
-\end{frame}
-
-\begin{frame}
-\begin{center}
-Memory View
-\end{center}
 \end{frame}
 
 \begin{frame}{Memory View}
@@ -729,12 +619,6 @@ Memory View
         \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
     \end{figure}
     \end{center}
-\end{frame}
-
-\begin{frame}
-\begin{center}
-Module View
-\end{center}
 \end{frame}
 
 \begin{frame}{Module View}
@@ -748,11 +632,7 @@ Module View
 
 %%%%%%%%%%%%%%%%
 
-\section{Results - Deepspeed/Flops-Profiler}
-
-\begin{frame}
-Deepspeed/Flops-Profiler
-\end{frame}
+\section{Deepspeed - FlopsProfiler}
 
 \begin{frame}[fragile]{Code listings}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
@@ -769,9 +649,37 @@ Deepspeed/Flops-Profiler
 
 \end{frame}
 
+\section{Usability}
+
+\begin{frame}{Usability}
+\end{frame}
+
 
 \section{Conclusion}
-\begin{frame}{Benchmarking is the first step of optimizing}
+\begin{frame}{Conclusion}
+
+\begin{columns}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \vspace{-1em}
+            \begin{figure}
+            \includegraphics[width=0.85\textwidth]{assets/Sherlock-Holmes-locates-the-best-graphical-processing-unit-inside-the-data-center-for-his-deep-learning-workflow}
+            \caption*{Image generated with stable diffusion: \\
+            \tiny{"Sherlock Holmes locates the best graphical processing unit inside the data center for his deep learning workflow"}}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item "Stable Diffusion v1 version of the model requires 150,000 A100 GPU Hours for a single training session"\footnote{\tiny{\url{https://syncedreview.com/2022/11/09/almost-7x-cheaper-colossal-ais-open-source-solution-accelerates-aigc-at-a-low-cost-diffusion-pretraining-and-hardware-fine-tuning-can-be/}}, accessed on: 10.11.2022}
+                \vspace{1em}
+                \item[$\Rightarrow$] Optimization of deep learning workflows is of growing importance for energy efficiency.
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
+\end{frame}
+
+\begin{frame}{Try it yourself}
 \label{pg:lastpage} % Label on last frame to get the page number for footer
 
 \begin{columns}
@@ -795,7 +703,11 @@ Deepspeed/Flops-Profiler
 
 \end{frame}
 
-\section{Appendix}
+\begin{frame}
+\begin{center}
+Appendix
+\end{center}
+\end{frame}
 
 \begin{frame}{References}
     % References slide in appendix
@@ -807,30 +719,32 @@ Deepspeed/Flops-Profiler
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 \tiny{
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
 \begin{table}[]
 \begin{tabular}{@{}llllll@{}}
 \toprule
 run & node         & tool           & job\_id  & is\_valid & experiment     \\ \midrule
 1   & scc\_cpu     & no-tool        & 14629421 & TRUE      &                \\
 2   & scc\_cpu     & tensorboard    & 14629426 & TRUE      &                \\
-3   & scc\_cpu     & profiler-torch & 14629425 & TRUE      &                \\
+3   & scc\_cpu     & profiler-torch & 14650740 & TRUE      &                \\
 4   & scc\_cpu     & deepspeed      & 14617521 & FALSE     &                \\
 5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE      &                \\
 6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE      &                \\
-7   & scc\_gtx1080 & profiler-torch & 14615562 & TRUE      &                \\
+7   & scc\_gtx1080 & profiler-torch & 14650076 & TRUE      &                \\
 8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE      &                \\
 9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE      &                \\
 10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE      &                \\
-11  & scc\_rtx5000 & profiler-torch & 14617173 & TRUE      &                \\
+11  & scc\_rtx5000 & profiler-torch & 14650079 & TRUE      &                \\
 12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE      &                \\
 13  & scc\_v100    & no-tool        & 14619619 & TRUE      &                \\
 14  & scc\_v100    & tensorboard    & 14617203 & TRUE      &                \\
-15  & scc\_v100    & profiler-torch & 14617204 & TRUE      &                \\
+15  & scc\_v100    & profiler-torch & 14650080 & TRUE      &                \\
 16  & scc\_v100    & deepspeed      & 14617202 & TRUE      &                \\
-17  & scc\_gtx1080 & profiler-torch & 14629008 & TRUE      & batch-size-64  \\
-18  & scc\_gtx1080 & profiler-torch & 14628864 & TRUE      & sample-points  \\
-19  & scc\_cpu     & profiler-torch & 14629422 & TRUE      & sample-points  \\
-20  & scc\_gtx1080 & profiler-torch & 14633534 & TRUE      & batch-size-128 \\ \bottomrule
+17  & scc\_gtx1080 & profiler-torch & 14650758 & TRUE      & batch-size-64  \\
+18  & scc\_gtx1080 & profiler-torch & 14650750 & TRUE      & sample-points  \\
+19  & scc\_cpu     & profiler-torch & 14657599 & TRUE      & sample-points  \\
+20  & scc\_gtx1080 & profiler-torch & 14650759 & TRUE      & batch-size-128 \\ \bottomrule
 \end{tabular}
 \end{table}
 }
@@ -855,5 +769,18 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
         \end{figure}
     \end{center}
 \end{frame}
+
+\begin{frame}[fragile]{Tensorboard}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,9-12,14-16}]{python}{../../data/tensorboard.py}
+\end{frame}
+
+\begin{frame}[fragile]{Torch profiler}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,14,15}]{python}{../../data/profiler-torch.py}
+\end{frame}
+
+\begin{frame}[fragile]{Deepspeed - FlopsProfiler}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{../../data/deepspeed.py}
+\end{frame}
+
 
 \end{document}
