@@ -90,6 +90,23 @@
 \usepackage{csquotes} % For \enqoute{}
 \usepackage{hyperref}
 
+\usepackage{xcolor}
+\definecolor{c1}{HTML}{ed5151}
+\definecolor{c2}{HTML}{149ece}
+\definecolor{c3}{HTML}{a7c636}
+\definecolor{c4}{HTML}{9e559c}
+\definecolor{c5}{HTML}{fc921f}
+\definecolor{c6}{HTML}{ffde3e}
+
+\newcommand{\backupbegin}{
+   \newcounter{framenumberappendix}
+   \setcounter{framenumberappendix}{\value{framenumber}}
+}
+\newcommand{\backupend}{
+   \addtocounter{framenumberappendix}{-\value{framenumber}}
+   \addtocounter{framenumber}{\value{framenumberappendix}} 
+}
+
 % --- document configuration ---
 \newcommand{\mytitle}{Benchmarking tree species classification\\with synthetic data and deep learning}     
 % Leave empty for no subtitle
@@ -649,33 +666,35 @@ GPU Kernel View
 
 \end{frame}
 
-\section{Usability}
 
-\begin{frame}{Usability}
-\end{frame}
 
 
 \section{Conclusion}
-\begin{frame}{Conclusion}
 
-\begin{columns}
-        \begin{column}{0.5\textwidth}
-            \centering
-            \vspace{-1em}
-            \begin{figure}
-            \includegraphics[width=0.85\textwidth]{assets/Sherlock-Holmes-locates-the-best-graphical-processing-unit-inside-the-data-center-for-his-deep-learning-workflow}
-            \caption*{Image generated with stable diffusion: \\
-            \tiny{"Sherlock Holmes locates the best graphical processing unit inside the data center for his deep learning workflow"}}
-            \end{figure}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \begin{itemize}
-                \item "Stable Diffusion v1 version of the model requires 150,000 A100 GPU Hours for a single training session"\footnote{\tiny{\url{https://syncedreview.com/2022/11/09/almost-7x-cheaper-colossal-ais-open-source-solution-accelerates-aigc-at-a-low-cost-diffusion-pretraining-and-hardware-fine-tuning-can-be/}}, accessed on: 10.11.2022}
-                \vspace{1em}
-                \item[$\Rightarrow$] Optimization of deep learning workflows is of growing importance for energy efficiency.
-            \end{itemize}
-        \end{column}
-    \end{columns}
+
+\begin{frame}
+    \frametitle{Conclusion}
+    \begin{itemize}
+    \item[$\checkmark$] all important metrics are available
+    \begin{itemize}
+        \item[\textcolor{c3}{\textbullet}] PyTorch Hints
+    \end{itemize}
+    \vspace{1cm}
+    \item[] Usability
+    \begin{itemize}
+        \item[$\checkmark$] easy to implement but some knowledge about code is required
+        \begin{itemize}
+            \item[\textcolor{c3}{\textbullet}] aaa
+            \item[\textcolor{c3}{\textbullet}] bbb
+    \end{itemize}
+        \item[($\checkmark$)] ggg
+        \begin{itemize}
+            \item[\textcolor{c3}{\textbullet}] ccc
+            \item[\textcolor{c1}{\textbullet}] ddd
+            \item[\textcolor{c1}{\textbullet}] fff
+         \end{itemize}
+    \end{itemize}
+\end{itemize}
 
 \end{frame}
 
@@ -703,11 +722,8 @@ GPU Kernel View
 
 \end{frame}
 
-\begin{frame}
-\begin{center}
-Appendix
-\end{center}
-\end{frame}
+\appendix
+\backupbegin
 
 \begin{frame}{References}
     % References slide in appendix
@@ -782,5 +798,6 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{../../data/deepspeed.py}
 \end{frame}
 
+\backupend
 
 \end{document}
