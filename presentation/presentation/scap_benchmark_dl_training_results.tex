@@ -622,31 +622,15 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 
 \end{frame}
 
-\begin{frame}{Operator View}
-    \vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
-    \end{figure}
-    \end{center}
-\end{frame}
-
-\begin{frame}{Operator View}
-    \vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
-    \end{figure}
-    \end{center}
-\end{frame}
-
-\begin{frame}{GPU Kernel View}
-    \vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
-    \end{figure}
-    \end{center}
+\begin{frame}{PyTorch Profiler: Views}
+\begin{itemize}
+    \item Overview
+    \item Operator View
+    \item GPU Kernel View
+    \item Trace View
+    \item Memory View
+    \item Module View
+\end{itemize}
 \end{frame}
 
 \begin{frame}{Trace View}
@@ -681,15 +665,6 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 \begin{center}
     \begin{figure}
         \includegraphics[width=0.85\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
-    \end{figure}
-    \end{center}
-\end{frame}
-
-\begin{frame}{Module View}
-    \vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
     \end{figure}
     \end{center}
 \end{frame}
@@ -850,6 +825,42 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
 
 \begin{frame}[fragile]{Deepspeed - FlopsProfiler}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{../../data/deepspeed.py}
+\end{frame}
+
+\begin{frame}{Operator View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Operator View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}{GPU Kernel View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Module View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
+    \end{figure}
+    \end{center}
 \end{frame}
 
 \backupend
