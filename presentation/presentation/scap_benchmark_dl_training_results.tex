@@ -108,7 +108,7 @@
 }
 
 % --- document configuration ---
-\newcommand{\mytitle}{Benchmarking tree species classification\\with synthetic data and deep learning}     
+\newcommand{\mytitle}{Profiling tree species classification\\with synthetic data and deep learning}     
 % Leave empty for no subtitle
 \newcommand{\mysubtitle}{State of the art and plan for Scalable Computing Systems and Applications in AI, Big Data and HPC}   
 \newcommand{\myauthor}{Hauke Kirchner}
@@ -116,7 +116,7 @@
 Linky}}
 \newcommand{\myvenue}{Göttingen}
 % For example, use \today
-\newcommand{\mydate}{24.11.2022}
+\newcommand{\mydate}{2.2.2023}
 % For example, Institute for Computer Science / GWDG
 \newcommand{\myinstitute}{GWDG - AG Computing}
 % Leave empty for no footer image
@@ -164,7 +164,7 @@ Linky}}
 
 \section{Motivation}
 
-\begin{frame}{Why is it important to benchmark the training process of neural networks?}
+\begin{frame}{Why is it important to profile\\the training process of neural networks?}
 
     \begin{columns}
         \begin{column}{0.5\textwidth}
@@ -197,20 +197,19 @@ Linky}}
         \begin{column}{0.6\textwidth}
             \begin{itemize}
                 \item training of neural networks is computationally intensive
-                \item[$\hookrightarrow$] workflow needs to be optimized for available hardware
+                \vspace{1em}
+                \item[$\hookrightarrow$] optimizations for available hardware
                     \begin{itemize}
                         \item How to make good use of clusters with heterogenous hardware?
                         \item How many GPUs are worth requesting?
                     \end{itemize}
-                    \vspace{2em}
-                \item[$\Rightarrow$] optimization for available accelerators is critical in ML/DL
             \end{itemize}
         \end{column}
         \begin{column}{0.4\textwidth}
             \vspace{-1em}
             \begin{figure}
                 \includegraphics[width=0.9\textwidth]{assets/gwdg_scc.png}
-                \caption*{Structure and resources of a part of the Scientific Compute Cluster.}
+                \caption*{Structure and resources of a part of the Scientific Compute Cluster (SCC).}
             \end{figure}
         \end{column}
     \end{columns}
@@ -230,9 +229,13 @@ Linky}}
         
         \begin{column}{0.6\textwidth}
             \begin{itemize}
-                \item for different neural networks, the required energy ranges from relatively low demands (finetuning) to very high demands (training of a complex network)
-                \item depends on used hardware and energy source
-                \item[$\Rightarrow$] As deep learning is emerging in several fields, the impact on energy consumption and consequently, our climate is growing
+                \item for different applications, the required energy ranges from
+                    \begin{itemize}
+                        \item low demands (finetuning) to
+                        \item high demands (training)
+                    \end{itemize}
+                \vspace{1em}
+                \item[$\Rightarrow$] impact on our climate is growing
             \end{itemize}
         \end{column}
 
@@ -258,9 +261,12 @@ Linky}}
             \vspace{-1em}
             \begin{block}{Tree species classification from lidar}
                 \begin{itemize}
-                    \item monitoring of tree species is essential for forest restructuring towards more resilient forests in changing environments under climate change condition~\footnote{\tiny{\url{https://www.umweltbundesamt.de/angepasster-waldumbau}}}
+                    \item monitoring of tree species is essential for forest restructuring~\footnote{\tiny{\url{https://www.umweltbundesamt.de/angepasster-waldumbau}}}
+                    \vspace{1em}
                     \item lidar is already in use for forest inventories (\cite{white_2016_als-forest-inventory})
+                    \vspace{1em}
                     \item Problem: lack of pre-trained models
+                    \vspace{1em}
                 \end{itemize}
             \end{block}
 
@@ -277,21 +283,21 @@ Linky}}
     \end{columns}
 \end{frame}
 
-\section{Research Goals}
-\sectionIntroHidden
 \begin{frame}{Research Goals}
 
 \begin{itemize}
     \item Identify \textbf{profiling tools} that can help to \textbf{optimize an existing PyTorch workflow}.
+    \vspace{1em}
     \item As this approach should help scientists, the \textbf{usibility is of high importance}. The simplest tool for doing the job is preferred.
-    \item In contrast to training benchmark suites, such as MLPerf, I do not focus on benchmarking hardware but on optimizing an existing PyTorch workflow (viewpoint of a scientist)
+    \vspace{1em}
+    \item In contrast to training benchmark suites, such as MLPerf, I do not focus on benchmarking hardware but on optimizing an existing PyTorch workflow (viewpoint of a scientist).
 \end{itemize}
 
 \end{frame}
 
 \section{Methods}
-\sectionIntroHidden % Show an outline of the current section with hidden subsections
-%\sectionIntro % Show an outline of the current section with subsections
+%\sectionIntroHidden % Show an outline of the current section with hidden subsections
+\sectionIntro % Show an outline of the current section with subsections
 
 \begin{frame}{Workflow}
     \begin{columns}
@@ -300,8 +306,11 @@ Linky}}
             \begin{block}{Pre-training with synthetic data}
                 \begin{enumerate}
                     \item scene generation with Arbaro\footnote{\tiny{\url{https://github.com/wdiestel/arbaro}}}
-                    \item synthetic lidar data is generated with the  lidar operations simulator Helios++ (\cite{9906068})
-                    \item pre-training of PointNet, which is a very popular architecture for point cloud analysis (\cite{pointnet})
+                    \vspace{1em}
+                    \item synthetic lidar data generation with Helios++ (\cite{9906068})
+                    \vspace{1em}
+                    \item pre-training of\\PointNet (\cite{pointnet})
+                    \vspace{1em}
                 \end{enumerate}
             \end{block}
 
@@ -359,18 +368,22 @@ Throughput: $\frac{images}{sec}$                                                
     \end{column}
 \end{frame}
 
-\section{First attempts}
+\section{Experiments}
+%\sectionIntroHidden % Show an outline of the current section with hidden subsections
+\sectionIntro % Show an outline of the current section with subsections
 
 \begin{frame}{Training setup}
 \begin{itemize}
     \item number of trees for training: 8000 (740 GB)
-    \item number of trees for test: 2000 (191GB)
+    \vspace{1em}
+    \item number of trees for testing: 2000 (191GB)
+    \vspace{1em}
     \item trained for 15 epochs
 \end{itemize}
 \end{frame}
 
 
-\begin{frame}{First attempt using PyTorch Profiler}
+\begin{frame}{Long training times for original workflow}
     \begin{center}
     \begin{figure}
         \includegraphics[width=0.5\textwidth]{../../data/sacct_barplot_by_nodes_profiler-torch_sample-points}
@@ -378,16 +391,16 @@ Throughput: $\frac{images}{sec}$                                                
     \end{center}
 \end{frame}
 
-\begin{frame}{Trying to use the PyTorch Profiler to find the reason}
+\begin{frame}{Trying to use the PyTorch Profiler to find the bottleneck}
 	\vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750}
+        \includegraphics[width=0.75\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750}
     \end{figure}
     \end{center}
 \end{frame}
 
-\begin{frame}{Trying to use the PyTorch Profiler to find the reason}
+\begin{frame}{Trying to use the PyTorch Profiler to find the bottleneck}
     \vspace{-1em}
     \begin{center}
     \begin{figure}
@@ -396,11 +409,37 @@ Throughput: $\frac{images}{sec}$                                                
     \end{center}
 \end{frame}
 
-\begin{frame}{Without help of profiler: identified data loader as bottleneck}
-    
+\begin{frame}{Identification of the bottleneck}
+
+\begin{columns}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \vspace{-1em}
+            \begin{figure}
+            \includegraphics[width=0.7\textwidth]{../../data/icon_question}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item bottleneck
+                \begin{itemize}
+                    \item data loading and \\sampling process
+                \end{itemize}
+                \item solution
+                    \begin{itemize}
+                        \item sample points before training
+                    \end{itemize}
+                \vspace{2em}
+                \hline
+                \vspace{2em}
+                \item without help of the PyTorch Profiler
+            \end{itemize}
+        \end{column}
+    \end{columns}
+
 \end{frame}
 
-\begin{frame}{Effect of sample points on walltime}
+\begin{frame}{Effect of point sampling strategies on walltime}
     \vspace{-1em}
     \begin{center}
     \begin{figure}
@@ -409,41 +448,52 @@ Throughput: $\frac{images}{sec}$                                                
     \end{center}
 \end{frame}
 
-\section{Experiments}
-
-\begin{frame}{Training setup - new}
+\begin{frame}{Training setup - improved}
 \begin{itemize}
     \item number of trees for training: 8000 (\sout{740 GB} 434 MB)
-    \item number of trees for test: 2000 (\sout{191 GB} 109M)
+    \vspace{1em}
+    \item number of trees for testing: 2000 (\sout{191 GB} 109MB)
+    \vspace{1em}
     \item trained for 15 epochs
+    \vspace{2em}
+    \hline
+    \vspace{2em}
     \item[$\rightarrow$] reduced hardware usage (energy + money savings)
     \item[$\rightarrow$] more variations of hardware and tools can be tested
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Test runs}
+\begin{frame}{Experiments}
 \begin{columns}
         \begin{column}{0.5\textwidth}
             \centering
             \vspace{-1em}
             \begin{figure}
-            \includegraphics[width=0.85\textwidth]{../../data/runs.png}
-            \caption*{Experiments}
+            \includegraphics[width=0.9\textwidth]{../../data/experiments.png}
+            %\caption*{Experiments}
             \end{figure}
         \end{column}
         \begin{column}{0.5\textwidth}
             \begin{itemize}
-                \item 4 different nodes of the Scientific Compute Cluster
-                \item 4 different setups regarding tool usage (only one at a time)
-                \item Tensorflow was included to inspect resulting overhead
+                \item What is the benefit of using different accelerators?
+                \vspace{1em}
+                \item What is the cost for using profilers?
+                \vspace{2em}
+                \hline
+                \vspace{2em}
+                \item 4 different nodes of the SCC\footnote{Scientific Compute Cluster}
+                \vspace{1em}
+                \item 4 different tools
+                \vspace{1em}
                 \item[$\Rightarrow$] 16 runs
             \end{itemize}
+            \vspace{1em}
         \end{column}
     \end{columns}
 
 \end{frame}
 
-\begin{frame}{Test runs - tabular overview}
+\begin{frame}{Experiments - tabular overview}
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 \scriptsize{
@@ -452,29 +502,29 @@ Throughput: $\frac{images}{sec}$                                                
 \begin{table}[]
 \begin{tabular}{@{}llllll@{}}
 \toprule
-run & node         & tool           & job\_id  & is\_valid & experiment \\ \midrule
-1   & scc\_cpu     & no-tool        & 14629421 & TRUE      &            \\
-2   & scc\_cpu     & tensorboard    & 14629426 & TRUE      &            \\
-3   & scc\_cpu     & profiler-torch & 14650740 & TRUE      &            \\
-4   & scc\_cpu     & deepspeed      & 14617521 & FALSE     &            \\
-5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE      &            \\
-6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE      &            \\
-7   & scc\_gtx1080 & profiler-torch & 14650076 & TRUE      &            \\
-8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE      &            \\
-9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE      &            \\
-10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE      &            \\
-11  & scc\_rtx5000 & profiler-torch & 14650079 & TRUE      &            \\
-12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE      &            \\
-13  & scc\_v100    & no-tool        & 14619619 & TRUE      &            \\
-14  & scc\_v100    & tensorboard    & 14617203 & TRUE      &            \\
-15  & scc\_v100    & profiler-torch & 14650080 & TRUE      &            \\
-16  & scc\_v100    & deepspeed      & 14617202 & TRUE      &           
+run & node         & tool           & job\_id  & is\_valid  \\ \midrule
+1   & scc\_cpu     & no-tool        & 14629421 & TRUE                  \\
+2   & scc\_cpu     & tensorboard    & 14629426 & TRUE                  \\
+3   & scc\_cpu     & profiler-torch & 14650740 & TRUE                  \\
+4   & scc\_cpu     & deepspeed      & 14617521 & FALSE                 \\
+5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE                  \\
+6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE                  \\
+7   & scc\_gtx1080 & profiler-torch & 14650076 & TRUE                  \\
+8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE                  \\
+9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE                  \\
+10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE                  \\
+11  & scc\_rtx5000 & profiler-torch & 14650079 & TRUE                  \\
+12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE                  \\
+13  & scc\_v100    & no-tool        & 14619619 & TRUE                  \\
+14  & scc\_v100    & tensorboard    & 14617203 & TRUE                  \\
+15  & scc\_v100    & profiler-torch & 14650080 & TRUE                  \\
+16  & scc\_v100    & deepspeed      & 14617202 & TRUE                 
 \end{tabular}
 \end{table}
 }
 \end{frame}
 
-\begin{frame}{Overview - runtime on HPC}
+\begin{frame}{Runtime on HPC}
     \begin{center}
     \begin{figure}
         \includegraphics[width=1\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment}
@@ -482,7 +532,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment \\ \midr
     \end{center}
 \end{frame}
 
-\begin{frame}{Overview - runtime on HPC - GPU-only}
+\begin{frame}{Runtime on HPC (GPU-only)}
     \begin{center}
     \begin{figure}
         \includegraphics[width=0.87\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment_gpu}
@@ -490,7 +540,8 @@ run & node         & tool           & job\_id  & is\_valid & experiment \\ \midr
     \end{center}
 \end{frame}
 
-\begin{frame}[fragile]{Until now everything was achieved with sacct}
+\begin{frame}[fragile]{So far we just analyzed the wall time}
+\footnotetext[1]{test}
 \begin{columns}
 \begin{column}{0.7\textwidth}
         \begin{minted}[breaklines, fontsize=\scriptsize ]{python}
@@ -506,8 +557,10 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 \end{frame}
 
 \section{Pytorch - Profiler}
+%\sectionIntroHidden % Show an outline of the current section with hidden subsections
+\sectionIntro % Show an outline of the current section with subsections
 
-\begin{frame}{PyTorch-Profiler: Overview}
+\begin{frame}{Overview}
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
@@ -517,7 +570,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 
 \end{frame}
 
-\begin{frame}{lets look at the pytorch profiler hint section}
+\begin{frame}{Performance Recommendation}
 
 \begin{center}
     \begin{figure}
@@ -527,7 +580,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 
 \end{frame}
 
-\begin{frame}{result of increasing batch size - 64}
+\begin{frame}{Overview: Increased batch size (64)}
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
@@ -537,7 +590,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 
 \end{frame}
 
-\begin{frame}{result of increasing batch size - 64}
+\begin{frame}{Performance Recommendation: Increased batch size (64)}
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
@@ -548,7 +601,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 \end{frame}
 
 
-\begin{frame}{result of increasing batch size - 128}
+\begin{frame}{Overview: Increased batch size (128)}
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
@@ -559,11 +612,11 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 \end{frame}
 
 
-\begin{frame}{result of increasing batch size - comparison}
-    \vspace{-1em}
+\begin{frame}{Effect of increasing the batch size}
+    \vspace{-0.5em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_comparison-batch-size}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_comparison-batch-size}
     \end{figure}
     \end{center}
 
@@ -587,12 +640,6 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
     \end{center}
 \end{frame}
 
-\begin{frame}
-\begin{center}
-GPU Kernel View
-\end{center}
-\end{frame}
-
 \begin{frame}{GPU Kernel View}
     \vspace{-1em}
 \begin{center}
@@ -611,7 +658,7 @@ GPU Kernel View
     \end{center}
 \end{frame}
 
-\begin{frame}{Trace View - Laspy with presampled lidar data}
+\begin{frame}{Trace View: Laspy with presampled lidar data}
     \vspace{-1em}
 \begin{center}
     \begin{figure}
@@ -620,7 +667,7 @@ GPU Kernel View
     \end{center}
 \end{frame}
 
-\begin{frame}{Trace View - Laspy with raw lidar data}
+\begin{frame}{Trace View: Laspy with raw lidar data}
     \vspace{-1em}
 \begin{center}
     \begin{figure}
@@ -633,7 +680,7 @@ GPU Kernel View
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
+        \includegraphics[width=0.85\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
     \end{figure}
     \end{center}
 \end{frame}
@@ -642,7 +689,7 @@ GPU Kernel View
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
+        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
     \end{figure}
     \end{center}
 \end{frame}
@@ -650,18 +697,20 @@ GPU Kernel View
 %%%%%%%%%%%%%%%%
 
 \section{Deepspeed - FlopsProfiler}
+%\sectionIntroHidden % Show an outline of the current section with hidden subsections
+\sectionIntro % Show an outline of the current section with subsections
 
-\begin{frame}[fragile]{Code listings}
+\begin{frame}[fragile]{Overview}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
 
 \end{frame}
 
-\begin{frame}[fragile]{Code listings}
+\begin{frame}[fragile]{Aggregated Profile per GPU}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=18,lastline=31]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
 
 \end{frame}
 
-\begin{frame}[fragile]{Code listings}
+\begin{frame}[fragile]{Detailed Profile per GPU}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\tiny, firstline=33,lastline=48, breaklines]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
 
 \end{frame}
@@ -670,7 +719,8 @@ GPU Kernel View
 
 
 \section{Conclusion}
-
+%\sectionIntroHidden % Show an outline of the current section with hidden subsections
+\sectionIntro % Show an outline of the current section with subsections
 
 \begin{frame}
     \frametitle{Conclusion}
@@ -698,27 +748,31 @@ GPU Kernel View
 
 \end{frame}
 
-\begin{frame}{Try it yourself}
+\begin{frame}{Try it yourself!}
 \label{pg:lastpage} % Label on last frame to get the page number for footer
 
 \begin{columns}
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.45\textwidth}
             \centering
             \vspace{-1em}
             \begin{figure}
-            \includegraphics[width=0.85\textwidth]{assets/Sherlock-Holmes-locates-the-best-graphical-processing-unit-inside-the-data-center-for-his-deep-learning-workflow}
-            \caption*{Image generated with stable diffusion: \\
-            \tiny{"Sherlock Holmes locates the best graphical processing unit inside the data center for his deep learning workflow"}}
+            \includegraphics[width=0.7\textwidth]{../../data/gwdg_scc_tree-data}
+            \caption*{Synthetic lidar data is available on the SCC.}
             \end{figure}
         \end{column}
-        \begin{column}{0.5\textwidth}
+        \begin{column}{0.55\textwidth}
             \begin{itemize}
-                \item "Stable Diffusion v1 version of the model requires 150,000 A100 GPU Hours for a single training session"\footnote{\tiny{\url{https://syncedreview.com/2022/11/09/almost-7x-cheaper-colossal-ais-open-source-solution-accelerates-aigc-at-a-low-cost-diffusion-pretraining-and-hardware-fine-tuning-can-be/}}, accessed on: 10.11.2022}
+                \item data is on scratch of the SCC\footnote{\tiny{\texttt{/scratch/projects/workshops/forest/synthetic\_trees\_ten\_sampled}}}
                 \vspace{1em}
-                \item[$\Rightarrow$] Optimization of deep learning workflows is of growing importance for energy efficiency.
+                \item code for this course is available \\on Github\footnote{\tiny{\url{https://github.com/haukekirchner/scap/}}}
+                \vspace{1em}
+                \item additional read:\\workshop Forests in HPC\footnote{\tiny{\url{https://gitlab-ce.gwdg.de/hauke.gronenberg/workshop-forests-in-hpc}}}
+                \vspace{1em}
             \end{itemize}
         \end{column}
     \end{columns}
+
+\source{Image source: Adapted from \url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}, accessed on: 09.11.2022}
 
 \end{frame}
 
