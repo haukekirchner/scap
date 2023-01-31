@@ -98,6 +98,8 @@
 \definecolor{c5}{HTML}{fc921f}
 \definecolor{c6}{HTML}{ffde3e}
 
+\usepackage[multiple]{footmisc} %https://tex.stackexchange.com/questions/28465/multiple-footnotes-at-one-point
+
 \newcommand{\backupbegin}{
    \newcounter{framenumberappendix}
    \setcounter{framenumberappendix}{\value{framenumber}}
@@ -255,34 +257,6 @@ Linky}}
 
 \end{frame}
 
-\begin{frame}{Use case}
-    \begin{columns}
-        \begin{column}{0.5\textwidth}
-            \vspace{-1em}
-            \begin{block}{Tree species classification from lidar}
-                \begin{itemize}
-                    \item monitoring of tree species is essential for forest restructuring~\footnote{\tiny{\url{https://www.umweltbundesamt.de/angepasster-waldumbau}}}
-                    \vspace{1em}
-                    \item lidar is already in use for forest inventories (\cite{white_2016_als-forest-inventory})
-                    \vspace{1em}
-                    \item Problem: lack of pre-trained models
-                    \vspace{1em}
-                \end{itemize}
-            \end{block}
-
-        \end{column}
-        \begin{column}{0.5\textwidth}
-                \centering
-                \vspace{-3em}
-                \begin{figure}
-                \includegraphics[width=0.9\textwidth]{assets/beech_drought}
-                \caption*{Spruce and beech stand close to the national park "Hainich".}
-                \end{figure}
-                \source{Image source: Adapted from \cite{henkel_2021}}
-        \end{column}
-    \end{columns}
-\end{frame}
-
 \begin{frame}{Research Goals}
 
 \begin{itemize}
@@ -299,7 +273,7 @@ Linky}}
 %\sectionIntroHidden % Show an outline of the current section with hidden subsections
 \sectionIntro % Show an outline of the current section with subsections
 
-\begin{frame}{Workflow}
+\begin{frame}{Tree species classification}
     \begin{columns}
         \begin{column}{0.5\textwidth}
 
@@ -344,33 +318,58 @@ Throughput: $\frac{images}{sec}$                                                
 
 \end{frame}
 
-\begin{frame}{Tools - Overview}
+\begin{frame}[t]{Tools}
+    \begin{center}
+        \includegraphics[width=1\textwidth]{../../data/tools}
+    \end{center}
+    \begin{columns}[t]
     \begin{column}{0.5\textwidth}
-        \begin{block}{\centering \includegraphics[height=4em,keepaspectratio,]{../../data/Pytorch_logo}}
-
                 \begin{itemize}
                     \item PyTorch - Profiler~\footnote{\tiny{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}}}
-                    \item collection of performance metrics during training/inference
-                    \item indentification of expensive operators and 
+                    \item collection of performance metrics
+                    \item indentification of\\expensive operators
                     \item tracking of the kernel activity
                 \end{itemize}
-            \end{block}
     \end{column}
     \begin{column}{0.5\textwidth}
-        \begin{block}{\centering \includegraphics[height=4em,keepaspectratio,]{../../data/deepspeed-logo-uppercase-bold-white-1.15}}
-                
                 \begin{itemize}
-                    \item FlopsProfiler is part of the deep learning optimization software suit DeepSpeed~\footnote{\tiny{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}}}
-                    \item model training/inference speed (latency, throughput)
-                    \item efficiency (floating-point operations per second)
+                    \item FlopsProfiler~\footnote{\tiny{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}}}
+                    \item model speed (latency, throughput)
+                    \item efficiency (FLOPS\footnote{\tiny{floating-point operations per second}})
                 \end{itemize}
-            \end{block}
     \end{column}
+    \end{columns}
 \end{frame}
 
 \section{Experiments}
 %\sectionIntroHidden % Show an outline of the current section with hidden subsections
 \sectionIntro % Show an outline of the current section with subsections
+
+\begin{frame}{Overview}
+\begin{columns}
+        \begin{column}{0.5\textwidth}
+            \centering
+            \vspace{-1em}
+            \begin{figure}
+            \includegraphics[width=0.9\textwidth]{../../data/experiments.png}
+            \end{figure}
+        \end{column}
+        \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item What is the benefit of using different accelerators?
+                \item What is the cost for using profilers?
+                \vspace{2em}
+                \hline
+                \vspace{2em}
+                \item 4 different nodes of the SCC\footnote{\tiny{Scientific Compute Cluster}}\footnote{\tiny{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}}, accessed on: 31.01.2023}
+                \item 4 different tools
+                \item[$\Rightarrow$] 16 runs
+            \end{itemize}
+            \vspace{1em}
+        \end{column}
+    \end{columns}
+
+\end{frame}
 
 \begin{frame}{Training setup}
 \begin{itemize}
@@ -463,37 +462,7 @@ Throughput: $\frac{images}{sec}$                                                
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Experiments}
-\begin{columns}
-        \begin{column}{0.5\textwidth}
-            \centering
-            \vspace{-1em}
-            \begin{figure}
-            \includegraphics[width=0.9\textwidth]{../../data/experiments.png}
-            %\caption*{Experiments}
-            \end{figure}
-        \end{column}
-        \begin{column}{0.5\textwidth}
-            \begin{itemize}
-                \item What is the benefit of using different accelerators?
-                \vspace{1em}
-                \item What is the cost for using profilers?
-                \vspace{2em}
-                \hline
-                \vspace{2em}
-                \item 4 different nodes of the SCC\footnote{Scientific Compute Cluster}
-                \vspace{1em}
-                \item 4 different tools
-                \vspace{1em}
-                \item[$\Rightarrow$] 16 runs
-            \end{itemize}
-            \vspace{1em}
-        \end{column}
-    \end{columns}
-
-\end{frame}
-
-\begin{frame}{Experiments - tabular overview}
+\begin{frame}{Tabular overview}
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 \scriptsize{
@@ -556,9 +525,20 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 \end{columns}
 \end{frame}
 
-\section{Pytorch - Profiler}
+\section{PyTorch Profiler}
 %\sectionIntroHidden % Show an outline of the current section with hidden subsections
 \sectionIntro % Show an outline of the current section with subsections
+
+\begin{frame}{PyTorch Profiler: Views}
+\begin{itemize}
+    \item \textbf{Overview}
+    \item Operator View
+    \item GPU Kernel View
+    \item \textbf{Trace View}
+    \item Memory View
+    \item Module View
+\end{itemize}
+\end{frame}
 
 \begin{frame}{Overview}
 	\vspace{-1em}
@@ -580,37 +560,6 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 
 \end{frame}
 
-\begin{frame}{Overview: Increased batch size (64)}
-	\vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758}
-    \end{figure}
-    \end{center}
-
-\end{frame}
-
-\begin{frame}{Performance Recommendation: Increased batch size (64)}
-	\vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_zoom}
-    \end{figure}
-    \end{center}
-
-\end{frame}
-
-
-\begin{frame}{Overview: Increased batch size (128)}
-	\vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14650759}
-    \end{figure}
-    \end{center}
-
-\end{frame}
-
 
 \begin{frame}{Effect of increasing the batch size}
     \vspace{-0.5em}
@@ -620,17 +569,6 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
     \end{figure}
     \end{center}
 
-\end{frame}
-
-\begin{frame}{PyTorch Profiler: Views}
-\begin{itemize}
-    \item Overview
-    \item Operator View
-    \item GPU Kernel View
-    \item Trace View
-    \item Memory View
-    \item Module View
-\end{itemize}
 \end{frame}
 
 \begin{frame}{Trace View}
@@ -660,22 +598,13 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
     \end{center}
 \end{frame}
 
-\begin{frame}{Memory View}
-    \vspace{-1em}
-\begin{center}
-    \begin{figure}
-        \includegraphics[width=0.85\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
-    \end{figure}
-    \end{center}
-\end{frame}
-
 %%%%%%%%%%%%%%%%
 
 \section{Deepspeed - FlopsProfiler}
 %\sectionIntroHidden % Show an outline of the current section with hidden subsections
 \sectionIntro % Show an outline of the current section with subsections
 
-\begin{frame}[fragile]{Overview}
+\begin{frame}[fragile]{Summary}
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
 
 \end{frame}
@@ -697,30 +626,23 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 %\sectionIntroHidden % Show an outline of the current section with hidden subsections
 \sectionIntro % Show an outline of the current section with subsections
 
-\begin{frame}
-    \frametitle{Conclusion}
+\begin{frame}{Conclusion}
+\begin{itemize}
+    \item[$\checkmark$] Identification of profiling tools
     \begin{itemize}
-    \item[$\checkmark$] all important metrics are available
-    \begin{itemize}
-        \item[\textcolor{c3}{\textbullet}] PyTorch Hints
+        \item[\textcolor{c3}{\textbullet}] all important metrics are available
+        \item[\textcolor{c3}{\textbullet}] \textbf{PyTorch Profiler}: similar to "typical" software profilers
+        \item[\textcolor{c3}{\textbullet}] \textbf{FlopsProfiler}: more intuitive from a deep learning perspective
+        \item[$\rightarrow$] Combination of both is most promising
     \end{itemize}
     \vspace{1cm}
-    \item[] Usability
+    \item[($\checkmark$)] Usability
     \begin{itemize}
-        \item[$\checkmark$] easy to implement but some knowledge about code is required
-        \begin{itemize}
-            \item[\textcolor{c3}{\textbullet}] aaa
-            \item[\textcolor{c3}{\textbullet}] bbb
-    \end{itemize}
-        \item[($\checkmark$)] ggg
-        \begin{itemize}
-            \item[\textcolor{c3}{\textbullet}] ccc
-            \item[\textcolor{c1}{\textbullet}] ddd
-            \item[\textcolor{c1}{\textbullet}] fff
-         \end{itemize}
+        \item[\textcolor{c3}{\textbullet}] easy to setup
+        \item[\textcolor{c3}{\textbullet}] some low hanging fruits (e.g. performance recommendations)
+        \item[\textcolor{c1}{\textbullet}] generally a deep dive into the code and the network architecture is required
     \end{itemize}
 \end{itemize}
-
 \end{frame}
 
 \begin{frame}{Try it yourself!}
@@ -827,6 +749,37 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
         \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{../../data/deepspeed.py}
 \end{frame}
 
+\begin{frame}{Overview: Increased batch size (64)}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758}
+    \end{figure}
+    \end{center}
+
+\end{frame}
+
+\begin{frame}{Performance Recommendation: Increased batch size (64)}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_zoom}
+    \end{figure}
+    \end{center}
+
+\end{frame}
+
+
+\begin{frame}{Overview: Increased batch size (128)}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14650759}
+    \end{figure}
+    \end{center}
+
+\end{frame}
+
 \begin{frame}{Operator View}
     \vspace{-1em}
 \begin{center}
@@ -850,6 +803,15 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
 \begin{center}
     \begin{figure}
         \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
+    \end{figure}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Memory View}
+    \vspace{-1em}
+\begin{center}
+    \begin{figure}
+        \includegraphics[width=0.85\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
     \end{figure}
     \end{center}
 \end{frame}
