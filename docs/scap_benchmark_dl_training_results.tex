@@ -12,8 +12,8 @@
 \usepackage[style=verbose,backend=biber,style=authoryear, citestyle=authoryear ]{biblatex}
 \setbeamertemplate{bibliography item}{\insertbiblabel} % Ensure that cite labels appear in references section
 \addbibresource{ref.bib}
-\usepackage{../assets/beamerthemeGoettingen} % make sure the theme file is on this path
-\graphicspath{{../}{../assets/}}
+\usepackage{./assets/beamerthemeGoettingen} % make sure the theme file is on this path
+\graphicspath{{../}{./assets/}}
 \usepackage{caption}
 \usepackage{booktabs}
 
@@ -321,7 +321,7 @@ Throughput: $\frac{images}{sec}$                                                
 
 \begin{frame}[t]{Tools}
     \begin{center}
-        \includegraphics[width=1\textwidth]{../../data/tools}
+        \includegraphics[width=1\textwidth]{./assets/tools}
     \end{center}
     \begin{columns}[t]
     \begin{column}{0.5\textwidth}
@@ -352,7 +352,7 @@ Throughput: $\frac{images}{sec}$                                                
             \centering
             \vspace{-1em}
             \begin{figure}
-            \includegraphics[width=0.9\textwidth]{../../data/experiments.png}
+            \includegraphics[width=0.9\textwidth]{./assets/experiments.png}
             \end{figure}
         \end{column}
         \begin{column}{0.5\textwidth}
@@ -386,7 +386,7 @@ Throughput: $\frac{images}{sec}$                                                
 \begin{frame}{Long training times for original workflow}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.5\textwidth]{../../data/sacct_barplot_by_nodes_profiler-torch_sample-points}
+        \includegraphics[width=0.5\textwidth]{./assets/sacct_barplot_by_nodes_profiler-torch_sample-points}
     \end{figure}
     \end{center}
 \end{frame}
@@ -395,7 +395,7 @@ Throughput: $\frac{images}{sec}$                                                
 	\vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.75\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750}
+        \includegraphics[width=0.75\textwidth]{./assets/scap_gtx1080_profiler-torch_sample-points_14650750}
     \end{figure}
     \end{center}
 \end{frame}
@@ -404,7 +404,7 @@ Throughput: $\frac{images}{sec}$                                                
     \vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750_execution-time}
+        \includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_sample-points_14650750_execution-time}
     \end{figure}
     \end{center}
 \end{frame}
@@ -416,7 +416,7 @@ Throughput: $\frac{images}{sec}$                                                
             \centering
             \vspace{-1em}
             \begin{figure}
-            \includegraphics[width=0.7\textwidth]{../../data/icon_question}
+            \includegraphics[width=0.7\textwidth]{./assets/icon_question}
             \end{figure}
         \end{column}
         \begin{column}{0.5\textwidth}
@@ -443,7 +443,7 @@ Throughput: $\frac{images}{sec}$                                                
     \vspace{-1em}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.85\textwidth]{../../data/sacct_barplot_by_nodes_sample-points-effect}
+        \includegraphics[width=0.85\textwidth]{./assets/sacct_barplot_by_nodes_sample-points-effect}
     \end{figure}
     \end{center}
 \end{frame}
@@ -497,7 +497,7 @@ run & node         & tool           & job\_id  & is\_valid  \\ \midrule
 \begin{frame}{Runtime on HPC}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment}
+        \includegraphics[width=1\textwidth]{./assets/sacct_barplot_by_nodes_no-experiment}
     \end{figure}
     \end{center}
 \end{frame}
@@ -505,7 +505,7 @@ run & node         & tool           & job\_id  & is\_valid  \\ \midrule
 \begin{frame}{Runtime on HPC (GPU-only)}
     \begin{center}
     \begin{figure}
-        \includegraphics[width=0.87\textwidth]{../../data/sacct_barplot_by_nodes_no-experiment_gpu}
+        \includegraphics[width=0.87\textwidth]{./assets/sacct_barplot_by_nodes_no-experiment_gpu}
     \end{figure}
     \end{center}
 \end{frame}
@@ -521,7 +521,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 
 \begin{column}{0.3\textwidth}
     \vspace{-2em}
-        \inputminted[xleftmargin=1em,linenos,fontsize=\tiny,]{python}{../../data/sacct.out}
+        \inputminted[xleftmargin=1em,linenos,fontsize=\tiny,]{python}{./assets/sacct.out}
 \end{column}
 \end{columns}
 \end{frame}
@@ -545,7 +545,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 	\vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_14650076}
+        \includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
     \end{figure}
 \end{center}
 
@@ -555,7 +555,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_14650076_zoom}
+        \includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076_zoom}
     \end{figure}
 \end{center}
 
@@ -566,7 +566,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
     \vspace{-0.5em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_comparison-batch-size}
+        \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_comparison-batch-size}
     \end{figure}
     \end{center}
 
@@ -576,7 +576,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
+        \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
     \end{figure}
     \end{center}
 \end{frame}
@@ -585,7 +585,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
+        \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
     \end{figure}
     \end{center}
 \end{frame}
@@ -594,7 +594,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
+        \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
     \end{figure}
     \end{center}
 \end{frame}
@@ -606,17 +606,17 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 \sectionIntro % Show an outline of the current section with subsections
 
 \begin{frame}[fragile]{Summary}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
 
 \end{frame}
 
 \begin{frame}[fragile]{Aggregated Profile per GPU}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=18,lastline=31]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=18,lastline=31]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
 
 \end{frame}
 
 \begin{frame}[fragile]{Detailed Profile per GPU}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\tiny, firstline=33,lastline=48, breaklines]{python}{../../data/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\tiny, firstline=33,lastline=48, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
 
 \end{frame}
 
@@ -654,7 +654,7 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
             \centering
             \vspace{-1em}
             \begin{figure}
-            \includegraphics[width=0.7\textwidth]{../../data/gwdg_scc_tree-data}
+            \includegraphics[width=0.7\textwidth]{./assets/gwdg_scc_tree-data}
             \caption*{Synthetic lidar data is available on the SCC.}
             \end{figure}
         \end{column}
@@ -722,7 +722,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
 
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_tensorboard_14615343}
+        \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_tensorboard_14615343}
     \end{figure}
     \end{center}
 
@@ -732,29 +732,29 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \vspace{-1em}
     \begin{center}
         \begin{figure}
-            \includegraphics[width=0.85\textwidth]{../../data/sacct_barplot_by_nodes_batch-size-effect}
+            \includegraphics[width=0.85\textwidth]{./assets/sacct_barplot_by_nodes_batch-size-effect}
 
         \end{figure}
     \end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Tensorboard}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,9-12,14-16}]{python}{../../data/tensorboard.py}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
 \end{frame}
 
 \begin{frame}[fragile]{Torch profiler}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,14,15}]{python}{../../data/profiler-torch.py}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
 \end{frame}
 
 \begin{frame}[fragile]{Deepspeed - FlopsProfiler}
-        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{../../data/deepspeed.py}
+        \footnotesize\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
 \end{frame}
 
 \begin{frame}{Overview: Increased batch size (64)}
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758}
+        \includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758}
     \end{figure}
     \end{center}
 
@@ -764,7 +764,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_zoom}
+        \includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_zoom}
     \end{figure}
     \end{center}
 
@@ -775,7 +775,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.7\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-128_14650759}
+        \includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-128_14650759}
     \end{figure}
     \end{center}
 
@@ -785,7 +785,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
+        \includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
     \end{figure}
     \end{center}
 \end{frame}
@@ -794,7 +794,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
+        \includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
     \end{figure}
     \end{center}
 \end{frame}
@@ -803,7 +803,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.9\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
+        \includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
     \end{figure}
     \end{center}
 \end{frame}
@@ -812,7 +812,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=0.85\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
+        \includegraphics[width=0.85\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
     \end{figure}
     \end{center}
 \end{frame}
@@ -821,7 +821,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
     \vspace{-1em}
 \begin{center}
     \begin{figure}
-        \includegraphics[width=1\textwidth]{../../data/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
+        \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
     \end{figure}
     \end{center}
 \end{frame}
