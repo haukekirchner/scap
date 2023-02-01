@@ -35,10 +35,10 @@ export_ggplot <- function(g, target_size = "full", name, ratio = 1, width = NA){
 }
 #####################
 
-data_jobs <- read.csv2(file = '~/projects/scap/data/202301_1150_scap_results.csv')
+data_jobs <- read.csv2(file = '~/projects/scap/docs/assets/202301_1150_scap_results.csv')
 data_jobs
 
-data_sacct <- read.csv(file = '~/projects/scap/data/sacct.out', sep="|")
+data_sacct <- read.csv(file = '~/projects/scap/docs/assets/sacct.out', sep="|")
 names(data_sacct)[names(data_sacct) == 'JobID'] <- 'job_id'
 
 data <- merge(data_jobs,data_sacct,by="job_id")
@@ -66,7 +66,7 @@ g <-ggplot(filter(data, experiment =="sample-points"), aes(factor(node), duratio
   ylab("Elapsed time [sec]")
 
 g
-export_ggplot(g, target_size = "half", name = "~/projects/scap/data/sacct_barplot_by_nodes_profiler-torch_sample-points.png", ratio = 1)
+export_ggplot(g, target_size = "half", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_profiler-torch_sample-points.png", ratio = 1)
 
 
 
@@ -77,7 +77,7 @@ g <-ggplot(filter(data, experiment ==""), aes(factor(node), duration, fill = too
   xlab("Compute Nodes")+
   ylab("Elapsed time [sec]")
 g
-export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_no-experiment.png", ratio = 1)
+export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_no-experiment.png", ratio = 1)
 
 
 g <-ggplot(filter(data, tool=="profiler-torch" & experiment != "batch-size-64" & experiment != "batch-size-128"   & (node =="scc_gtx1080" | node == "scc_cpu")), aes(factor(node), duration)) + 
@@ -89,7 +89,7 @@ g <-ggplot(filter(data, tool=="profiler-torch" & experiment != "batch-size-64" &
   xlab("Compute Nodes")+
   ylab("Elapsed time [sec]")
 g
-export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_sample-points-effect.png", ratio = 0.6)
+export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_sample-points-effect.png", ratio = 0.6)
 
 
 g <-ggplot(data, aes(factor(node), log(duration), fill = tool, alpha = is_valid)) + 
@@ -110,7 +110,7 @@ g <-ggplot(filter(data,experiment==""), aes(factor(node), duration, fill = tool,
 
 g
 
-export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_no-experiment.png", ratio = 0.5)
+export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_no-experiment.png", ratio = 0.5)
 
 
 g <-ggplot(filter(data, node != "scc_cpu" & experiment == ""), aes(factor(node), duration, fill = tool)) + 
@@ -121,7 +121,7 @@ g <-ggplot(filter(data, node != "scc_cpu" & experiment == ""), aes(factor(node),
 
 g
 
-export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_no-experiment_gpu.png", ratio = 0.5)
+export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_no-experiment_gpu.png", ratio = 0.5)
 
 
 level_order <- c('', 'batch-size-64', 'batch-size-128') 
@@ -136,4 +136,4 @@ labels=c('batch-size: 32 \n(default)', 'batch-size: 64', 'batch-size: 128'),
   ylab("Elapsed time [sec]")
 g
 
-export_ggplot(g, target_size = "full", name = "~/projects/scap/data/sacct_barplot_by_nodes_batch-size-effect.png", ratio = 0.6)
+export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_batch-size-effect.png", ratio = 0.6)
