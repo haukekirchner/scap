@@ -164,8 +164,9 @@ Linky}}
 
 % --- slides begin ---
 
-\section{Motivation}
+\section{Research Goals}
 
+\iffalse
 \begin{frame}{Why is it important to profile\\the training process of neural networks?}
 
     \begin{columns}
@@ -256,7 +257,7 @@ Linky}}
 
 
 \end{frame}
-
+\fi
 \begin{frame}{Research Goals}
 
 \begin{itemize}
@@ -630,9 +631,9 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 \begin{itemize}
     \item[$\checkmark$] Identification of profiling tools
     \begin{itemize}
-        \item[\textcolor{c3}{\textbullet}] all important metrics are available
         \item[\textcolor{c3}{\textbullet}] \textbf{PyTorch Profiler}: similar to "typical" software profilers
-        \item[\textcolor{c3}{\textbullet}] \textbf{FlopsProfiler}: more intuitive from a deep learning perspective
+        \item[\textcolor{c5}{\textbullet}] \textbf{FlopsProfiler}: more intuitive from a deep learning perspective
+        \item[\textcolor{c5}{\textbullet}] most important metrics are available
         \item[$\rightarrow$] Combination of both is most promising
     \end{itemize}
     \vspace{1cm}
