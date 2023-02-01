@@ -1,7 +1,0 @@
-\frametitle{Code listings}
-\texttt{Hello World} implemented in C++
-
-    \begin{tcolorbox}[title=C++]
-        \footnotesize\inputminted[xleftmargin=1em,linenos]{c++}{../assets/hello-world.cpp}
-    \end{tcolorbox}
-
