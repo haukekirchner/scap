@@ -1,0 +1,336 @@
+%pdflatex -shell-escape --output-directory=out report.tex
+\documentclass[12pt, a4paper, hidelinks]{article}
+
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage[english]{babel}
+\usepackage[nottoc]{tocbibind}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[backend=biber,style=alphabetic]{biblatex}
+\addbibresource{ref.bib} % The filename of the bibliography
+\usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\usepackage{acronym}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\usepackage{lipsum}
+\usepackage{array, tabularx, booktabs} % For better tables
+\usepackage{longtable}
+%\usepackage{listings} % Code environments
+%\usepackage{lstautogobble}  % Fix relative indenting
+%\usepackage{color}          % Code coloring
+%\usepackage{zi4}            % Nice font
+\usepackage{minted}
+\usemintedstyle{tango}
+\setminted{linenos, autogobble, bgcolor=gray!5}
+\usepackage{cleveref}
+\usepackage{titlesec}
+\setlength{\marginparwidth}{2cm}
+\usepackage{todonotes}
+\usepackage[autostyle=true]{csquotes}
+
+\iffalse
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{backcolour}{gray}{0.95}
+\definecolor{codeorange}{rgb}{0.8,0.5,0.2}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},  
+    commentstyle=\color{codegray},
+    keywordstyle=\color{codeorange},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codegreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+%\lstset{style=mystyle}
+
+\definecolor{bluekeywords}{rgb}{0.13, 0.13, 1}
+\definecolor{greencomments}{rgb}{0, 0.5, 0}
+\definecolor{redstrings}{rgb}{0.9, 0, 0}
+\definecolor{graynumbers}{rgb}{0.5, 0.5, 0.5}
+
+\usepackage{listings}
+\lstset{
+    autogobble,
+    columns=fullflexible,
+    showspaces=false,
+    showtabs=false,
+    breaklines=true,
+    showstringspaces=false,
+    breakatwhitespace=true,
+    escapeinside={(*@}{@*)},
+    commentstyle=\color{greencomments},
+    keywordstyle=\color{bluekeywords},
+    stringstyle=\color{redstrings},
+    numberstyle=\color{graynumbers},
+    basicstyle=\ttfamily\footnotesize,
+    frame=l,
+    framesep=12pt,
+    xleftmargin=12pt,
+    tabsize=4,
+    captionpos=b
+}
+
+\fi
+
+\titleformat{\section}[hang]{\huge\bfseries}{\thesection\hspace{20pt}}{0pt}{\huge\bfseries}
+\graphicspath{{Figures/}{./}{Assets/}}
+
+% --- document configuration ---
+
+\newcommand{\thesistitle}{[Put your title here]}  
+\newcommand{\supervisor}{[Put your supervisors name here]} 
+\newcommand{\authorname}{[Put your name here]}
+\newcommand{\university}{Georg-August-Universität Göttingen}
+\newcommand{\department}{Institute of Computer Science}
+\newcommand{\thesistype}{Seminar Report}
+\newcommand{\matrikelnumber}{[Put your matrikel number here]}
+\newcommand{\keywords}{} % Set keywords that describe your report
+
+\hypersetup{pdftitle=\thesistitle} % Set the PDF's title to your title
+\hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
+\hypersetup{pdfkeywords=\keywords} % Set the PDF's keywords to your keywords
+
+\begin{document}
+
+\fancyhead{}
+\fancyhead[R]{\footnotesize \thesistitle}
+\fancyfoot{}
+\fancyfoot[R]{\thepage}
+\fancyfoot[L]{Section \thesection}
+\fancyfoot[C]{\authorname}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.4pt}
+
+\pagestyle{plain}
+
+
+    
+
+% --- title page ---
+
+\begin{titlepage}
+\begin{minipage}[t]{0.6\textwidth}
+\begin{flushleft}
+\includegraphics[width=6.5cm]{logo-goettingen.pdf}
+\end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.4\textwidth}
+\begin{center}
+\qquad\includegraphics[width=2.5cm]{hps-logo.pdf}
+\end{center}
+\end{minipage}
+
+\begin{center}
+
+\vspace*{.06\textheight}
+\LARGE \thesistype\\[0.5cm]
+
+\rule{.9\linewidth}{.6pt} \\[0.4cm] % Horizontal line
+{\huge \bfseries \thesistitle}\vspace{0.4cm}
+\rule{.9\linewidth}{.6pt} \\[1.5cm] % Horizontal line
+ 
+\Large\authorname\\
+\hfill\\
+\large MatrNr: \matrikelnumber\\ \vfill
+Supervisor: \supervisor 
+\vfill
+\university\\
+\department
+\vfill
+{\large \today}\\[4cm] % Date
+ 
+\vfill
+\end{center}
+\end{titlepage}
+    
+
+% --- abstract ---
+
+%\thispagestyle{empty}
+\newpage
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\section*{Abstract}
+
+
+[Put your abstract here.]
+Note that we typically publish your report as PDF on our webpage. Let us know if you disagree.]
+
+\medskip
+
+General structure of an abstract, write 1 to 2 sentences per section
+\begin{enumerate}
+\item  A general statement introducing the broad research area of the particular topic being investigated.
+\item  An explanation of the specific problem (difficulty, obstacle, challenge) to be solved.
+\item  A review of existing or standard solutions to this problem and their limitations.
+\item  An outline of the proposed new solution.
+\item  A summary of how the solution was evaluated and what the outcomes of the evaluation were.
+\end{enumerate}
+
+You may find the following resources useful:
+\begin{itemize}
+    \item \url{https://www.grammarly.com/blog/write-an-abstract/}
+    \item \url{https://www.editage.com/insights/manuscript-structure-how-to-convey-your-most-important-ideas-through-your-paper}
+    \item More useful links: \url{https://hps.vi4io.org/teaching/ressources/start}
+\end{itemize}
+
+
+%\thispagestyle{empty}
+% --- table of contents ---
+% Comment out the lists you are not using
+\newpage
+
+
+\clearpage
+\phantomsection\pdfbookmark{\contentsname}{toc}
+\tableofcontents
+
+\newpage
+\clearpage\phantomsection
+\listoftables
+%\newpage
+%\clearpage
+\phantomsection
+\listoffigures
+%\newpage
+%\clearpage
+\phantomsection
+\listoflistings \addcontentsline{toc}{section}{List of Listings}
+
+% if you have abbreviations
+\newpage
+
+\section*{List of Abbreviations} \addcontentsline{toc}{section}{List of Abbreviations}
+\begin{acronym}[Bash] % Add acronyms such that they are shown in full only on first occurrence
+    \acro{HPC}{High-Performance Computing}
+\end{acronym}
+
+\thispagestyle{plain}
+\newpage
+
+% --- content ---
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\pagestyle{fancy}
+
+
+\section{Introduction}
+[Any page limit starts with the main content here and ends with the biography (before the appendix).
+
+The introduction is the most important part of such a report. Its general structure is similar to the Abstract but with about one paragraph per section as listed again below.
+\begin{enumerate}
+\item  A general statement introducing the broad research area of the particular topic being investigated.
+\item  An explanation of the specific problem (difficulty, obstacle, challenge) to be solved.
+\item  A review of existing or standard solutions to this problem and their limitations.
+\item  An outline of the proposed new solution.
+\item  A summary of how the solution was evaluated and what the outcomes of the evaluation were.
+\end{enumerate}
+Furthermore, the introduction should have a contributions section, that summarizes, possibly as a list, what the report and the work described in the report has contributed.
+Finally, the introduction should end with an outline of the remaining report.
+
+\ac{HPC} refers to the usage of powerful compute systems to solve non-trivial problems.
+
+\subsection{Citation and figure example}
+Hawthorn et al. \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances} talk about laser, which is similar to the work of his colleagues \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances, 20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances}.
+\begin{figure}[th]
+\centering
+\includegraphics[width=0.7\textwidth]{speed_FILL0_wght400_GRAD0_opsz48.png}
+\caption[An Electron]{An electron (artist's impression).}
+\label{fig:Electron}
+\end{figure}
+
+\subsection{Table and listing example}
+\Cref{tab:treatments} shows an example for a table in \LaTeX.
+\begin{table}[th]
+\label{tab:treatments}
+\centering
+\begin{tabularx}{0.45\textwidth}{l||r|r}
+Groups & Treatment X & Treatment Y \\
+\hline \hline
+1 & 0.20 & 0.80\\
+2 & 0.17 & 0.70\\
+3 & 0.24 & 0.75\\
+4 & 0.68 & 0.30\\
+\end{tabularx}
+\caption{The effects of treatments X and Y on the four groups studied.}
+\end{table}
+
+[If you show results in tables, always ensure all of them are aligned to the right and have the same precision.]
+
+\Cref{lst:hello} shows an example of a listing, a good way to display code in \LaTeX.
+
+\begin{listing}
+\begin{minted}{Go}
+package main
+import "fmt"
+func main() {
+    fmt.Println("Hello, world!")
+}
+\end{minted}
+\caption{"Hello, world!" in Go}
+\label{lst:hello}
+\end{listing}
+
+
+\iffalse
+\begin{lstlisting}[language=Go, caption={"Hello, world!" in Go}, label=lst:hello]
+package main
+import "fmt"
+func main() {
+    fmt.Println("Hello, world!")
+}
+\end{lstlisting}
+\fi
+
+\section{Conclusion}
+\lipsum[2]
+
+
+
+% --- references ---
+
+\newpage
+\printbibliography[heading=bibintoc]
+
+% --- your appendix ---
+\appendix
+\break
+
+\pagenumbering{arabic}
+\renewcommand*{\thepage}{A\arabic{page}}
+
+
+
+\section{Work sharing}
+
+If you worked in a group, describe here how you distributed the work and the actual contributions of each peer.
+
+\subsection{Hans}
+...
+
+\subsection{Peter}
+...
+
+\section{Code samples}
+
+This is part of the appendix...
+
+
+\end{document}  
