@@ -92,13 +92,13 @@
 
 % --- document configuration ---
 
-\newcommand{\thesistitle}{[Put your title here]}  
-\newcommand{\supervisor}{[Put your supervisors name here]} 
-\newcommand{\authorname}{[Put your name here]}
-\newcommand{\university}{Georg-August-Universität Göttingen}
-\newcommand{\department}{Institute of Computer Science}
+\newcommand{\thesistitle}{Profiling tree species classification with synthetic data and deep learning}  
+\newcommand{\supervisor}{Dorothea Sommer} 
+\newcommand{\authorname}{Hauke Kirchner}
+%\newcommand{\university}{Georg-August-Universität Göttingen}
+%\newcommand{\department}{Institute of Computer Science}
 \newcommand{\thesistype}{Seminar Report}
-\newcommand{\matrikelnumber}{[Put your matrikel number here]}
+%\newcommand{\matrikelnumber}{[Put your matrikel number here]}
 \newcommand{\keywords}{} % Set keywords that describe your report
 
 \hypersetup{pdftitle=\thesistitle} % Set the PDF's title to your title
@@ -146,11 +146,11 @@
  
 \Large\authorname\\
 \hfill\\
-\large MatrNr: \matrikelnumber\\ \vfill
+%\large MatrNr: \matrikelnumber\\ \vfill
 Supervisor: \supervisor 
 \vfill
-\university\\
-\department
+%\university\\
+%\department
 \vfill
 {\large \today}\\[4cm] % Date
  
@@ -169,11 +169,8 @@ Supervisor: \supervisor
 \section*{Abstract}
 
 
-[Put your abstract here.]
-Note that we typically publish your report as PDF on our webpage. Let us know if you disagree.]
-
 \medskip
-
+\iffalse
 General structure of an abstract, write 1 to 2 sentences per section
 \begin{enumerate}
 \item  A general statement introducing the broad research area of the particular topic being investigated.
@@ -189,7 +186,7 @@ You may find the following resources useful:
     \item \url{https://www.editage.com/insights/manuscript-structure-how-to-convey-your-most-important-ideas-through-your-paper}
     \item More useful links: \url{https://hps.vi4io.org/teaching/ressources/start}
 \end{itemize}
-
+\fi
 
 %\thispagestyle{empty}
 % --- table of contents ---
@@ -232,8 +229,23 @@ You may find the following resources useful:
 
 
 \section{Introduction}
-[Any page limit starts with the main content here and ends with the biography (before the appendix).
 
+\iffalse
+Why is it important to benchmark the training process of neural networks?
+
+1. Training speed
+2. Energy efficiency
+\fi
+
+Recent advances in deep learning made the technology more popular in several fields of research.
+This lead to breakthroughs which helped to ...
+Increasingly applications in forestry profit from deep learning applications and pubications in recent years have shown the great potential. Often traning data is a bottleneck for the application of neural networks. Especially in the field of environmental research collecting data requires substential effort. In Germany the largest effort to cellect data of German forests is the "Bundeswaldinventur". This involves the work of multiple teams over 
+
+Especilly for lidar data of forests not to many pre-trained networks exist. Therfore, we test an approach where the pre-training is done based on synthetically generated lidar data representing individual trees.
+
+Simultaniously, the emerging use of deep learning also leads to an increase in energy consumption. This phenomen studied by \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances}. 
+
+\iffalse
 The introduction is the most important part of such a report. Its general structure is similar to the Abstract but with about one paragraph per section as listed again below.
 \begin{enumerate}
 \item  A general statement introducing the broad research area of the particular topic being investigated.
@@ -287,7 +299,7 @@ func main() {
 \caption{"Hello, world!" in Go}
 \label{lst:hello}
 \end{listing}
-
+\fi
 
 \iffalse
 \begin{lstlisting}[language=Go, caption={"Hello, world!" in Go}, label=lst:hello]
@@ -299,8 +311,37 @@ func main() {
 \end{lstlisting}
 \fi
 
+\section{Methods}
+\label{sec:methods}
+
+\subsection{Tree species classification based on synthetic lidar data}
+\label{sec:workflow}
+\subsection{Fundamentals of software profiling}
+\label{sec:profiling}
+
+\subsection{PyTorch - Profiler}
+\label{sec:m-pytorch-profiler}
+
+\subsection{Deepspeed - FlopsProfiler}
+\label{sec:m-flopsprofiler}
+
+
+\section{Results}
+\label{sec:results}
+
+\subsection{PyTorch - Profiler}
+\label{sec:r-pytorch-profiler}
+
+\subsection{Deepspeed - FlopsProfiler}
+\label{sec:r-flopsprofiler}
+
+\section{Discussion}
+\label{sec:discussion}
+
+
+
 \section{Conclusion}
-\lipsum[2]
+\label{sec:conclusion}
 
 
 
@@ -317,16 +358,6 @@ func main() {
 \renewcommand*{\thepage}{A\arabic{page}}
 
 
-
-\section{Work sharing}
-
-If you worked in a group, describe here how you distributed the work and the actual contributions of each peer.
-
-\subsection{Hans}
-...
-
-\subsection{Peter}
-...
 
 \section{Code samples}
 
