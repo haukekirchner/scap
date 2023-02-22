@@ -1,4 +1,3 @@
-%pdflatex -shell-escape --output-directory=out report.tex
 \documentclass[12pt, a4paper, hidelinks]{article}
 
 \usepackage{graphicx}
@@ -8,7 +7,7 @@
 \usepackage[nottoc]{tocbibind}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-\usepackage[backend=biber,style=alphabetic]{biblatex}
+\usepackage[style=verbose,backend=biber,style=authoryear, citestyle=authoryear ]{biblatex}
 \addbibresource{ref.bib} % The filename of the bibliography
 \usepackage[left=2.5cm,right=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{acronym}
@@ -16,6 +15,8 @@
 \pagestyle{fancy}
 \usepackage{lipsum}
 \usepackage{array, tabularx, booktabs} % For better tables
+\usepackage{booktabs}
+\usepackage{multirow}
 \usepackage{longtable}
 %\usepackage{listings} % Code environments
 %\usepackage{lstautogobble}  % Fix relative indenting
@@ -245,6 +246,12 @@ Especilly for lidar data of forests not to many pre-trained networks exist. Ther
 
 Simultaniously, the emerging use of deep learning also leads to an increase in energy consumption. This phenomen studied by \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances}. 
 
+\begin{itemize}
+    \item Identify \textbf{profiling tools} that can help to \textbf{optimize an existing PyTorch workflow}.
+    \item As this approach should help scientists, the \textbf{usibility is of high importance}. The simplest tool for doing the job is preferred.
+    \item In contrast to training benchmark suites, such as MLPerf, I do not focus on benchmarking hardware but on optimizing an existing PyTorch workflow (viewpoint of a scientist)
+\end{itemize}
+
 \iffalse
 The introduction is the most important part of such a report. Its general structure is similar to the Abstract but with about one paragraph per section as listed again below.
 \begin{enumerate}
@@ -316,24 +323,238 @@ func main() {
 
 \subsection{Tree species classification based on synthetic lidar data}
 \label{sec:workflow}
+
+\cite{white_2016_als-forest-inventory}
+\cite{uba_2020_waldumbau}
+\cite{weber_1995_arbaro}
+Arbaro implementation \footnote{\url{https://github.com/wdiestel/arbaro} (Accessed on: 22.02.2023)}
+\cite{pointnet}
+\cite{verma_2019_metrics-ml-benchmarking}
+pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.4\textwidth]{assets/beech_drought}
+\caption*{Spruce and beech stand close to the national park "Hainich".}
+\label{fig:uav-hainich}
+\end{figure}
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{assets/workflow_synthetic_data}
+\caption[Synthetic- lidar workflow]{This workflow shows ... Adapted from \cite{9906068}}
+\label{fig:lidar-workflow}
+\end{figure}
+
 \subsection{Fundamentals of software profiling}
 \label{sec:profiling}
 
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+% \usepackage{multirow}
+\begin{table}[H]
+\label{tab:metrics}
+\centering
+\begin{tabular}{@{}ll@{}}
+\toprule
+metric                                                                                 & purpose                        \\ \midrule
+Execution time                                                                         & \multirow{2}{*}{traditionally} \\
+FLOPS                                                                                  &                                \\ \midrule
+Throughput: $\frac{images}{sec}$                                                       & with the advent of GPUs        \\ \bottomrule
+\end{tabular}
+\caption{Adapted from \url{https://snehilverma41.github.io/Metrics_ML_FastPath19.pdf}}
+\end{table}
+
+
+!!!Test reference: \Cref{tab:metrics}
+
+\subsection{Tools Overview}
+\label{sec:tools-overview}
+
+% Please add the following required packages to your document preamble:
+% \usepackage{booktabs}
+% \usepackage{multirow}
+\begin{table}[H]
+\label{tab:tools}
+\centering
+\begin{tabular}{@{}lll@{}}
+\toprule
+tool                              & metrics                                                                                & scope                    \\ \midrule
+\href{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}{PyTorch Profiler With TensorBoard} & \begin{tabular}[c]{@{}l@{}}performance metrics\\ (e.g. time, memory)\end{tabular}      & \multirow{2}{*}{PyTorch} \\
+\href{https://github.com/facebookresearch/fvcore}{fvcore}                      & FLOPS                                                                                  &                          \\ \midrule
+\href{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}{Vtune}                             & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}general\\ performance metrics\end{tabular}} & Intel-only               \\
+\href{https://github.com/RRZE-HPC/likwid}{likwid}                            &                                                                                        & general                  \\ \bottomrule
+\end{tabular}
+\caption[test caption new]{test caption}
+\end{table}
+
+
+
+\begin{itemize}
+    \item[$\Rightarrow$] different tools for different use cases
+    \item[$\Rightarrow$] Vtune and likwid can profile all kind of applications
+    \item[$\Rightarrow$] here I will focus on profiling tools optimized for PyTorch
+\end{itemize}
+
+\subsection{Tensorboard}
+\label{sec:Tensorboard}
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
+\caption{}
+\label{lst:tensorboard}
+\end{listing}
+
 \subsection{PyTorch - Profiler}
 \label{sec:m-pytorch-profiler}
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
+\caption{}
+\label{lst:profiler-torch}
+\end{listing}
 
 \subsection{Deepspeed - FlopsProfiler}
 \label{sec:m-flopsprofiler}
 
 
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
+\caption{}
+\label{lst:deepspeed}
+\end{listing}
+
+\subsection{Experiments}
+\label{sec:m-experiments}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{./assets/experiments.png}
+\caption*{}
+\label{fig:experiments}
+\end{figure}
+
+\begin{table}[]
+\label{tab:experiments-all}
+\begin{tabular}{@{}llllll@{}}
+\toprule
+run & node         & tool           & job\_id  & is\_valid & experiment     \\ \midrule
+1   & scc\_cpu     & no-tool        & 14629421 & TRUE      &                \\
+2   & scc\_cpu     & tensorboard    & 14629426 & TRUE      &                \\
+3   & scc\_cpu     & profiler-torch & 14650740 & TRUE      &                \\
+4   & scc\_cpu     & deepspeed      & 14617521 & FALSE     &                \\
+5   & scc\_gtx1080 & no-tool        & 14619617 & TRUE      &                \\
+6   & scc\_gtx1080 & tensorboard    & 14615343 & TRUE      &                \\
+7   & scc\_gtx1080 & profiler-torch & 14650076 & TRUE      &                \\
+8   & scc\_gtx1080 & deepspeed      & 14615344 & TRUE      &                \\
+9   & scc\_rtx5000 & no-tool        & 14619618 & TRUE      &                \\
+10  & scc\_rtx5000 & tensorboard    & 14617172 & TRUE      &                \\
+11  & scc\_rtx5000 & profiler-torch & 14650079 & TRUE      &                \\
+12  & scc\_rtx5000 & deepspeed      & 14617171 & TRUE      &                \\
+13  & scc\_v100    & no-tool        & 14619619 & TRUE      &                \\
+14  & scc\_v100    & tensorboard    & 14617203 & TRUE      &                \\
+15  & scc\_v100    & profiler-torch & 14650080 & TRUE      &                \\
+16  & scc\_v100    & deepspeed      & 14617202 & TRUE      &                \\
+17  & scc\_gtx1080 & profiler-torch & 14650758 & TRUE      & batch-size-64  \\
+18  & scc\_gtx1080 & profiler-torch & 14650750 & TRUE      & sample-points  \\
+19  & scc\_cpu     & profiler-torch & 14657599 & TRUE      & sample-points  \\
+20  & scc\_gtx1080 & profiler-torch & 14650759 & TRUE      & batch-size-128 \\ \bottomrule
+\end{tabular}
+\caption{test caption}
+\end{table}
+
+footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Accessed on: 22.02.2023)}
+
 \section{Results}
 \label{sec:results}
+
+\subsection{Original Workflow}
+\label{sec:r-original-workflow}
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.5\textwidth]{./assets/sacct_barplot_by_nodes_sample-points-effect}
+\caption*{}
+\label{fig:sacct_barplot_by_nodes_sample-points-effect}
+\end{figure}
+
+\subsection{Runtime}
+\label{sec:r-runtime}
+
+
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/sacct_barplot_by_nodes_no-experiment}
+\caption*{Runtime on HPC}
+\label{fig:sacct_barplot_by_nodes_no-experiment}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/sacct_barplot_by_nodes_no-experiment_gpu}
+\caption*{Runtime on HPC (GPU-only)}
+\label{fig:sacct_barplot_by_nodes_no-experiment_gpu}
+\end{figure}
 
 \subsection{PyTorch - Profiler}
 \label{sec:r-pytorch-profiler}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
+\caption*{Overview}
+\label{fig:scap_gtx1080_profiler-torch_14650076}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_comparison-batch-size}
+\caption*{Effect of increasing the batch size}
+\label{fig:scap_gtx1080_profiler-torch_comparison-batch-size}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
+\caption*{Trace View: Laspy with presampled lidar data}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
+\caption*{Trace View: Laspy with raw lidar data}
+\label{fig:scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
+\end{figure}
+
+
+
 \subsection{Deepspeed - FlopsProfiler}
 \label{sec:r-flopsprofiler}
+
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+\caption{Summary}
+\label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-summary}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=18,lastline=31]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+\caption{Aggregated Profile per GPU}
+\label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-aggregated}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\tiny, firstline=33,lastline=48, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+\caption{Detailed Profile per GPU}
+\label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-detailed}
+\end{listing}
 
 \section{Discussion}
 \label{sec:discussion}
@@ -357,6 +578,75 @@ func main() {
 \pagenumbering{arabic}
 \renewcommand*{\thepage}{A\arabic{page}}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
+\caption*{Trace View}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_tensorboard_14615343}
+\caption*{Tensorboard for run with GTX1080}
+\label{fig:scap_gtx1080_tensorboard_14615343}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{./assets/sacct_barplot_by_nodes_batch-size-effect}
+\caption*{result of increasing batch size on walltime}
+\label{fig:sacct_barplot_by_nodes_batch-size-effect}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758}
+\caption[test]{Overview: Increased batch size (64)}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-128_14650759}
+\caption[]{Overview: Increased batch size (128)}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-128_14650759}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
+\caption[Operator View]{}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
+\caption[Operator View - Details]{}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
+\caption[GPU Kernel View]{}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
+\caption[Memory View]{}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
+\caption[Module View]{}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
+\end{figure}
 
 
 \section{Code samples}
