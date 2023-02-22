@@ -217,6 +217,9 @@ You may find the following resources useful:
 \section*{List of Abbreviations} \addcontentsline{toc}{section}{List of Abbreviations}
 \begin{acronym}[Bash] % Add acronyms such that they are shown in full only on first occurrence
     \acro{HPC}{High-Performance Computing}
+    \acro{FLOPs}{floating point operations per second}
+    \acro{MACs}{multiply-accumulate operations}
+    \acro{GPU}{Graphics processing unit}
 \end{acronym}
 
 \thispagestyle{plain}
@@ -326,29 +329,27 @@ func main() {
 
 \cite{white_2016_als-forest-inventory}
 \cite{uba_2020_waldumbau}
-\cite{weber_1995_arbaro}
-Arbaro implementation \footnote{\url{https://github.com/wdiestel/arbaro} (Accessed on: 22.02.2023)}
-\cite{pointnet}
+
+Arbaro implementation 
+
 \cite{verma_2019_metrics-ml-benchmarking}
 pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.4\textwidth]{assets/beech_drought}
-\caption*{Spruce and beech stand close to the national park "Hainich".}
-\label{fig:uav-hainich}
-\end{figure}
 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{assets/workflow_synthetic_data}
-\caption[Synthetic- lidar workflow]{This workflow shows ... Adapted from \cite{9906068}}
+\caption[Workflow for generating synthetic lidar data ]{The workflow for generating synthtic lidar data starts with the generation of tree models. This is done with the software Arbaro\footnote{\url{https://github.com/wdiestel/arbaro} (Accessed on: 22.02.2023)}~(\cite{weber_1995_arbaro}). Based on these models Helios++~(\cite{9906068}) is used to simulate lidar data which is similar to data capture with the Zenmuse L1 sensor from dji~\footnote{https://www.dji.com/de/zenmuse-l1}. Following this generated data is used to pre-train a PointNet model proposed by ~\textcite{pointnet}. The figure is adapted from \textcite{9906068}.}
 \label{fig:lidar-workflow}
 \end{figure}
 
 \subsection{Fundamentals of software profiling}
 \label{sec:profiling}
+
+% general introduction
+
+% definition of metrics
+Table~\Cref{tab:metrics} shows an overview of the most important metrics which were used for profiling the PyTorch workflow. Traditionally software is profiled by analyzing execution time and \acf{FLOPs}. With the advent of \ac{GPU}'s throughput and \ac{MACs} gained importance.
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
@@ -361,13 +362,13 @@ pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tenso
 metric                                                                                 & purpose                        \\ \midrule
 Execution time                                                                         & \multirow{2}{*}{traditionally} \\
 FLOPS                                                                                  &                                \\ \midrule
-Throughput: $\frac{images}{sec}$                                                       & with the advent of GPUs        \\ \bottomrule
+Throughput: $\frac{images}{sec}$                                                       & \multirow{2}{*}{with the advent of GPUs} \\
+MACs                                                                                   &                                \\ \bottomrule
 \end{tabular}
-\caption{Adapted from \url{https://snehilverma41.github.io/Metrics_ML_FastPath19.pdf}}
+\caption[Overview of performance metrics]{Overview of performance metrics which were used for profiling.}
 \end{table}
 
 
-!!!Test reference: \Cref{tab:metrics}
 
 \subsection{Tools Overview}
 \label{sec:tools-overview}
