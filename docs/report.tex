@@ -220,6 +220,7 @@ You may find the following resources useful:
     \acro{FLOPs}{floating point operations per second}
     \acro{MACs}{multiply-accumulate operations}
     \acro{GPU}{Graphics processing unit}
+    \acro{CPU}{Central processing unit}
 \end{acronym}
 
 \thispagestyle{plain}
@@ -238,7 +239,7 @@ You may find the following resources useful:
 Why is it important to benchmark the training process of neural networks?
 
 1. Training speed
-2. Energy efficiency
+2. Energy efficiency -> GreenAI
 \fi
 
 Recent advances in deep learning made the technology more popular in several fields of research.
@@ -248,6 +249,10 @@ Increasingly applications in forestry profit from deep learning applications and
 Especilly for lidar data of forests not to many pre-trained networks exist. Therfore, we test an approach where the pre-training is done based on synthetically generated lidar data representing individual trees.
 
 Simultaniously, the emerging use of deep learning also leads to an increase in energy consumption. This phenomen studied by \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances}. 
+
+
+\cite{white_2016_als-forest-inventory}
+\cite{uba_2020_waldumbau}
 
 \begin{itemize}
     \item Identify \textbf{profiling tools} that can help to \textbf{optimize an existing PyTorch workflow}.
@@ -327,24 +332,27 @@ func main() {
 \subsection{Tree species classification based on synthetic lidar data}
 \label{sec:workflow}
 
-\cite{white_2016_als-forest-inventory}
-\cite{uba_2020_waldumbau}
+The use case for testing profiling options available for PyTorch is lidar-based tree species classification. 
+Recently, several applications of deep learning approaches for analyzing lidar data were proposed (~\cite{2017_qi_pointnet, 2021_krisanski_fsct}).
+As the computation cost for 3D convolutions is high, analyzing a workflow for lidar data processing is an ideal real world example explore the capabilities of profilers for PyTorch.
 
-Arbaro implementation 
-
-\cite{verma_2019_metrics-ml-benchmarking}
-pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
+In the project ForestCare~\footnote{https://hps.vi4io.org/research/projects/forestcare/start, accessed on: 13.03.2023} a pre-training workflow based on synthetic lidar data was developed, to overcome the lack of available pre-trainined neural networks for tree species classification.
+A detailed description of this workflow can be found in~\Cref{fig:lidar-workflow}.
+The code for pre-training the poinet model can be found in the accompanying github repository~\url{https://github.com/haukekirchner/scap/, accessed on: 22.02.2023}.
 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{assets/workflow_synthetic_data}
-\caption[Workflow for generating synthetic lidar data ]{The workflow for generating synthtic lidar data starts with the generation of tree models. This is done with the software Arbaro\footnote{\url{https://github.com/wdiestel/arbaro} (Accessed on: 22.02.2023)}~(\cite{weber_1995_arbaro}). Based on these models Helios++~(\cite{9906068}) is used to simulate lidar data which is similar to data capture with the Zenmuse L1 sensor from dji~\footnote{https://www.dji.com/de/zenmuse-l1}. Following this generated data is used to pre-train a PointNet model proposed by ~\textcite{pointnet}. The figure is adapted from \textcite{9906068}.}
+\caption[Workflow for generating synthetic lidar data ]{The workflow for generating synthtic lidar data starts with the generation of tree models. This is done with the software Arbaro\footnote{\url{https://github.com/wdiestel/arbaro}, accessed on: 22.02.2023}~(\cite{weber_1995_arbaro}). Based on these models Helios++~(\cite{9906068}) is used to simulate lidar data which is similar to data capture with the Zenmuse L1 sensor from dji~\footnote{\url{https://www.dji.com/de/zenmuse-l1}, accessed on: 22.02.2023}. Following this generated data is used to pre-train a PointNet model proposed by ~\textcite{2017_qi_pointnet}. The figure is adapted from \textcite{9906068}.}
 \label{fig:lidar-workflow}
 \end{figure}
 
 \subsection{Fundamentals of software profiling}
 \label{sec:profiling}
+
+\cite{verma_2019_metrics-ml-benchmarking}
+pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
 
 % general introduction
 
@@ -387,7 +395,7 @@ tool                              & metrics                                     
 \href{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}{Vtune}                             & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}general\\ performance metrics\end{tabular}} & Intel-only               \\
 \href{https://github.com/RRZE-HPC/likwid}{likwid}                            &                                                                                        & general                  \\ \bottomrule
 \end{tabular}
-\caption[test caption new]{test caption}
+\caption[Overview of profiling tools]{Ovierview of tools used for profiling.}
 \end{table}
 
 
@@ -402,8 +410,8 @@ tool                              & metrics                                     
 \label{sec:Tensorboard}
 
 \begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
-\caption{}
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
+\caption[Code example for Tensorboard]{Highlighted parts of the code are required to use Tensorboard for profiling the training process of the neural network.}
 \label{lst:tensorboard}
 \end{listing}
 
@@ -411,8 +419,8 @@ tool                              & metrics                                     
 \label{sec:m-pytorch-profiler}
 
 \begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
-\caption{}
+\inputminted[breaklines, xleftmargin=1em,linenos,fontsize=\small, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
+\caption[Code example for PyTorch - Profiler]{Highlighted parts of the code are required to use the PyTorch Profiler for profiling the training process of the neural network.}
 \label{lst:profiler-torch}
 \end{listing}
 
@@ -421,8 +429,8 @@ tool                              & metrics                                     
 
 
 \begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
-\caption{}
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
+\caption[Code example for Deepspeed - FlopsProfiler]{Highlighted parts of the code are required to use Deepspeed - FlopsProfiler for profiling the training process of the neural network.}
 \label{lst:deepspeed}
 \end{listing}
 
@@ -432,11 +440,11 @@ tool                              & metrics                                     
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{./assets/experiments.png}
-\caption*{}
+\caption[Overview of the runs]{In total 16 different runs where planned by testing all possible combinations of tools with available \ac{GPU}s and one \ac{CPU}. Four more runs where performed by adding some experiments according the data loader process and different batch sizes (\Cref{tab:experiments-all}).}
 \label{fig:experiments}
 \end{figure}
 
-\begin{table}[]
+\begin{table}[H]
 \label{tab:experiments-all}
 \begin{tabular}{@{}llllll@{}}
 \toprule
@@ -462,7 +470,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
 19  & scc\_cpu     & profiler-torch & 14657599 & TRUE      & sample-points  \\
 20  & scc\_gtx1080 & profiler-torch & 14650759 & TRUE      & batch-size-128 \\ \bottomrule
 \end{tabular}
-\caption{test caption}
+\caption[Ovierview over all runs including experiments]{In total 20 different experiments where performed. The first 16 experiments are directly derived from the experiment design presented in \Cref{fig:experiments}. Experiments 18 and 19 where done as preliminary work, to optimize the data loading process before all experiments are performed (~\Cref{sec:r-data-loading}). Experiments 17 and 20 where done based on the PyTorch - Profiler's performance recommendations(~\Cref{sec:r-pytorch-profiler}).}
 \end{table}
 
 footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Accessed on: 22.02.2023)}
@@ -470,35 +478,32 @@ footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Access
 \section{Results}
 \label{sec:results}
 
-\subsection{Original Workflow}
-\label{sec:r-original-workflow}
+\subsection{Optimization of the data loading process}
+\label{sec:r-data-loading}
 
 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{./assets/sacct_barplot_by_nodes_sample-points-effect}
-\caption*{}
+\caption[Data loading optimization]{By migrating the point sampling process from the data loader to a pre-processing step the elapsed time for the training runs was decreased significantly.}
 \label{fig:sacct_barplot_by_nodes_sample-points-effect}
 \end{figure}
 
 \subsection{Runtime}
 \label{sec:r-runtime}
 
-
-
-
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/sacct_barplot_by_nodes_no-experiment}
-\caption*{Runtime on HPC}
+\caption[Runtime of the experiments]{The runtime of all runs testing the combintation of tools and \ac{GPU} and \ac{CPU} partitions (\Cref{fig:experiments}). }
 \label{fig:sacct_barplot_by_nodes_no-experiment}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/sacct_barplot_by_nodes_no-experiment_gpu}
-\caption*{Runtime on HPC (GPU-only)}
+\caption[Runtime of the experiments (GPU-only)]{The runtime of all runs testing the combintation of tools and \ac{GPU} partitions - excluding \ac{CPU} partitions (\Cref{fig:experiments}).}
 \label{fig:sacct_barplot_by_nodes_no-experiment_gpu}
 \end{figure}
 
@@ -507,15 +512,15 @@ footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Access
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
-\caption*{Overview}
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
+\caption[PyTorch - Profiler: Overview]{Visualizing the profiling results of the PyTorch - Profiler with Tensorboard provides an overview page. This page summarizes important metrics of the workflow, such as \ac{GPU} utilization. Details on the metrics can be found in the corresponding Github repository~\footnote{\url{https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md}, accessed on: 27.22023}. Further, it offers performance recommendations on how to adress potential bottlenecks. }
 \label{fig:scap_gtx1080_profiler-torch_14650076}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_comparison-batch-size}
-\caption*{Effect of increasing the batch size}
+\caption[PyTorch - Profiler: Performance Recommendation]{For the tested training workflow the performance recommendations of the PyTorch - Profiler suggest to increase the batch size. The effect of the batch size on the \ac{GPU} utilization can be seen for a batch size of 32 (run 7 in~\Cref{tab:experiments-all}), 64 (run 17 in~\Cref{tab:experiments-all}), 128 (run 20 in~\Cref{tab:experiments-all}).}
 \label{fig:scap_gtx1080_profiler-torch_comparison-batch-size}
 \end{figure}
 
