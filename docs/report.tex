@@ -217,7 +217,7 @@ You may find the following resources useful:
 \section*{List of Abbreviations} \addcontentsline{toc}{section}{List of Abbreviations}
 \begin{acronym}[Bash] % Add acronyms such that they are shown in full only on first occurrence
     \acro{HPC}{High-Performance Computing}
-    \acro{FLOPs}{floating point operations per second}
+    \acro{FLOPS}{floating point operations per second}
     \acro{MACs}{multiply-accumulate operations}
     \acro{GPU}{Graphics processing unit}
     \acro{CPU}{Central processing unit}
@@ -338,7 +338,7 @@ As the computation cost for 3D convolutions is high, analyzing a workflow for li
 
 In the project ForestCare~\footnote{https://hps.vi4io.org/research/projects/forestcare/start, accessed on: 13.03.2023} a pre-training workflow based on synthetic lidar data was developed, to overcome the lack of available pre-trainined neural networks for tree species classification.
 A detailed description of this workflow can be found in~\Cref{fig:lidar-workflow}.
-The code for pre-training the poinet model can be found in the accompanying github repository~\url{https://github.com/haukekirchner/scap/, accessed on: 22.02.2023}.
+The code for pre-training the poinet model can be found in the accompanying github repository~\footnote{\url{https://github.com/haukekirchner/scap/}, accessed on: 22.02.2023}.
 
 
 \begin{figure}[H]
@@ -351,19 +351,30 @@ The code for pre-training the poinet model can be found in the accompanying gith
 \subsection{Fundamentals of software profiling}
 \label{sec:profiling}
 
-\cite{verma_2019_metrics-ml-benchmarking}
 pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
 
 % general introduction
+Software profiling is "a form of dynamic program analysis (as opposed to static code analysis), is the investigation of a program's behavior using information gathered as the program executes"~(\cite{wiki:profiling}).
+Metrices that are commonly of interest to identify performance bottlenecks are the number and the elapsed time per function call, as well as the memory consumption.
 
 % definition of metrics
-Table~\Cref{tab:metrics} shows an overview of the most important metrics which were used for profiling the PyTorch workflow. Traditionally software is profiled by analyzing execution time and \acf{FLOPs}. With the advent of \ac{GPU}'s throughput and \ac{MACs} gained importance.
+Metrics traditionally used for software profiling are execution time and \acf{FLOPS}~(\Cref{tab:metrics}).
+Execution time is a simple measure, which reports on the total time a function call takes.
+\ac{FLOPS} can be used to evalute the models efficiency.
+
+With the advent of \ac{GPU}'s throughput and \acf{MACs} gained importance~(\cite{verma_2019_metrics-ml-benchmarking}).
+Throughput is of high importance as deep learning models need to analyze massive amounts of data to finde generalizable patterns and can report on the models speed.
+As "most of modern hardware architectures uses FMA instructions for operations with tensors.  FMA computes $a*x+b$ as one operation. Roughly $GMACs = 0.5 * GFLOPs$"%\footnote{\url{https://github.com/sovrasov/flops-counter.pytorch/issues/16#issuecomment-518585837}, , accessed on: 22.11.2022}.
+
+
+Additionally, the PyTorch Profiler tracks the memory consumption. As deep learning applications depend on massive amounts of data, the effective usage of \ac{GPU}'s internal memory is critical to the overall performance.
+
+Further important profiling measure in deep learing, which are not considered in this report, are Time to Accuracy (TTA) and Average Time to Multiple Thresholds (ATTMT)~(\cite{verma_2019_metrics-ml-benchmarking}).
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 % \usepackage{multirow}
 \begin{table}[H]
-\label{tab:metrics}
 \centering
 \begin{tabular}{@{}ll@{}}
 \toprule
@@ -374,6 +385,7 @@ Throughput: $\frac{images}{sec}$                                                
 MACs                                                                                   &                                \\ \bottomrule
 \end{tabular}
 \caption[Overview of performance metrics]{Overview of performance metrics which were used for profiling.}
+\label{tab:metrics}
 \end{table}
 
 
@@ -424,13 +436,13 @@ tool                              & metrics                                     
 \label{lst:profiler-torch}
 \end{listing}
 
-\subsection{Deepspeed - FlopsProfiler}
-\label{sec:m-flopsprofiler}
+\subsection{Deepspeed - FLOPSProfiler}
+\label{sec:m-FLOPSprofiler}
 
 
 \begin{listing}[H]
 \inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
-\caption[Code example for Deepspeed - FlopsProfiler]{Highlighted parts of the code are required to use Deepspeed - FlopsProfiler for profiling the training process of the neural network.}
+\caption[Code example for Deepspeed - FLOPSProfiler]{Highlighted parts of the code are required to use Deepspeed - FLOPSProfiler for profiling the training process of the neural network.}
 \label{lst:deepspeed}
 \end{listing}
 
@@ -540,8 +552,8 @@ footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Access
 
 
 
-\subsection{Deepspeed - FlopsProfiler}
-\label{sec:r-flopsprofiler}
+\subsection{Deepspeed - FLOPSProfiler}
+\label{sec:r-FLOPSprofiler}
 
 
 \begin{listing}[H]
