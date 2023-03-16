@@ -351,8 +351,6 @@ The code for pre-training the poinet model can be found in the accompanying gith
 \subsection{Fundamentals of software profiling}
 \label{sec:profiling}
 
-pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
-
 % general introduction
 Software profiling is "a form of dynamic program analysis (as opposed to static code analysis), is the investigation of a program's behavior using information gathered as the program executes"~(\cite{wiki:profiling}).
 Metrices that are commonly of interest to identify performance bottlenecks are the number and the elapsed time per function call, as well as the memory consumption.
@@ -360,11 +358,11 @@ Metrices that are commonly of interest to identify performance bottlenecks are t
 % definition of metrics
 Metrics traditionally used for software profiling are execution time and \acf{FLOPS}~(\Cref{tab:metrics}).
 Execution time is a simple measure, which reports on the total time a function call takes.
-\ac{FLOPS} can be used to evalute the models efficiency.
+\ac{FLOPS} refers to the number of floating point operations that can be executed per second and can be used to evalute the models efficiency.
 
 With the advent of \ac{GPU}'s throughput and \acf{MACs} gained importance~(\cite{verma_2019_metrics-ml-benchmarking}).
 Throughput is of high importance as deep learning models need to analyze massive amounts of data to finde generalizable patterns and can report on the models speed.
-As "most of modern hardware architectures uses FMA instructions for operations with tensors.  FMA computes $a*x+b$ as one operation. Roughly $GMACs = 0.5 * GFLOPs$"%\footnote{\url{https://github.com/sovrasov/flops-counter.pytorch/issues/16#issuecomment-518585837}, , accessed on: 22.11.2022}.
+As "most of modern hardware architectures uses FMA [fused multiply-add] instructions for operations with tensors.  FMA computes $a*x+b$ as one operation. Roughly $GMACs = 0.5 * GFLOPs$"\footnote{\url{https://github.com/sovrasov/flops-counter.pytorch/issues/16\#issuecomment-518585837} , accessed on: 22.11.2022}.
 
 
 Additionally, the PyTorch Profiler tracks the memory consumption. As deep learning applications depend on massive amounts of data, the effective usage of \ac{GPU}'s internal memory is critical to the overall performance.
@@ -390,33 +388,40 @@ MACs                                                                            
 
 
 
-\subsection{Tools Overview}
+\subsection{Overview of profiling tools}
 \label{sec:tools-overview}
+
+Many different profiling tools that could be used to gain insights into the PyTorch workflow presented in~\Cref{sec:workflow} exist (a small collection can be found in~\Cref{tab:tools}).
+General profiling tools such as Intel's Vtune~\footnote{\url{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}, accessed on: 22.11.2022} or the open-source software LIKWID\footnote{\url{https://github.com/RRZE-HPC/likwid}, accessed on: 22.11.2022} can be used to collect useful metrices of any software.
+
+However, for PyTorch tools were developed specifically to the needs one need to profile PyTorch workflows.
+One popular tool is the in-build PyTorch profiler, which can be used in combination with tensorboard~\footnote{\url{https://www.tensorflow.org/tensorboard/}, accessed on: 16.03.2023}. This graphical visualization can both be used for beginners and experts to optimize their workflows, as it provides performance recommendations, as well as detailed metrics such as the call stack or the trace view.
+Another tool that was specifically designed for PyTorch is Deepspeed~\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 16.03.2023}. Here specifically the FlopsProfiler was used, as the Pytorch Profiler lacks the option to analyze FLOPS.
+
+
+General profiling tools could not provide automatic recommendations and as useful visualisations to highlight critical aspects, as they do not have the insights into PyTorch. Consequently more expert knowledge is required to make good use of tools like LIKWID or Vtune.
+As one of the reasearch goals of this project was the identification of eas-to-use tools this report focuses on the PyTorch Profiler and the Deepspeed's FlopsProfiler.
+
+
+pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
 % \usepackage{multirow}
 \begin{table}[H]
-\label{tab:tools}
 \centering
 \begin{tabular}{@{}lll@{}}
 \toprule
 tool                              & metrics                                                                                & scope                    \\ \midrule
 \href{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}{PyTorch Profiler With TensorBoard} & \begin{tabular}[c]{@{}l@{}}performance metrics\\ (e.g. time, memory)\end{tabular}      & \multirow{2}{*}{PyTorch} \\
-\href{https://github.com/facebookresearch/fvcore}{fvcore}                      & FLOPS                                                                                  &                          \\ \midrule
+\href{https://www.deepspeed.ai/tutorials/flops-profiler/}{Deepspeed/FlopsProfiler}                      & FLOPS                                                                                  &                          \\ \midrule
 \href{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}{Vtune}                             & \multirow{2}{*}{\begin{tabular}[c]{@{}l@{}}general\\ performance metrics\end{tabular}} & Intel-only               \\
 \href{https://github.com/RRZE-HPC/likwid}{likwid}                            &                                                                                        & general                  \\ \bottomrule
 \end{tabular}
 \caption[Overview of profiling tools]{Ovierview of tools used for profiling.}
+\label{tab:tools}
 \end{table}
 
-
-
-\begin{itemize}
-    \item[$\Rightarrow$] different tools for different use cases
-    \item[$\Rightarrow$] Vtune and likwid can profile all kind of applications
-    \item[$\Rightarrow$] here I will focus on profiling tools optimized for PyTorch
-\end{itemize}
 
 \subsection{Tensorboard}
 \label{sec:Tensorboard}
