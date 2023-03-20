@@ -447,7 +447,11 @@ Contrary to the PyTorch Profiler, the output is text-based without a visualizati
 \subsection{Experiments}
 \label{sec:m-experiments}
 
+For the design of the experiments, two main questions were considered.
+What is the benefit of using different accelerators? What is the cost of using profilers?
 
+Therefore, the three presented tools~(\Cref{sec:tools-overview}) were tested on all available \ac{GPU}s of the Scientific Compute Cluster\footnote{\tiny{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}}}.
+The main focus is on comparing the PyTorch - Profiler and DeepSpeed's Flops Profiler, as these tools are promoted primarily to optimize the performance of deep learning workflows. In addition, Tensorboard was included to analyze the overhead of this relatively simple and commonly used tool and to have a baseline for simple profiling tools.
 
 \begin{figure}[H]
 \centering
