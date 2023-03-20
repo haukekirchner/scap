@@ -332,19 +332,19 @@ func main() {
 \subsection{Tree species classification based on synthetic lidar data}
 \label{sec:workflow}
 
-The use case for testing profiling options available for PyTorch is lidar-based tree species classification. 
-Recently, several applications of deep learning approaches for analyzing lidar data were proposed (~\cite{2017_qi_pointnet, 2021_krisanski_fsct}).
-As the computation cost for 3D convolutions is high, analyzing a workflow for lidar data processing is an ideal real world example explore the capabilities of profilers for PyTorch.
+The use case for testing profiling options for PyTorch is lidar-based tree species classification. 
+Several applications of deep learning approaches for analyzing lidar data were recently proposed (~\cite{2017_qi_pointnet, 2021_krisanski_fsct}).
+As the computation cost for 3D convolutions is high, analyzing a workflow for lidar data processing is an ideal real-world example exploring the capabilities of PyTorch profilers.
 
-In the project ForestCare~\footnote{https://hps.vi4io.org/research/projects/forestcare/start, accessed on: 13.03.2023} a pre-training workflow based on synthetic lidar data was developed, to overcome the lack of available pre-trainined neural networks for tree species classification.
+In the project ForestCare~\footnote{https://hps.vi4io.org/research/projects/forestcare/start, accessed on: 13.03.2023}, a pre-training workflow based on synthetic lidar data was developed to overcome the lack of available pre-trained neural networks for tree species classification.
 A detailed description of this workflow can be found in~\Cref{fig:lidar-workflow}.
-The code for pre-training the poinet model can be found in the accompanying github repository~\footnote{\url{https://github.com/haukekirchner/scap/}, accessed on: 22.02.2023}.
+The code for pre-training the pointnet model can be found in the accompanying GitHub repository~\footnote{\url{https://github.com/haukekirchner/scap/}, accessed on: 22.02.2023}.
 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{assets/workflow_synthetic_data}
-\caption[Workflow for generating synthetic lidar data ]{The workflow for generating synthtic lidar data starts with the generation of tree models. This is done with the software Arbaro\footnote{\url{https://github.com/wdiestel/arbaro}, accessed on: 22.02.2023}~(\cite{weber_1995_arbaro}). Based on these models Helios++~(\cite{9906068}) is used to simulate lidar data which is similar to data capture with the Zenmuse L1 sensor from dji~\footnote{\url{https://www.dji.com/de/zenmuse-l1}, accessed on: 22.02.2023}. Following this generated data is used to pre-train a PointNet model proposed by ~\textcite{2017_qi_pointnet}. The figure is adapted from \textcite{9906068}.}
+\caption[Workflow for generating synthetic lidar data ]{The workflow for generating synthetic lidar data starts with generating tree models. This is done with the software Arbaro\footnote{\url{https://github.com/wdiestel/arbaro}, accessed on: 22.02.2023}~(\cite{weber_1995_arbaro}). Based on these models, Helios++~(\cite{9906068}) is used to simulate lidar data which is similar to data capture with the Zenmuse L1 sensor from dji~\footnote{\url{https://www.dji.com/de/zenmuse-l1}, accessed on: 22.02.2023}. This generated data is used to pre-train a PointNet model proposed by ~\textcite{2017_qi_pointnet}. The figure is adapted from \textcite{9906068}.}
 \label{fig:lidar-workflow}
 \end{figure}
 
@@ -353,21 +353,20 @@ The code for pre-training the poinet model can be found in the accompanying gith
 
 % general introduction
 Software profiling is "a form of dynamic program analysis (as opposed to static code analysis), is the investigation of a program's behavior using information gathered as the program executes"~(\cite{wiki:profiling}).
-Metrices that are commonly of interest to identify performance bottlenecks are the number and the elapsed time per function call, as well as the memory consumption.
+Metrics commonly of interest to identify performance bottlenecks are the number and elapsed time per function call and the memory consumption.
 
 % definition of metrics
 Metrics traditionally used for software profiling are execution time and \acf{FLOPS}~(\Cref{tab:metrics}).
-Execution time is a simple measure, which reports on the total time a function call takes.
-\ac{FLOPS} refers to the number of floating point operations that can be executed per second and can be used to evalute the models efficiency.
+Execution time is a simple measure that reports a function call's total time.
+\ac{FLOPS} refers to the number of floating point operations that can be executed per second and can be used to evaluate the model's efficiency.
 
 With the advent of \ac{GPU}'s throughput and \acf{MACs} gained importance~(\cite{verma_2019_metrics-ml-benchmarking}).
-Throughput is of high importance as deep learning models need to analyze massive amounts of data to finde generalizable patterns and can report on the models speed.
-As "most of modern hardware architectures uses FMA [fused multiply-add] instructions for operations with tensors.  FMA computes $a*x+b$ as one operation. Roughly $GMACs = 0.5 * GFLOPs$"\footnote{\url{https://github.com/sovrasov/flops-counter.pytorch/issues/16\#issuecomment-518585837} , accessed on: 22.11.2022}.
+Throughput is essential as deep learning models need to analyze massive amounts of data to find generalizable patterns and can report on the model's speed.
+Analog to \ac{FLOPS} \ac{MACs} do report on the software's efficiency. "Most modern hardware architectures use FMA [fused multiply-add] instructions for operations with tensors. FMA computes $a*x+b$ as one operation. Roughly $GMACs = 0.5 * GFLOPs$"\footnote{\url{https://github.com/sovrasov/flops-counter.pytorch/issues/16\#issuecomment-518585837} , accessed on: 22.11.2022}.
 
+Further, profiling memory consumption is critical, as deep learning applications depend on massive amounts of data. Therefore, efficiently using \ac{GPU}'s internal memory is critical to the overall performance.
 
-Additionally, the PyTorch Profiler tracks the memory consumption. As deep learning applications depend on massive amounts of data, the effective usage of \ac{GPU}'s internal memory is critical to the overall performance.
-
-Further important profiling measure in deep learing, which are not considered in this report, are Time to Accuracy (TTA) and Average Time to Multiple Thresholds (ATTMT)~(\cite{verma_2019_metrics-ml-benchmarking}).
+Other important profiling measures in deep learning, which are not considered in this report, are Time to Accuracy (TTA) and Average Time to Multiple Thresholds (ATTMT)~(\cite{verma_2019_metrics-ml-benchmarking}). These metrics were out of scope as the tested tools (\Cref{sec:tools-overview}) do not provide this information. However, setting up a workflow to measure these metrics based on the tools tested here is possible.
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
@@ -382,28 +381,26 @@ FLOPS                                                                           
 Throughput: $\frac{images}{sec}$                                                       & \multirow{2}{*}{with the advent of GPUs} \\
 MACs                                                                                   &                                \\ \bottomrule
 \end{tabular}
-\caption[Overview of performance metrics]{Overview of performance metrics which were used for profiling.}
+\caption[Overview of performance metrics]{Overview of performance metrics that were used for profiling.}
 \label{tab:metrics}
 \end{table}
 
+\subsection{Profiling tools}
 
-
-\subsection{Overview of profiling tools}
+\subsubsection{Overview of profiling tools}
 \label{sec:tools-overview}
 
-Many different profiling tools that could be used to gain insights into the PyTorch workflow presented in~\Cref{sec:workflow} exist (a small collection can be found in~\Cref{tab:tools}).
-General profiling tools such as Intel's Vtune~\footnote{\url{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}, accessed on: 22.11.2022} or the open-source software LIKWID\footnote{\url{https://github.com/RRZE-HPC/likwid}, accessed on: 22.11.2022} can be used to collect useful metrices of any software.
+Many different profiling tools can be used to gain insights into the PyTorch workflow presented in~\Cref{sec:workflow} exist. 
+~\Cref{tab:tools} lists some of the considered options.
+General profiling tools such as Intel's Vtune~\footnote{\url{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}, accessed on: 22.11.2022} or the open-source software LIKWID\footnote{\url{https://github.com/RRZE-HPC/likwid}, accessed on: 22.11.2022} can be used to collect valuable metrics of any software.
 
-However, for PyTorch tools were developed specifically to the needs one need to profile PyTorch workflows.
-One popular tool is the in-build PyTorch profiler, which can be used in combination with tensorboard~\footnote{\url{https://www.tensorflow.org/tensorboard/}, accessed on: 16.03.2023}. This graphical visualization can both be used for beginners and experts to optimize their workflows, as it provides performance recommendations, as well as detailed metrics such as the call stack or the trace view.
-Another tool that was specifically designed for PyTorch is Deepspeed~\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 16.03.2023}. Here specifically the FlopsProfiler was used, as the Pytorch Profiler lacks the option to analyze FLOPS.
-
-
-General profiling tools could not provide automatic recommendations and as useful visualisations to highlight critical aspects, as they do not have the insights into PyTorch. Consequently more expert knowledge is required to make good use of tools like LIKWID or Vtune.
-As one of the reasearch goals of this project was the identification of eas-to-use tools this report focuses on the PyTorch Profiler and the Deepspeed's FlopsProfiler.
+However, tools were developed specifically to the needs one needs to profile PyTorch workflows.
+One popular tool is the in-build PyTorch profiler, which can be combined with Tensorboard~\footnote{\url{https://www.tensorflow.org/tensorboard/}, accessed on: 16.03.2023}. This graphical visualization can be used for beginners and experts to optimize their workflows, as it provides automatic performance recommendations and detailed views such as the call stack or the trace view.
+Another tool specifically designed for PyTorch is Deepspeed~\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 16.03.2023}. The FlopsProfiler was used here, as the Pytorch Profiler lacks the option to analyze FLOPS.
 
 
-pytorch tutorial \footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.11.2022}
+General profiling tools could not provide automatic recommendations or useful visualizations to highlight critical aspects and bottlenecks, as they do not have insights into PyTorch. Consequently, more expert knowledge is required to use tools like LIKWID or Vtune.
+As this project's research goal was identifying easy-to-use tools, this report focuses on the PyTorch Profiler and DeepSpeed's FlopsProfiler.
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
@@ -423,36 +420,34 @@ tool                              & metrics                                     
 \end{table}
 
 
-\subsection{Tensorboard}
+\subsubsection{Tensorboard}
 \label{sec:Tensorboard}
 
-\begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
-\caption[Code example for Tensorboard]{Highlighted parts of the code are required to use Tensorboard for profiling the training process of the neural network.}
-\label{lst:tensorboard}
-\end{listing}
+Tensorboard is "TensorFlow's visualization toolkit"~\footnote{\url{https://www.tensorflow.org/tensorboard}, accessed on: 20.3.2023} and is commonly used to visualize the loss and accuracy during the training process of a neural network.
+For most people starting with deep learning, Tensorboard is one of the first tools to get insights into the deep learning workflow.
+Unlike the name implies, this tool is not limited to using TensorFlow but can also be used with PyTorch.
 
-\subsection{PyTorch - Profiler}
+\subsubsection{PyTorch - Profiler}
 \label{sec:m-pytorch-profiler}
 
-\begin{listing}[H]
-\inputminted[breaklines, xleftmargin=1em,linenos,fontsize=\small, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
-\caption[Code example for PyTorch - Profiler]{Highlighted parts of the code are required to use the PyTorch Profiler for profiling the training process of the neural network.}
-\label{lst:profiler-torch}
-\end{listing}
+A more advanced option to get insights into a PyTorch Workflow is the PyTorch - Profiler, which is " a simple profiler API that is useful when user needs to determine the most expensive operators in the model"~\footnote{\url{https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html}, accessed on: 20.3.2023}.
+With the help of this tool, one can collect general performance metrics, identify expensive operators, and track kernel activity.
+The PyTorch - Profiler can be used with Tensorboard to visualize the profiling outputs~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}.
 
-\subsection{Deepspeed - FLOPSProfiler}
+
+\subsubsection{Deepspeed - FLOPSProfiler}
 \label{sec:m-FLOPSprofiler}
 
+DeepSpeed is a collection of tools that can help to optimize deep learning workflows~\footnote{\url{https://www.deepspeed.ai/}, accessed on: 20.3.2023}.
+This project's primary interest was on the FlopsProfiler~\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 20.3.2023}. 
+As the name implies, the FlopsProfiler can measure the efficiency (\ac{FLOPS}) for both the training and inference of a deep learning model. Further, it can profile the model's speed (latency, throughput).
+Contrary to the PyTorch Profiler, the output is text-based without a visualization tool.
 
-\begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
-\caption[Code example for Deepspeed - FLOPSProfiler]{Highlighted parts of the code are required to use Deepspeed - FLOPSProfiler for profiling the training process of the neural network.}
-\label{lst:deepspeed}
-\end{listing}
 
 \subsection{Experiments}
 \label{sec:m-experiments}
+
+
 
 \begin{figure}[H]
 \centering
@@ -578,6 +573,28 @@ footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Access
 \caption{Detailed Profile per GPU}
 \label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-detailed}
 \end{listing}
+
+
+%%%%%%%%%%%%%%%%
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
+\caption[Code example for Tensorboard]{Highlighted parts of the code are required to use Tensorboard for profiling the training process of the neural network.}
+\label{lst:tensorboard}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[breaklines, xleftmargin=1em,linenos,fontsize=\small, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
+\caption[Code example for PyTorch - Profiler]{Highlighted parts of the code are required to use the PyTorch Profiler for profiling the training process of the neural network.}
+\label{lst:profiler-torch}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
+\caption[Code example for Deepspeed - FLOPSProfiler]{Highlighted parts of the code are required to use Deepspeed - FLOPSProfiler for profiling the training process of the neural network.}
+\label{lst:deepspeed}
+\end{listing}
+
 
 \section{Discussion}
 \label{sec:discussion}
