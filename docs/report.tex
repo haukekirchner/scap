@@ -216,11 +216,12 @@ You may find the following resources useful:
 
 \section*{List of Abbreviations} \addcontentsline{toc}{section}{List of Abbreviations}
 \begin{acronym}[Bash] % Add acronyms such that they are shown in full only on first occurrence
-    \acro{HPC}{High-Performance Computing}
-    \acro{FLOPS}{floating point operations per second}
-    \acro{MACs}{multiply-accumulate operations}
-    \acro{GPU}{Graphics processing unit}
     \acro{CPU}{Central processing unit}
+    \acro{FLOPS}{floating point operations per second}
+    \acro{GPU}{Graphics processing unit}
+    \acro{HPC}{High-Performance Computing}
+    \acro{MACs}{multiply-accumulate operations}
+    \acro{SCC}{Scientific Compute Cluster}
 \end{acronym}
 
 \thispagestyle{plain}
@@ -450,7 +451,7 @@ Contrary to the PyTorch Profiler, the output is text-based without a visualizati
 For the design of the experiments, two main questions were considered.
 What is the benefit of using different accelerators? What is the cost/overhead of using profilers?
 
-Therefore, the three presented tools~(\Cref{sec:tools-overview}) were tested on all available \ac{GPU}s of the Scientific Compute Cluster\footnote{\tiny{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}}}.
+Therefore, the three presented tools~(\Cref{sec:tools-overview}) were tested on all available \ac{GPU}s of the \ac{SCC}\footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}}.
 The main focus is on comparing the PyTorch - Profiler and DeepSpeed's Flops Profiler, as these tools are promoted primarily to optimize the performance of deep learning workflows. In addition, Tensorboard was included to analyze the overhead of this relatively simple and commonly used tool and to have a baseline for simple profiling tools.
 
 \begin{figure}[H]
@@ -465,6 +466,7 @@ Two more runs were included to test the performance recommendations of the PyTor
 Another two runs show the effect of an unoptimized data loading process, where the raw point cloud is loaded every time, and the point sampling process happens afterward (runs 18 and 19).
 
 \begin{table}[H]
+\centering
 \begin{tabular}{@{}llllll@{}}
 \toprule
 run & node         & tool           & job\_id  & is\_valid & experiment     \\ \midrule
@@ -493,20 +495,23 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
 \label{tab:experiments-all}
 \end{table}
 
-footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Accessed on: 22.02.2023)}
-
 \section{Results}
 \label{sec:results}
 
 \subsection{Optimization of the data loading process}
 \label{sec:r-data-loading}
 
+As we were aware that due to the massive amount of data we want to process, the data loading process is a bottleneck, it was decided to optimize this aspect before doing all remainig runs presented in~\Cref{sec:m-experiments}. This way, it was possible to run more experiments without wasting valuable \ac{GPU} hours for all users on the \ac{SCC}. The idea is to speed up the data-loading process by migrating the point sampling to a pre-processing workflow. Point sampling means selecting the number of points per tree the neural network architecture pointnet expects as input. Thus, it is possible to reduce the data size by a factor of $ 1714.55 $, from $931 GB $ to $543 MB $. 
 
+As the data loading process was the major bottleneck, reducing data that needs to be loaded during the training process significantly speeds up the whole training workflow. For example, while it still took $~4 hours$ to train the network on the GTX 1080 in the unoptimized version, it only took $~16 minutes$ for the optimized version. Similarly, the training process on the \ac{CPU} was decreased from $~14$ hours and $15$ minutes to $~2$ hours and $49$ minutes. This means a speed up for the \ac{CPU} by a factor of $~5$ and for the \ac{GPU} (GTX 1080) a speed up by a factor of $~14$.
+
+So far, the optimization problem has been solved by expert knowledge about the workflow and the data. Simultaneously the PyTorch - Profiler was tested to identify the bottleneck in the data loader. Unfortunately, the overview did not help identify the issue. Only an analysis of the trace view revealed that the function for reading the data takes up a large part of the time and thus slows down the workflow (\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}). More details on the PyTorch - Profiler can be found in~\Cref{sec:r-pytorch-profiler}.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.5\textwidth]{./assets/sacct_barplot_by_nodes_sample-points-effect}
-\caption[Data loading optimization]{By migrating the point sampling process from the data loader to a pre-processing step the elapsed time for the training runs was decreased significantly.}
+\includegraphics[width=1\textwidth]{./assets/sacct_barplot_by_nodes_sample-points-effect}
+\vspace{-1em}
+\caption[Effect of the data loading optimization]{By migrating the point sampling process from the data loader to a pre-processing step, the elapsed time for the training runs was decreased significantly.}
 \label{fig:sacct_barplot_by_nodes_sample-points-effect}
 \end{figure}
 
@@ -607,6 +612,11 @@ footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Access
 \section{Discussion}
 \label{sec:discussion}
 
+\iffalse
+- optimize data loader
+    - speed up bei GTX1080 deutlich höher (factor 5 gegen 14) -> bei der GPU deutlich größerer anteil an verlangsamenden komponenten. bei der CPU sind andere faktor auch massgeblich daran beteiligt
+        -> darum accelerator für train of dl so wichtig
+\fi
 
 
 \section{Conclusion}
