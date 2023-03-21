@@ -515,8 +515,14 @@ So far, the optimization problem has been solved by expert knowledge about the w
 \label{fig:sacct_barplot_by_nodes_sample-points-effect}
 \end{figure}
 
-\subsection{Runtime}
+\subsection{Effect of the accelerators and profiling tools on the runtime}
 \label{sec:r-runtime}
+
+The simplest mehtode to estimate the perforamnce of all different runs is to have a look at the elapsed time for each analysis. On the \ac{SCC} jobs are executed via SLURM~\footnote{\url{https://slurm.schedmd.com/}, accessed on: 21.3.2023} which provides the tool \texttt{sacct}\footnote{\url{https://slurm.schedmd.com/sacct.html}, accessed on: 21.3.2023} for analyzing accounting information, such as elapsed time of a job. The raw output and the command to get this information can be found in the Appendix (~\Cref{lst:sacct_out}, \Cref{lst:sacct_command}).
+
+Most obvious is the difference between runs on the \ac{CPU} and the \ac{GPU}s (\Cref{fig:sacct_barplot_by_nodes_no-experiment}). The mean for \ac{CPU}s is $9669.333$ seconds and for the \ac{GPU}s $513.25$ seconds.
+
+Further it is noteable that DeepSpeed is not compatible with \ac{CPU}s.
 
 \begin{figure}[H]
 \centering
@@ -636,6 +642,12 @@ So far, the optimization problem has been solved by expert knowledge about the w
 \pagenumbering{arabic}
 \renewcommand*{\thepage}{A\arabic{page}}
 
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos]{python}{./assets/sacct.out}
+\caption[Sacct output]{Output produced by~\Cref{lst:sacct_out}, which provides the elapsed time for each job on the \ac{SCC}.}
+\label{lst:sacct_out}
+\end{listing}
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
@@ -709,7 +721,12 @@ So far, the optimization problem has been solved by expert knowledge about the w
 
 \section{Code samples}
 
-This is part of the appendix...
-
+\begin{listing}[H]
+\begin{minted}[breaklines]{python}
+sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615344, 14617172, 14650079, 14617171, 14618941, 14617203, 14619619, 14650080, 14619618,14619617, 14617202, 14650750, 14650758, 14629421, 14629426, 14650740, 14650759 -X
+        \end{minted}
+\caption[Sacct command]{The command that is used to collect accounting information for the jobs executed on the \ac{SCC} for this project (\Cref{tab:experiments-all}). The output of this command can be found in~\Cref{lst:sacct_out}.}
+\label{lst:sacct_command}
+\end{listing}
 
 \end{document}  

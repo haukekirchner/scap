@@ -112,6 +112,11 @@ g
 
 export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_no-experiment.png", ratio = 0.5)
 
+data_tmp <- data %>% filter(node=="scc_cpu" & is_valid == TRUE & experiment == "")
+mean(data_tmp$duration)
+
+data_tmp <- data %>% filter(node!="scc_cpu" & is_valid == TRUE & experiment == "")
+mean(data_tmp$duration)
 
 g <-ggplot(filter(data, node != "scc_cpu" & experiment == ""), aes(factor(node), duration, fill = tool)) + 
   geom_bar(stat="identity", position = "dodge")+
