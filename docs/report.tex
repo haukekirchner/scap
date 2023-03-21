@@ -448,7 +448,7 @@ Contrary to the PyTorch Profiler, the output is text-based without a visualizati
 \label{sec:m-experiments}
 
 For the design of the experiments, two main questions were considered.
-What is the benefit of using different accelerators? What is the cost of using profilers?
+What is the benefit of using different accelerators? What is the cost/overhead of using profilers?
 
 Therefore, the three presented tools~(\Cref{sec:tools-overview}) were tested on all available \ac{GPU}s of the Scientific Compute Cluster\footnote{\tiny{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc}}}.
 The main focus is on comparing the PyTorch - Profiler and DeepSpeed's Flops Profiler, as these tools are promoted primarily to optimize the performance of deep learning workflows. In addition, Tensorboard was included to analyze the overhead of this relatively simple and commonly used tool and to have a baseline for simple profiling tools.
@@ -456,12 +456,15 @@ The main focus is on comparing the PyTorch - Profiler and DeepSpeed's Flops Prof
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{./assets/experiments.png}
-\caption[Overview of the runs]{In total 16 different runs where planned by testing all possible combinations of tools with available \ac{GPU}s and one \ac{CPU}. Four more runs where performed by adding some experiments according the data loader process and different batch sizes (\Cref{tab:experiments-all}).}
+\caption[Overview of the runs]{In total, 16 different runs were planned by testing all possible combinations of tools with available \ac{GPU}s and one \ac{CPU}. Four more runs were performed by adding experiments according to the data loader process and different batch sizes (\Cref{tab:experiments-all}).}
 \label{fig:experiments}
 \end{figure}
 
+Based on this experiment design, 16 different runs were executed~(\Cref{tab:experiments-all}).
+Two more runs were included to test the performance recommendations of the PyTorch Profiler (runs 17 and 20).
+Another two runs show the effect of an unoptimized data loading process, where the raw point cloud is loaded every time, and the point sampling process happens afterward (runs 18 and 19).
+
 \begin{table}[H]
-\label{tab:experiments-all}
 \begin{tabular}{@{}llllll@{}}
 \toprule
 run & node         & tool           & job\_id  & is\_valid & experiment     \\ \midrule
@@ -486,7 +489,8 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
 19  & scc\_cpu     & profiler-torch & 14657599 & TRUE      & sample-points  \\
 20  & scc\_gtx1080 & profiler-torch & 14650759 & TRUE      & batch-size-128 \\ \bottomrule
 \end{tabular}
-\caption[Ovierview over all runs including experiments]{In total 20 different experiments where performed. The first 16 experiments are directly derived from the experiment design presented in \Cref{fig:experiments}. Experiments 18 and 19 where done as preliminary work, to optimize the data loading process before all experiments are performed (~\Cref{sec:r-data-loading}). Experiments 17 and 20 where done based on the PyTorch - Profiler's performance recommendations(~\Cref{sec:r-pytorch-profiler}).}
+\caption[Overview of all runs]{In total, twenty different experiments were performed. The first 16 experiments are directly derived from the experiment design presented in \Cref{fig:experiments}. Experiments 18 and 19 were preliminary work to optimize the data loading process before all experiments were performed (~\Cref{sec:r-data-loading}). Experiments 17 and 20 were done based on the PyTorch - Profiler's performance recommendations(~\Cref{sec:r-pytorch-profiler}).}
+\label{tab:experiments-all}
 \end{table}
 
 footnote \footnote{\url{https://www.gwdg.de/web/guest/hpc-on-campus/scc} (Accessed on: 22.02.2023)}
