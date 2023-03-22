@@ -431,7 +431,7 @@ Unlike the name implies, this tool is not limited to using TensorFlow but can al
 \subsubsection{PyTorch - Profiler}
 \label{sec:m-pytorch-profiler}
 
-A more advanced option to get insights into a PyTorch Workflow is the PyTorch - Profiler, which is " a simple profiler API that is useful when user needs to determine the most expensive operators in the model"~\footnote{\url{https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html}, accessed on: 20.3.2023}.
+A more advanced option to get insights into a PyTorch Workflow is the PyTorch - Profiler, which is "a simple profiler API that is useful when user needs to determine the most expensive operators in the model"~\footnote{\url{https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html}, accessed on: 20.3.2023}.
 With the help of this tool, one can collect general performance metrics, identify expensive operators, and track kernel activity.
 The PyTorch - Profiler can be used with Tensorboard to visualize the profiling outputs~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}.
 
@@ -541,6 +541,10 @@ No clear trend can be observed regarding the overhead of the different profiling
 \subsection{PyTorch - Profiler}
 \label{sec:r-pytorch-profiler}
 
+When visualizing the profiling results of the PyTorch Profiler with Tensorboard, the first view visible is the "Overview". This view is one of six different views, showing different details of the profiler output. If not labeled differently here, the output of the PyTorch - Profiler run on the GTX 1080~(run 7 \Cref{tab:experiments-all}) will be discussed.
+
+The "Overview"~(\Cref{fig:scap_gtx1080_profiler-torch_14650076}) gives "a high-level summary of the model performance"~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}. It can be subdivided into five different panes. On top, there are the panes "Configuration", "GPU Summary", and "Execution Summary". In "Configuration", information about the number(s) of workers and device type (\ac{CPU} or \ac{GPU}) are listed. The "GPU Summary" provides information about the GPU utilization by showing different metrices~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.3.2023}, such as "GPU Utilization" and the "Estimated Stream Multiprocessor Efficiency". Here the metrics indicate that the utilization of the GPU is relatively low for the tested workflow. The same can be seen in the "Execution Summary", where the time spent on the kernel is low. Here, the profiler misses detecting the DataLoader operations and sums up most of the time spent for the workflow in the category "Other". The "Step Time Breakdown" visualizes the same information as the "Execution Summary" per step. However, in the tested example, just the first step was visualized. The last pane, "Performance Recommendation", provides hints for optimizing the PyTorch workflow. Here, the profiler detected a low \ac{GPU} utilization where a common strategy is to increase the batch size. Testing this recommendation showed that increasing the batch size from 32 to 64 improved the GPU utilization by $~10\%$~(\Cref{fig:scap_gtx1080_profiler-torch_comparison-batch-size}). As the utilization is still low, the performance recommendation remains the same. Nevertheless, increasing the batch size to 64 lead to a decrease in GPU utilization.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
@@ -555,10 +559,12 @@ No clear trend can be observed regarding the overhead of the different profiling
 \label{fig:scap_gtx1080_profiler-torch_comparison-batch-size}
 \end{figure}
 
+
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
-\caption*{Trace View: Laspy with presampled lidar data}
+\caption[PyTorch - Profiler: Trace View]{The "Trace View" provides insights into Laspy with presampled lidar data}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
 \end{figure}
 
@@ -635,6 +641,11 @@ Effect of the accelerators and profiling tools on the runtime
             - not done here as one run is sufficient to get an idea of the trend
             - do not waste energy/ressources
         - overhead seems to be nor too significant
+
+PyTorch - Profiler
+- overview
+    - nice vis but dataloader not detected and only step 1 visualized
+    - performance recommendations need to be tested. expert knwoledge required at a low level
 
 \fi
 
