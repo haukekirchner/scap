@@ -73,11 +73,14 @@ export_ggplot(g, target_size = "half", name = "~/projects/scap/docs/assets/sacct
 g <-ggplot(filter(data, experiment ==""), aes(factor(node), duration, fill = tool, alpha = is_valid)) + 
   geom_bar(stat="identity", position = "dodge") + 
   scale_alpha_discrete("Is a valid run.")+
-  scale_fill_brewer(palette = "Set1")+
   xlab("Compute Nodes")+
-  ylab("Elapsed time [sec]")
+  ylab("Elapsed time [sec]")+
+  scale_fill_brewer("Tool",
+                    breaks= c('deepspeed', 'no-tool', 'profiler-torch','tensorboard'),
+                    labels=c('DeepSpeed\nFlops Profiler', 'No tool', 'PyTorch\nProfiler', 'TensorBoard'),
+                    palette = "Set1")
 g
-export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_no-experiment.png", ratio = 1)
+export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_no-experiment.png", ratio = 0.5)
 
 
 g <-ggplot(filter(data, tool=="profiler-torch" & experiment != "batch-size-64" & experiment != "batch-size-128"   & (node =="scc_gtx1080" | node == "scc_cpu")), aes(factor(node), duration)) + 
@@ -101,26 +104,25 @@ g <-ggplot(data, aes(factor(node), log(duration), fill = tool, alpha = is_valid)
 
 g
 
-g <-ggplot(filter(data,experiment==""), aes(factor(node), duration, fill = tool, alpha = is_valid)) + 
-  geom_bar(stat="identity", position = "dodge") + 
-  scale_alpha_discrete("Is a valid run.")+
-  scale_fill_brewer(palette = "Set1")+
-  xlab("Compute Nodes")+
-  ylab("Elapsed time [sec]")
-
-g
-
-export_ggplot(g, target_size = "full", name = "~/projects/scap/docs/assets/sacct_barplot_by_nodes_no-experiment.png", ratio = 0.5)
-
 data_tmp <- data %>% filter(node=="scc_cpu" & is_valid == TRUE & experiment == "")
 mean(data_tmp$duration)
 
 data_tmp <- data %>% filter(node!="scc_cpu" & is_valid == TRUE & experiment == "")
 mean(data_tmp$duration)
 
+data_tmp %>% group_by(node) %>% 
+  summarize(mean = mean(duration)/60,
+            sum = sum(duration)/60,
+            max = max(duration)/60,
+            min = min(duration)/60,
+            sd = sd(duration))
+
 g <-ggplot(filter(data, node != "scc_cpu" & experiment == ""), aes(factor(node), duration, fill = tool)) + 
   geom_bar(stat="identity", position = "dodge")+
-  scale_fill_brewer(palette = "Set1")+
+  scale_fill_brewer("Tool",
+                    breaks= c('deepspeed', 'no-tool', 'profiler-torch','tensorboard'),
+                    labels=c('DeepSpeed\nFlops Profiler', 'No tool', 'PyTorch\nProfiler', 'TensorBoard'),
+                    palette = "Set1")+
   xlab("Compute Nodes")+
   ylab("Elapsed time [sec]")
 

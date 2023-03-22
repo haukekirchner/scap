@@ -518,23 +518,23 @@ So far, the optimization problem has been solved by expert knowledge about the w
 \subsection{Effect of the accelerators and profiling tools on the runtime}
 \label{sec:r-runtime}
 
-The simplest mehtode to estimate the perforamnce of all different runs is to have a look at the elapsed time for each analysis. On the \ac{SCC} jobs are executed via SLURM~\footnote{\url{https://slurm.schedmd.com/}, accessed on: 21.3.2023} which provides the tool \texttt{sacct}\footnote{\url{https://slurm.schedmd.com/sacct.html}, accessed on: 21.3.2023} for analyzing accounting information, such as elapsed time of a job. The raw output and the command to get this information can be found in the Appendix (~\Cref{lst:sacct_out}, \Cref{lst:sacct_command}).
+The simplest method to get a first estimate for the performance of all different runs is to look at the elapsed time for each analysis. On the \ac{SCC} jobs are executed via SLURM~\footnote{\url{https://slurm.schedmd.com/}, accessed on: 21.3.2023} which provides the tool \texttt{sacct}\footnote{\url{https://slurm.schedmd.com/sacct.html}, accessed on: 21.3.2023} for analyzing accounting information, such as elapsed time of a job. The raw output and the command to get this information can be found in the Appendix (~\Cref{lst:sacct_out}, \Cref{lst:sacct_command}). 
 
-Most obvious is the difference between runs on the \ac{CPU} and the \ac{GPU}s (\Cref{fig:sacct_barplot_by_nodes_no-experiment}). The mean for \ac{CPU}s is $9669.333$ seconds and for the \ac{GPU}s $513.25$ seconds.
+Most apparent is the difference between runs on the \ac{CPU} and the \ac{GPU}s (\Cref{fig:sacct_barplot_by_nodes_no-experiment}). The mean runtime for jobs on \ac{CPU}s is $9669.333$ seconds, and for runs on the \ac{GPU}s, $513.25$ seconds. Further, it is notable that DeepSpeed is not compatible with \ac{CPU}s. A more detailed view on runs using the \ac{GPU}s (\Cref{fig:sacct_barplot_by_nodes_no-experiment_gpu}) shows that the GTX 1080 node is slower (mean runtime of $13$ minutes) than the RTX 5000 node (mean runtime of $7.65$ minutes). The fastest node is the V100, with a mean runtime of $5.02$ minutes.
 
-Further it is noteable that DeepSpeed is not compatible with \ac{CPU}s.
+No clear trend can be observed regarding the overhead of the different profiling tools. Generally, the PyTorch - Profiler creates the highest overhead. However, on nodes GTX 1080 and RTX 5000, runs using DeepSpeed's FlopsProfiler or TensorBoard are faster than baseline runs without any tools.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/sacct_barplot_by_nodes_no-experiment}
-\caption[Runtime of the experiments]{The runtime of all runs testing the combintation of tools and \ac{GPU} and \ac{CPU} partitions (\Cref{fig:experiments}). }
+\caption[Runtime of the experiments]{The runtime of all runs testing the combination of tools and \ac{GPU} and \ac{CPU} partitions (\Cref{fig:experiments}). }
 \label{fig:sacct_barplot_by_nodes_no-experiment}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/sacct_barplot_by_nodes_no-experiment_gpu}
-\caption[Runtime of the experiments (GPU-only)]{The runtime of all runs testing the combintation of tools and \ac{GPU} partitions - excluding \ac{CPU} partitions (\Cref{fig:experiments}).}
+\caption[Runtime of the experiments (GPU-only)]{The runtime of all runs testing the combination of tools and \ac{GPU} partitions - excluding \ac{CPU} partitions (\Cref{fig:experiments}).}
 \label{fig:sacct_barplot_by_nodes_no-experiment_gpu}
 \end{figure}
 
@@ -619,9 +619,23 @@ Further it is noteable that DeepSpeed is not compatible with \ac{CPU}s.
 \label{sec:discussion}
 
 \iffalse
-- optimize data loader
+
+optimize data loader
     - speed up bei GTX1080 deutlich höher (factor 5 gegen 14) -> bei der GPU deutlich größerer anteil an verlangsamenden komponenten. bei der CPU sind andere faktor auch massgeblich daran beteiligt
         -> darum accelerator für train of dl so wichtig
+
+Effect of the accelerators and profiling tools on the runtime
+- runtime shows which nodes are the fastest
+    - CPUs are not optimized for this task
+    - the faster the GPU the faster the training -> workflow can make use of faster hardware
+    - overhead of PyTroch - Profiler is high
+    - deepspeed/tensorboard runs faster than baseline run without tool
+        - shared ressources
+        - more reliable would be the mean of multiple runs and using one node exclusively
+            - not done here as one run is sufficient to get an idea of the trend
+            - do not waste energy/ressources
+        - overhead seems to be nor too significant
+
 \fi
 
 
