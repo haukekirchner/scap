@@ -576,6 +576,11 @@ As already stated in the "Overview", it can be seen that the GPU is most of the 
 \label{fig:scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
 \end{figure}
 
+Different views provided by the PyTorch - Profiler are "Operator", "GPU Kernel", "Memory", and "Module".
+The "Operator" view provides insights into the profiling results of PyTorch's operators~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}). Self-time refers to the duration of the operator without child operators, which are included in the total time. For example, it can be seen that the operator \texttt{aten::copy\_} is expensive. Also, the View CallStack can be shown in this view~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}).
+The "GPU Kernel" view shows for all kernels the time that was spent on the \ac{GPU}~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}). More information about the metrics used in this view can be found on the official tutorials website\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}.
+The "Memory" view gives information about memory usages, such as allocation and release events. This view consists of a "memory curve graph, memory events table, and memory statistics table"\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}).
+The "Module" view shows profiling results (occurrences, time) per PyTorch module, such as the whole PointNet or the submodule Transform~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}).
 
 
 \subsection{Deepspeed - FLOPSProfiler}
@@ -690,13 +695,6 @@ PyTorch - Profiler
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.85\textwidth]{./assets/sacct_barplot_by_nodes_batch-size-effect}
-\caption*{result of increasing batch size on walltime}
-\label{fig:sacct_barplot_by_nodes_batch-size-effect}
-\end{figure}
-
-\begin{figure}[H]
-\centering
 \includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758}
 \caption[test]{Overview: Increased batch size (64)}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758}
@@ -712,35 +710,35 @@ PyTorch - Profiler
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
-\caption[Operator View]{}
+\caption[PyTorch - Profiler: Operator View]{PyTorch - Profiler: Operator View}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
-\caption[Operator View - Details]{}
+\caption[PyTorch - Profiler: Operator View (CallStack)]{PyTorch - Profiler: Operator View (CallStack)}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
-\caption[GPU Kernel View]{}
+\caption[PyTorch - Profiler: GPU Kernel View]{PyTorch - Profiler: GPU Kernel View}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.85\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
-\caption[Memory View]{}
+\caption[PyTorch - Profiler: Memory View]{PyTorch - Profiler: Memory View}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
-\caption[Module View]{}
+\caption[PyTorch - Profiler: Module View]{PyTorch - Profiler: Module View}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
 \end{figure}
 
