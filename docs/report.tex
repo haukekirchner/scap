@@ -559,19 +559,20 @@ The "Overview"~(\Cref{fig:scap_gtx1080_profiler-torch_14650076}) gives "a high-l
 \label{fig:scap_gtx1080_profiler-torch_comparison-batch-size}
 \end{figure}
 
-
+The "Trace View" of the PyTorch - Profiler shows the usage of operators and GPU kernels on a timeline. By clicking on operators, details, such as start time or end time, can be seen (\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}). Further, this view provides insights into operator connections ("incoming flow").
+As already stated in the "Overview", it can be seen that the GPU is most of the time waiting for other operators on the CPU to finish. That way, a significant part of the GPU time is wasted. The operator identified as a bottleneck is the data reading operation. This is even worse for the not optimized workflow (run 18~\Cref{tab:experiments-all}) where the raw point cloud is loaded and afterward, the point sampling is done (\Cref{fig:scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}). For one reading operation, the optimized data loading strategy takes $3,023$ milliseconds, and the unoptimized variation requires $58,064$ milliseconds.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
-\caption[PyTorch - Profiler: Trace View]{The "Trace View" provides insights into Laspy with presampled lidar data}
+\caption[PyTorch - Profiler: Trace View]{The "Trace View" provides insights into the operators and GPU kernels over time. Here the read operation of the lidar data based on pre-sampled point clouds is analyzed.}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
-\caption*{Trace View: Laspy with raw lidar data}
+\caption[PyTorch - Profiler: Trace View of run 18]{The trace view of the unoptimized workflow (run 18~\Cref{tab:experiments-all}), loading the raw lidar data, shows that a significant part of the time is spend on the reading opertions.}
 \label{fig:scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
 \end{figure}
 
