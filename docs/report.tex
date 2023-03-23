@@ -217,6 +217,7 @@ You may find the following resources useful:
 
 \section*{List of Abbreviations} \addcontentsline{toc}{section}{List of Abbreviations}
 \begin{acronym}[Bash] % Add acronyms such that they are shown in full only on first occurrence
+    \acro{API}{application programming interface}
     \acro{CPU}{Central processing unit}
     \acro{FLOPS}{floating point operations per second}
     \acro{GPU}{Graphics processing unit}
@@ -620,7 +621,11 @@ In the detailed profile, the metrics are reported for all submodules of the mode
 \label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-detailed}
 \end{listing}
 
-%%%%%%%%%%%%%%%%
+\subsubsection{Usability of the different tools}
+\label{sec:r-usability}
+
+The tools provide different \ac{API}s, such as a context manager, as a decorater, or a Python module\footnote{\url{https://www.alcf.anl.gov/sites/default/files/2022-08/Profiling.pdf}, accessed on: 23.3.2023}. For example, the DeepSpeed Flops Profiler can be activated in DeepSpeed's runtime, which would not require to adapt the Python code at all. However, for this project all tools were used as Python packages. This requires to insert a few lines of code (8 to 13). The important parts of the code and their placement in the training code is shown in ~\Cref{lst:tensorboard}, \Cref{lst:profiler-torch}, and \Cref{lst:deepspeed}.
+%todo how to parse the profiling output
 
 \begin{listing}[H]
 \inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
@@ -682,6 +687,7 @@ DeepSpeed
         - this explains the top modules in different depths
     - detailed profile
         - information to a very detailed level
+    - bug mit 3d conv? -> deswegen so interessant auf eigenem workflow zu testen und nicht nur einfache beispiele
 
 \fi
 
