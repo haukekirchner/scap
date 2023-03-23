@@ -422,7 +422,7 @@ tool                              & metrics                                     
 \end{table}
 
 
-\subsubsection{Tensorboard}
+\subsubsection{TensorBoard}
 \label{sec:Tensorboard}
 
 Tensorboard is "TensorFlow's visualization toolkit"~\footnote{\url{https://www.tensorflow.org/tensorboard}, accessed on: 20.3.2023} and is commonly used to visualize the loss and accuracy during the training process of a neural network.
@@ -539,41 +539,48 @@ No clear trend can be observed regarding the overhead of the different profiling
 \label{fig:sacct_barplot_by_nodes_no-experiment_gpu}
 \end{figure}
 
-\subsection{PyTorch - Profiler}
+\subsection{Results of the profiling tools}
+
+\subsubsection{TensorBoard}
+\label{sec:r-tensorboard}
+
+The minimal example for using a TensorBoard to keep track of the model's training process provides information about the model's accuracy, the loss per epoch, and the loss per minibatch~(\Cref{fig:scap_gtx1080_tensorboard_14615343}). It can be seen that over the training time, the accuracy constantly increases, and the loss decreases.
+
+\subsubsection{PyTorch - Profiler}
 \label{sec:r-pytorch-profiler}
 
-When visualizing the profiling results of the PyTorch Profiler with Tensorboard, the first view visible is the "Overview". This view is one of six different views, showing different details of the profiler output. If not labeled differently here, the output of the PyTorch - Profiler run on the GTX 1080~(run 7 \Cref{tab:experiments-all}) will be discussed.
+When visualizing the profiling results of the PyTorch Profiler with Tensorboard, the first view visible is the "Overview". This view is one of six different views, showing different details of the profiler output. If not labeled differently here, the output of the PyTorch - Profiler run on the GTX 1080 with optimized batch size of 64~(run 17 \Cref{tab:experiments-all}) will be discussed.
 
 The "Overview"~(\Cref{fig:scap_gtx1080_profiler-torch_14650076}) gives "a high-level summary of the model performance"~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}. It can be subdivided into five different panes. On top, there are the panes "Configuration", "GPU Summary", and "Execution Summary". In "Configuration", information about the number(s) of workers and device type (\ac{CPU} or \ac{GPU}) are listed. The "GPU Summary" provides information about the GPU utilization by showing different metrices~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.3.2023}, such as "GPU Utilization" and the "Estimated Stream Multiprocessor Efficiency". Here the metrics indicate that the utilization of the GPU is relatively low for the tested workflow. The same can be seen in the "Execution Summary", where the time spent on the kernel is low. Here, the profiler misses detecting the DataLoader operations and sums up most of the time spent for the workflow in the category "Other". The "Step Time Breakdown" visualizes the same information as the "Execution Summary" per step. However, in the tested example, just the first step was visualized. The last pane, "Performance Recommendation", provides hints for optimizing the PyTorch workflow. Here, the profiler detected a low \ac{GPU} utilization where a common strategy is to increase the batch size. Testing this recommendation showed that increasing the batch size from 32 to 64 improved the GPU utilization by $~10\%$~(\Cref{fig:scap_gtx1080_profiler-torch_comparison-batch-size}). As the utilization is still low, the performance recommendation remains the same. Nevertheless, increasing the batch size to 64 lead to a decrease in GPU utilization.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
-\caption[PyTorch - Profiler: Overview]{Visualizing the profiling results of the PyTorch - Profiler with Tensorboard provides an overview page. This page summarizes important metrics of the workflow, such as \ac{GPU} utilization. Details on the metrics can be found in the corresponding Github repository~\footnote{\url{https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md}, accessed on: 27.22023}. Further, it offers performance recommendations on how to adress potential bottlenecks. }
+\caption[PyTorch - Profiler: Overview]{Visualizing the profiling results of the PyTorch - Profiler with Tensorboard provides an overview page. This page summarizes important metrics of the workflow, such as \ac{GPU} utilization. Details on the metrics can be found in the corresponding Github repository~\footnote{\url{https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md}, accessed on: 27.22023}. Further, it offers performance recommendations on how to adress potential bottlenecks. This "Overview" shows the result for run run 17 \Cref{tab:experiments-all}.}
 \label{fig:scap_gtx1080_profiler-torch_14650076}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_comparison-batch-size}
-\caption[PyTorch - Profiler: Performance Recommendation]{For the tested training workflow the performance recommendations of the PyTorch - Profiler suggest to increase the batch size. The effect of the batch size on the \ac{GPU} utilization can be seen for a batch size of 32 (run 7 in~\Cref{tab:experiments-all}), 64 (run 17 in~\Cref{tab:experiments-all}), 128 (run 20 in~\Cref{tab:experiments-all}).}
+\caption[PyTorch - Profiler: Performance Recommendation]{For the tested training workflow the performance recommendations of the PyTorch - Profiler suggest to increase the batch size. The effect of the batch size on the \ac{GPU} utilization can be seen for a batch size of 32 (run 7 in~\Cref{tab:experiments-all}), 64 (run 17 in~\Cref{tab:experiments-all}), 128 (run 20 in~\Cref{tab:experiments-all}). The full view for these experiments can be seen in~\Cref{fig:scap_gtx1080_profiler-torch_14650076}, \Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758}, and \Cref{fig:scap_gtx1080_profiler-torch_batch-size-128_14650759}.}
 \label{fig:scap_gtx1080_profiler-torch_comparison-batch-size}
 \end{figure}
 
-The "Trace View" of the PyTorch - Profiler shows the usage of operators and GPU kernels on a timeline. By clicking on operators, details, such as start time or end time, can be seen (\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}). Further, this view provides insights into operator connections ("incoming flow").
+The "Trace View" of the PyTorch - Profiler shows the usage of operators and GPU kernels on a timeline~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}). By clicking on operators, details, such as start time or end time, can be seen (\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}). Further, this view provides insights into operator connections ("incoming flow").
 As already stated in the "Overview", it can be seen that the GPU is most of the time waiting for other operators on the CPU to finish. That way, a significant part of the GPU time is wasted. The operator identified as a bottleneck is the data reading operation. This is even worse for the not optimized workflow (run 18~\Cref{tab:experiments-all}) where the raw point cloud is loaded and afterward, the point sampling is done (\Cref{fig:scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}). For one reading operation, the optimized data loading strategy takes $3,023$ milliseconds, and the unoptimized variation requires $58,064$ milliseconds.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
-\caption[PyTorch - Profiler: Trace View]{The "Trace View" provides insights into the operators and GPU kernels over time. Here the read operation of the lidar data based on pre-sampled point clouds is analyzed.}
+\caption[PyTorch - Profiler: Trace View of data input]{The "Trace View" provides insights into the operators and GPU kernels over time. Here the read operation of the lidar data based on pre-sampled point clouds is analyzed.}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
-\caption[PyTorch - Profiler: Trace View of run 18]{The trace view of the unoptimized workflow (run 18~\Cref{tab:experiments-all}), loading the raw lidar data, shows that a significant part of the time is spend on the reading opertions.}
+\caption[PyTorch - Profiler: Trace View of data input for run 18]{The trace view of the unoptimized workflow (run 18~\Cref{tab:experiments-all}), loading the raw lidar data, shows that a significant part of the time is spend on the reading opertions.}
 \label{fig:scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
 \end{figure}
 
@@ -584,10 +591,10 @@ The "Memory" view gives information about memory usages, such as allocation and 
 The "Module" view shows profiling results (occurrences, time) per PyTorch module, such as the whole PointNet or the submodule Transform~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}).
 
 
-\subsection{DeepSpeed - FlopsProfiler}
+\subsubsection{DeepSpeed - FlopsProfiler}
 \label{sec:r-flopsprofiler}
 
-The output of the DeepSpeed - Flops Profiler is a textfile~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}), which provides metrics on different levels of the network. The first part summarizes metrics for the whole neural network, such as the model parameters, \ac{MACs}, number of floating-point operations (flops), floating-point operations per second (FLOPS), and latency. Precise definitions of these metrics can be found in the output file~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}). For this example run~(run 8 \Cref{tab:experiments-all}), a total of $14.07$GMACs ($29.04$G flops) were measured. Dividing this by the forward propagation latency shows that for the whole model, the floating-point operations per second are $349.1$GFLOPS.
+The output of the DeepSpeed - Flops Profiler is a textfile~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}), which provides metrics on different levels of the network. The first part summarizes metrics for the whole neural network, such as the model parameters, \ac{MACs}, number of floating-point operations (flops), floating-point operations per second (FLOPS), and latency. Precise definitions of these metrics can be found in the output file~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}). For this example run~(run 8 \Cref{tab:experiments-all}), a total of $14.07$ GMACs ($29.04$ Gflops) were measured. Dividing this by the forward propagation latency shows that for the whole model, the floating-point operations per second are $349.1$ GFLOPS.
 
 \begin{listing}[H]
 \inputminted[xleftmargin=1em,linenos,fontsize=\small, firstline=2,lastline=16, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
@@ -597,7 +604,7 @@ The output of the DeepSpeed - Flops Profiler is a textfile~(\Cref{lst:scap_gtx10
 
 The second part of the DeepSpeed - FlopsProfiler's output~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-aggregated}) reports on the top modules in different depths of the model. Top modules are defined based on the number of parameters, \ac{MACs}, and forward propagation latency are considered. In-depth 0 the whole PointNet model is considered so that the profiling results are the same as in the first part of the output~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-summary}).
 In depth 1 it can be seen that most of the resources are spent on the Transform module. For example, $14.05$ GMACs out of $14.07$ GMACs are spent on this module.
-The top module in depth 2 is the Tnet with $9.34$GMACs.
+The top module in depth 2 is the Tnet with $9.34$ GMACs.
 
 \begin{listing}[H]
 \inputminted[xleftmargin=1em,linenos,fontsize=\small, firstline=19,lastline=31, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
@@ -612,11 +619,6 @@ In the detailed profile, the metrics are reported for all submodules of the mode
 \caption{DeepSpeed - FlopProfiler: Detailed Profile per GPU}
 \label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-detailed}
 \end{listing}
-
-\subsection{TensorBoard}
-\label{sec:r-tensorboard}
-
-
 
 %%%%%%%%%%%%%%%%
 
@@ -660,18 +662,27 @@ Effect of the accelerators and profiling tools on the runtime
             - do not waste energy/ressources
         - overhead seems to be nor too significant
 
+tools
+
+tensorboard
+    - easy starting point
+    - user-friendly dashboard
+    - early stoppings
+    - suggested in Green AI to optimze for more efficient curves
+
 PyTorch - Profiler
 - overview
     - nice vis but dataloader not detected and only step 1 visualized
     - performance recommendations need to be tested. expert knwoledge required at a low level
 
-- DeepSpeed
+DeepSpeed
     - summary
     - Aggregated Profile per GPU
         - have a look at the network architecture
         - this explains the top modules in different depths
     - detailed profile
         - information to a very detailed level
+
 \fi
 
 
@@ -700,30 +711,30 @@ PyTorch - Profiler
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
-\caption*{Trace View}
-\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
-\end{figure}
-
-\begin{figure}[H]
-\centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_tensorboard_14615343}
-\caption*{Tensorboard for run with GTX1080}
+\caption[TensorBoard - Accuracy and Loss]{TensorBoard - Accuracy and Loss for run 6 on the GTX 1080~(\Cref{tab:experiments-all})}
 \label{fig:scap_gtx1080_tensorboard_14615343}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758}
-\caption[test]{Overview: Increased batch size (64)}
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758}
+\caption[PyTorch - Profiler: Overview - Increased batch size (64)]{PyTorch - Profiler: Overview - Increased batch size (64)}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.7\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-128_14650759}
-\caption[]{Overview: Increased batch size (128)}
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-128_14650759}
+\caption[PyTorch - Profiler: Overview - Increased batch size (128)]{PyTorch - Profiler: Overview - Increased batch size (128)}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-128_14650759}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
+\caption[PyTorch - Profiler: Trace View]{PyTorch - Profiler: Trace View}
+\label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view}
 \end{figure}
 
 \begin{figure}[H]
