@@ -30,6 +30,7 @@
 \setlength{\marginparwidth}{2cm}
 \usepackage{todonotes}
 \usepackage[autostyle=true]{csquotes}
+\usepackage{caption}
 
 \iffalse
 
@@ -397,7 +398,7 @@ General profiling tools such as Intel's Vtune~\footnote{\url{https://www.intel.c
 
 However, tools were developed specifically to the needs one needs to profile PyTorch workflows.
 One popular tool is the in-build PyTorch profiler, which can be combined with Tensorboard~\footnote{\url{https://www.tensorflow.org/tensorboard/}, accessed on: 16.03.2023}. This graphical visualization can be used for beginners and experts to optimize their workflows, as it provides automatic performance recommendations and detailed views such as the call stack or the trace view.
-Another tool specifically designed for PyTorch is Deepspeed~\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 16.03.2023}. The FlopsProfiler was used here, as the Pytorch Profiler lacks the option to analyze FLOPS.
+Another tool specifically designed for PyTorch is DeepSpeed~\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 16.03.2023}. The FlopsProfiler was used here, as the Pytorch Profiler lacks the option to analyze FLOPS.
 
 
 General profiling tools could not provide automatic recommendations or useful visualizations to highlight critical aspects and bottlenecks, as they do not have insights into PyTorch. Consequently, more expert knowledge is required to use tools like LIKWID or Vtune.
@@ -436,7 +437,7 @@ With the help of this tool, one can collect general performance metrics, identif
 The PyTorch - Profiler can be used with Tensorboard to visualize the profiling outputs~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}.
 
 
-\subsubsection{Deepspeed - FLOPSProfiler}
+\subsubsection{Deepspeed - FlopsProfiler}
 \label{sec:m-FLOPSprofiler}
 
 DeepSpeed is a collection of tools that can help to optimize deep learning workflows~\footnote{\url{https://www.deepspeed.ai/}, accessed on: 20.3.2023}.
@@ -583,27 +584,38 @@ The "Memory" view gives information about memory usages, such as allocation and 
 The "Module" view shows profiling results (occurrences, time) per PyTorch module, such as the whole PointNet or the submodule Transform~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}).
 
 
-\subsection{Deepspeed - FLOPSProfiler}
-\label{sec:r-FLOPSprofiler}
+\subsection{DeepSpeed - FlopsProfiler}
+\label{sec:r-flopsprofiler}
 
+The output of the DeepSpeed - Flops Profiler is a textfile~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}), which provides metrics on different levels of the network. The first part summarizes metrics for the whole neural network, such as the model parameters, \ac{MACs}, number of floating-point operations (flops), floating-point operations per second (FLOPS), and latency. Precise definitions of these metrics can be found in the output file~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}). For this example run~(run 8 \Cref{tab:experiments-all}), a total of $14.07$GMACs ($29.04$G flops) were measured. Dividing this by the forward propagation latency shows that for the whole model, the floating-point operations per second are $349.1$GFLOPS.
 
 \begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=1,lastline=16]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
-\caption{Summary}
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, firstline=2,lastline=16, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+\caption{DeepSpeed - FlopProfiler: Summary}
 \label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-summary}
 \end{listing}
 
+The second part of the DeepSpeed - FlopsProfiler's output~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-aggregated}) reports on the top modules in different depths of the model. Top modules are defined based on the number of parameters, \ac{MACs}, and forward propagation latency are considered. In-depth 0 the whole PointNet model is considered so that the profiling results are the same as in the first part of the output~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-summary}).
+In depth 1 it can be seen that most of the resources are spent on the Transform module. For example, $14.05$ GMACs out of $14.07$ GMACs are spent on this module.
+The top module in depth 2 is the Tnet with $9.34$GMACs.
+
 \begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\scriptsize, firstline=18,lastline=31]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
-\caption{Aggregated Profile per GPU}
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, firstline=19,lastline=31, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+\caption{DeepSpeed - FlopProfiler: Aggregated Profile per GPU}
 \label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-aggregated}
 \end{listing}
 
+In the detailed profile, the metrics are reported for all submodules of the model~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-detailed}). Besides the metrics given for higher-level summarization before, e.g., metrics for the whole PointNet, all metrics for submodules are listed. The order of the metrics is params, percentage of total params, MACs, percentage of total MACs, fwd latency, percentage of total fwd latency, fwd FLOPS~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}). For example, it can be seen that the second convolution of the Tnet is a 1D convolution\footnote{\url{https://pytorch.org/docs/stable/generated/torch.nn.Conv1d.html}, accessed on: 23.3.2023} with $268.44$ MMACs.
+
 \begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\tiny, firstline=33,lastline=48, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
-\caption{Detailed Profile per GPU}
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, firstline=41,lastline=48, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+\caption{DeepSpeed - FlopProfiler: Detailed Profile per GPU}
 \label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-detailed}
 \end{listing}
+
+\subsection{TensorBoard}
+\label{sec:r-tensorboard}
+
 
 
 %%%%%%%%%%%%%%%%
@@ -653,6 +665,13 @@ PyTorch - Profiler
     - nice vis but dataloader not detected and only step 1 visualized
     - performance recommendations need to be tested. expert knwoledge required at a low level
 
+- DeepSpeed
+    - summary
+    - Aggregated Profile per GPU
+        - have a look at the network architecture
+        - this explains the top modules in different depths
+    - detailed profile
+        - information to a very detailed level
 \fi
 
 
@@ -742,6 +761,8 @@ PyTorch - Profiler
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_module-view}
 \end{figure}
 
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
+\captionof{listing}{DeepSpeed - FlopProfiler: Full output\label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}}
 
 \section{Code samples}
 
