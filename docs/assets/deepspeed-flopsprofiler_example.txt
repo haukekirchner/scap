@@ -1,0 +1,111 @@
+-------------------------- DeepSpeed Flops Profiler --------------------------
+Profile Summary at step 10:
+Notations:
+data parallel size (dp_size), model parallel size(mp_size),
+number of parameters (params), number of multiply-accumulate operations(MACs),
+number of floating-point operations (flops), floating-point operations per second (FLOPS),
+fwd latency (forward propagation latency), bwd latency (backward propagation latency),
+step (weights update latency), iter latency (sum of fwd, bwd and step latency)
+
+world size:                                                   1
+data parallel size:                                           1
+model parallel size:                                          1
+batch size per GPU:                                           80
+params per gpu:                                               336.23 M
+params of model = params per GPU * mp_size:                   336.23 M
+fwd MACs per GPU:                                             3139.93 G
+fwd flops per GPU:                                            6279.86 G
+fwd flops of model = fwd flops per GPU * mp_size:             6279.86 G
+fwd latency:                                                  76.67 ms
+bwd latency:                                                  108.02 ms
+fwd FLOPS per GPU = fwd flops per GPU / fwd latency:          81.9 TFLOPS
+bwd FLOPS per GPU = 2 * fwd flops per GPU / bwd latency:      116.27 TFLOPS
+fwd+bwd FLOPS per GPU = 3 * fwd flops per GPU / (fwd+bwd latency):   102.0 TFLOPS
+step latency:                                                 34.09 us
+iter latency:                                                 184.73 ms
+samples/second:                                               433.07
+
+----------------------------- Aggregated Profile per GPU -----------------------------
+Top modules in terms of params, MACs or fwd latency at different model depths:
+depth 0:
+    params      - {'BertForPreTrainingPreLN': '336.23 M'}
+    MACs        - {'BertForPreTrainingPreLN': '3139.93 GMACs'}
+    fwd latency - {'BertForPreTrainingPreLN': '76.39 ms'}
+depth 1:
+    params      - {'BertModel': '335.15 M', 'BertPreTrainingHeads': '32.34 M'}
+    MACs        - {'BertModel': '3092.96 GMACs', 'BertPreTrainingHeads': '46.97 GMACs'}
+    fwd latency - {'BertModel': '34.29 ms', 'BertPreTrainingHeads': '3.23 ms'}
+depth 2:
+    params      - {'BertEncoder': '302.31 M', 'BertLMPredictionHead': '32.34 M'}
+    MACs        - {'BertEncoder': '3092.88 GMACs', 'BertLMPredictionHead': '46.97 GMACs'}
+    fwd latency - {'BertEncoder': '33.45 ms', 'BertLMPredictionHead': '2.61 ms'}
+depth 3:
+    params      - {'ModuleList': '302.31 M', 'Embedding': '31.79 M', 'Linear': '31.26 M'}
+    MACs        - {'ModuleList': '3092.88 GMACs', 'Linear': '36.23 GMACs'}
+    fwd latency - {'ModuleList': '33.11 ms', 'BertPredictionHeadTransform': '1.83 ms''}
+depth 4:
+    params      - {'BertLayer': '302.31 M', 'LinearActivation': '1.05 M''}
+    MACs        - {'BertLayer': '3092.88 GMACs', 'LinearActivation': '10.74 GMACs'}
+    fwd latency - {'BertLayer': '33.11 ms', 'LinearActivation': '1.43 ms'}
+depth 5:
+    params      - {'BertAttention': '100.76 M', 'BertIntermediate': '100.76 M'}
+    MACs        - {'BertAttention': '1031.3 GMACs', 'BertIntermediate': '1030.79 GMACs'}
+    fwd latency - {'BertAttention': '19.83 ms', 'BertOutput': '4.38 ms'}
+depth 6:
+    params      - {'LinearActivation': '100.76 M', 'Linear': '100.69 M'}
+    MACs        - {'LinearActivation': '1030.79 GMACs', 'Linear': '1030.79 GMACs'}
+    fwd latency - {'BertSelfAttention': '16.29 ms', 'LinearActivation': '3.48 ms'}
+
+------------------------------ Detailed Profile per GPU ------------------------------
+Each module profile is listed after its name in the following order:
+params, percentage of total params, MACs, percentage of total MACs, fwd latency, percentage of total fwd latency, fwd FLOPS
+
+BertForPreTrainingPreLN(
+  336.23 M, 100.00% Params, 3139.93 GMACs, 100.00% MACs, 76.39 ms, 100.00% latency, 82.21 TFLOPS,
+  (bert): BertModel(
+    335.15 M, 99.68% Params, 3092.96 GMACs, 98.50% MACs, 34.29 ms, 44.89% latency, 180.4 TFLOPS,
+    (embeddings): BertEmbeddings(...)
+    (encoder): BertEncoder(
+      302.31 M, 89.91% Params, 3092.88 GMACs, 98.50% MACs, 33.45 ms, 43.79% latency, 184.93 TFLOPS,
+      (FinalLayerNorm): FusedLayerNorm(...)
+      (layer): ModuleList(
+        302.31 M, 89.91% Params, 3092.88 GMACs, 98.50% MACs, 33.11 ms, 43.35% latency, 186.8 TFLOPS,
+        (0): BertLayer(
+          12.6 M, 3.75% Params, 128.87 GMACs, 4.10% MACs, 1.29 ms, 1.69% latency, 199.49 TFLOPS,
+          (attention): BertAttention(
+            4.2 M, 1.25% Params, 42.97 GMACs, 1.37% MACs, 833.75 us, 1.09% latency, 103.08 TFLOPS,
+            (self): BertSelfAttention(
+              3.15 M, 0.94% Params, 32.23 GMACs, 1.03% MACs, 699.04 us, 0.92% latency, 92.22 TFLOPS,
+              (query): Linear(1.05 M, 0.31% Params, 10.74 GMACs, 0.34% MACs, 182.39 us, 0.24% latency, 117.74 TFLOPS,...)
+              (key): Linear(1.05 M, 0.31% Params, 10.74 GMACs, 0.34% MACs, 57.22 us, 0.07% latency, 375.3 TFLOPS,...)
+              (value): Linear(1.05 M, 0.31% Params, 10.74 GMACs, 0.34% MACs, 53.17 us, 0.07% latency, 403.91 TFLOPS,...)
+              (dropout): Dropout(...)
+              (softmax): Softmax(...)
+            )
+            (output): BertSelfOutput(
+              1.05 M, 0.31% Params, 10.74 GMACs, 0.34% MACs, 114.68 us, 0.15% latency, 187.26 TFLOPS,
+              (dense): Linear(1.05 M, 0.31% Params, 10.74 GMACs, 0.34% MACs, 64.13 us, 0.08% latency, 334.84 TFLOPS, ...)
+              (dropout): Dropout(...)
+            )
+          )
+          (PreAttentionLayerNorm): FusedLayerNorm(...)
+          (PostAttentionLayerNorm): FusedLayerNorm(...)
+          (intermediate): BertIntermediate(
+            4.2 M, 1.25% Params, 42.95 GMACs, 1.37% MACs, 186.68 us, 0.24% latency, 460.14 TFLOPS,
+            (dense_act): LinearActivation(4.2 M, 1.25% Params, 42.95 GMACs, 1.37% MACs, 175.0 us, 0.23% latency, 490.86 TFLOPS,...)
+          )
+          (output): BertOutput(
+            4.2 M, 1.25% Params, 42.95 GMACs, 1.37% MACs, 116.83 us, 0.15% latency, 735.28 TFLOPS,
+            (dense): Linear(4.2 M, 1.25% Params, 42.95 GMACs, 1.37% MACs, 65.57 us, 0.09% latency, 1310.14 TFLOPS,...)
+            (dropout): Dropout(...)
+          )
+        )
+        ...
+        (23): BertLayer(...)
+      )
+    )
+    (pooler): BertPooler(...)
+  )
+  (cls): BertPreTrainingHeads(...)
+)
+------------------------------------------------------------------------------
