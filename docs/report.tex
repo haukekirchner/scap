@@ -649,6 +649,25 @@ The tools provide different \ac{API}s, such as a context manager, as a decorater
 \section{Discussion}
 \label{sec:discussion}
 
+Generally, it can be said that the used profilers, PyTorch Profiler and DeepSpeed's FlopsProfiler, provide interesting and useful insights into the training process of a PyTorch model, which can be used for optimization purposes. But also with the beginner-friendly TensorBoard approach, tracking the accuracy and loss, details of the training process can be analzed.
+
+For the PointNet workflow analyzed for this report, the most obvious bottleneck was the data loading process. This was both seen in the PyTorch Profiler's logs and making use of expert knowledge about the size of the input data and the point data sampling technique within the data loader. 
+In \Cref{fig:sacct_barplot_by_nodes_sample-points-effect} two important aspects for optimzing the PointNet workflow can be seen. First, the speedup for each compute node by migrating the point sampling process to a pre-processing step of the worklfow. Second, the huge different between runtimes of the \ac{CPU} and \ac{GPU}. Here it can be seen how important the use of accelerators, such as \ac{GPU}s, is for the training of deep neural networks.
+Further, \Cref{fig:sacct_barplot_by_nodes_no-experiment_gpu} shows the performance gain one can get by using faster \ac{GPU} nodes on the cluster and the compute overhead each tool is generating due to its measuremnts activities and the writing of logging files. The overhead created by the PyTorch Profiler seems to be the highest. Interesting is, that the runs without any tool on the GTX 1080 and RTX 5000 are slower than the runs that are profiled with DeepSpeed's FlopsProfiler and TensorBoard.
+However, for a reliable performance comparison the mean of several identical runs would be required. Additionaly, performance comparison between nodes on the \ac{SCC} is more complicated due to the fact that the compute nodes are shared ressources and computations by other users could effect the measurements. 
+
+An easy starting point for profiling the training process of a PyTorch model is TensorBoard. As it is commonly used in beginner introductions to deep learning, most will be familiar with using this tool. The user-friendly visualisation as dashboard and the interactivity increases the accesibilty.
+For example, the loss and accuracy curves shown in TensorBoard make overfitting visible and the training process could be stopped manually or by early stopping rules. Additinally, checkpoints can also prevent re-training of models in such a case.
+
+Also the PyTorch Profiler profits from intuitive visualizations in Tensorboard.
+Especially, the Overview page with it's performance recommendations can be very useful for beginners. Nevertheless the effect of these recommendations should still be checked as it was shown in~\Cref{fig:scap_gtx1080_profiler-torch_comparison-batch-size}.
+Further, the Trace view provided important insights into the training workflow, as it highlighted the most ressource intense operators. This helped to identify the data reading as bottleneck of the whole workflow.
+More complicated is the evaluation of the other views which report on the models performance on a very low level and somtimes requires knowledge about the implementation of PyTorch and the models architecture to make good use of it. 
+
+As the PyTorch Profiler lacks the feature to measure \ac{FLOPS}, DeepSpeed's FlopsProfiler was additinally used. The text-based logging file is easy to interpret for high-level summarizations of the model's performance~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}). Less intuitive is the "Detailed Profile per GPU" which includes the measurements for all submodules in PyTorch. However, the "Aggregated Profile per GPU" already highlights the most expensive modules in different depths of the model and the analysis of the details view can then be limited to those modules.
+Compared to example outputs in the official tutorial\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 24.3.2023} some metrics are unfortunatly not reported, such as the models throughput. Further, there were issues about the compatibilty with 3D convoultions\footnote{\url{https://github.com/microsoft/DeepSpeed/issues/1467}, accessed on: 24.3.2023}, which shows the importance of testing these tools with real models one is intereseted in and not only the provided examples.
+
+All tested tools were easy to use and the effort to get them running was relatively low. However, they seem to have some bugs or unexpected behaviours (just one step in the PyTorch Profiler, missing metrics in the FlopsProfiler) which could be reasoned in a wrong usage or real bugs in the software. Figuring this out was out of scope of this report.
 \iffalse
 
 optimize data loader
@@ -695,7 +714,10 @@ DeepSpeed
 \section{Conclusion}
 \label{sec:conclusion}
 
-
+It is well known that profiling tools help to identify bottlenecks in software. The same was proven to be true for the tested tools in profiling the training process of PyTorch models. Just by identifying the major bottleneck in the data loading process, results in a speed up by a factor of 14 on the GTX 1080.
+To achieve higher performances would require a substantial expert knowldege about PyTorch and the network architecture. This can be both a barrier for practicioners, but also a motivation to learn more about the technical backgrounds.
+Because of the given workflow that we were interested in the focus here was on training process. However, inference can also be measured with these tools and due to the potentially higher number of inferece runs this can be even more important in a real world example.
+Further, the DeepSpeed framework provides many more options for optimizing PyTorch workflows, which seem to be very interesting to test in future projects.
 
 % --- references ---
 
