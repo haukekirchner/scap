@@ -387,10 +387,37 @@ Time to Accuracy (TTA)                                                          
 
 \end{frame}
 
-\begin{frame}
+\begin{frame}[fragile]{Try it yourself!}
 \label{pg:lastpage} % Label on last frame to get the page number for footer
 \centering
-Try it yourself!
+
+\begin{block}{Hints}
+    \begin{itemize}
+        \item Set number of epochs to one
+        \begin{itemize}
+            \item in \texttt{/code/train.py} $\rightarrow$ \texttt{epoch = 1}
+        \end{itemize}
+            \item decrease time requested in SLURM
+        \begin{itemize}
+            \item in \texttt{code/submit\_train.sh} $\rightarrow$ \texttt{#SBATCH -t 00:20:00}
+        \end{itemize}
+    \end{itemize}
+\end{block}
+
+\begin{block}{Backup}
+\vspace{-0.5em}
+\begin{lstlisting}[breaklines=true,numbers=none,frame=none,basicstyle=\scriptsize]
+# download example profiling output 
+rsync -avvH <user>@glogin9.hlrn.de:/scratch/projects/\
+workshops/gpu-workshop/profiling_example ~/Downloads
+cd ~/Downloads/profiling_example/train-nn-gpu_4464217
+# open PyTorch Profiler's output with TensorBoard
+tensorboard --logdir=./profiler
+# open DeepSpeed's output with texteditor
+vim slurm-train-nn-gpu-4464217.out
+\end{lstlisting}
+\end{block}
+
 \end{frame}
 
 \begin{frame}{References}
