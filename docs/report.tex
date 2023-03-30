@@ -558,14 +558,16 @@ The "Overview"~(\Cref{fig:scap_gtx1080_profiler-torch_14650076}) gives "a high-l
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
-\caption[PyTorch - Profiler: Overview]{Visualizing the profiling results of the PyTorch - Profiler with Tensorboard provides an overview page. This page summarizes important metrics of the workflow, such as \ac{GPU} utilization. Details on the metrics can be found in the corresponding Github repository~\footnote{\url{https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md}, accessed on: 27.22023}. Further, it offers performance recommendations on how to adress potential bottlenecks. This "Overview" shows the result for run run 17 \Cref{tab:experiments-all}.}
+\includegraphics[width=0.95\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
+\vspace{-0.5em}
+\caption[PyTorch - Profiler: Overview]{Visualizing the profiling results of the PyTorch - Profiler with Tensorboard provides an overview page. This page summarizes important metrics of the workflow, such as \ac{GPU} utilization. Details on the metrics can be found in the corresponding Github repository~\footnote{\url{https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md}, accessed on: 27.22023}. Further, it offers performance recommendations on how to adress potential bottlenecks. This "Overview" shows the result for run 17 in \Cref{tab:experiments-all}.}
 \label{fig:scap_gtx1080_profiler-torch_14650076}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_comparison-batch-size}
+\includegraphics[width=0.95\textwidth]{./assets/scap_gtx1080_profiler-torch_comparison-batch-size}
+\vspace{-0.5em}
 \caption[PyTorch - Profiler: Performance Recommendation]{For the tested training workflow the performance recommendations of the PyTorch - Profiler suggest to increase the batch size. The effect of the batch size on the \ac{GPU} utilization can be seen for a batch size of 32 (run 7 in~\Cref{tab:experiments-all}), 64 (run 17 in~\Cref{tab:experiments-all}), 128 (run 20 in~\Cref{tab:experiments-all}). The full view for these experiments can be seen in~\Cref{fig:scap_gtx1080_profiler-torch_14650076}, \Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758}, and \Cref{fig:scap_gtx1080_profiler-torch_batch-size-128_14650759}.}
 \label{fig:scap_gtx1080_profiler-torch_comparison-batch-size}
 \end{figure}
@@ -576,6 +578,7 @@ As already stated in the "Overview", it can be seen that the GPU is most of the 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
+\vspace{-6em}
 \caption[PyTorch - Profiler: Trace View of data input]{The "Trace View" provides insights into the operators and GPU kernels over time. Here the read operation of the lidar data based on pre-sampled point clouds is analyzed.}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
 \end{figure}
@@ -628,24 +631,6 @@ In the detailed profile, the metrics are reported for all submodules of the mode
 
 The tools provide different \ac{API}s, such as a context manager, as a decorater, or a Python module\footnote{\url{https://www.alcf.anl.gov/sites/default/files/2022-08/Profiling.pdf}, accessed on: 23.3.2023}. For example, the DeepSpeed Flops Profiler can be activated in DeepSpeed's runtime, which would not require to adapt the Python code at all. However, for this project all tools were used as Python packages. This requires to insert a few lines of code (8 to 13). The important parts of the code and their placement in the training code is shown in ~\Cref{lst:tensorboard}, \Cref{lst:profiler-torch}, and \Cref{lst:deepspeed}.
 %todo how to parse the profiling output
-
-\begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
-\caption[Code example for Tensorboard]{Highlighted parts of the code are required to use Tensorboard for profiling the training process of the neural network.}
-\label{lst:tensorboard}
-\end{listing}
-
-\begin{listing}[H]
-\inputminted[breaklines, xleftmargin=1em,linenos,fontsize=\small, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
-\caption[Code example for PyTorch - Profiler]{Highlighted parts of the code are required to use the PyTorch Profiler for profiling the training process of the neural network.}
-\label{lst:profiler-torch}
-\end{listing}
-
-\begin{listing}[H]
-\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
-\caption[Code example for Deepspeed - FLOPSProfiler]{Highlighted parts of the code are required to use Deepspeed - FLOPSProfiler for profiling the training process of the neural network.}
-\label{lst:deepspeed}
-\end{listing}
 
 
 \section{Discussion}
@@ -813,6 +798,24 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
         \end{minted}
 \caption[Sacct command]{The command that is used to collect accounting information for the jobs executed on the \ac{SCC} for this project (\Cref{tab:experiments-all}). The output of this command can be found in~\Cref{lst:sacct_out}.}
 \label{lst:sacct_command}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
+\caption[Code example for Tensorboard]{Highlighted parts of the code are required to use Tensorboard for profiling the training process of the neural network.}
+\label{lst:tensorboard}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[breaklines, xleftmargin=1em,linenos,fontsize=\small, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
+\caption[Code example for PyTorch - Profiler]{Highlighted parts of the code are required to use the PyTorch Profiler for profiling the training process of the neural network.}
+\label{lst:profiler-torch}
+\end{listing}
+
+\begin{listing}[H]
+\inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
+\caption[Code example for Deepspeed - FLOPSProfiler]{Highlighted parts of the code are required to use Deepspeed - FLOPSProfiler for profiling the training process of the neural network.}
+\label{lst:deepspeed}
 \end{listing}
 
 \end{document}  
