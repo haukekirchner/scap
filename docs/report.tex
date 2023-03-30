@@ -217,6 +217,7 @@ You may find the following resources useful:
 
 \section*{List of Abbreviations} \addcontentsline{toc}{section}{List of Abbreviations}
 \begin{acronym}[Bash] % Add acronyms such that they are shown in full only on first occurrence
+    \acro{AI}{Artifical Inteligence}
     \acro{API}{application programming interface}
     \acro{CPU}{Central processing unit}
     \acro{FLOPS}{floating point operations per second}
@@ -245,22 +246,22 @@ Why is it important to benchmark the training process of neural networks?
 2. Energy efficiency -> GreenAI
 \fi
 
-Recent advances in deep learning made the technology more popular in several fields of research.
-This lead to breakthroughs which helped to ...
-Increasingly applications in forestry profit from deep learning applications and pubications in recent years have shown the great potential. Often traning data is a bottleneck for the application of neural networks. Especially in the field of environmental research collecting data requires substential effort. In Germany the largest effort to cellect data of German forests is the "Bundeswaldinventur". This involves the work of multiple teams over 
+Recent advances in deep learning, such as image~(\cite{rombach_2022_high-resolution-image-synthesis-with-latent-diffusion-models}) and text generation~(\cite{openai_2023_gpt4-4-technical-report}), lead to an increase in the number of \ac{AI} publications in the world~(\cite{zhang_2022_ai-report}).
+Most of the accuracy gains of these models result from increasingly complex models~(\cite{schwartz_2019_greenai}). From 2013 to 2019, the required to compute power for training deep learning models increased by a factor of $300,000$~(\cite{amodei_2018_ai-and-compute}). This also leads to an increase in required energy and results in significant carbon dioxide emissions. \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances} showed that the training process of a 6 billion parameter transformer model (trained for approximately $13$\% of the total training time) consumes $\sim 10$M $CO_2$ grams. That is equivalent to a US household's yearly home energy demands per year. Further, this massive computing capacity is exclusively accessible by a few organizations, making the developed state-of-the-art models inaccessible to many researchers. To make \ac{AI} more environmental-friendly and inclusive~\cite{schwartz_2019_greenai} proposed "Green AI" as an alternative to the accuracy-focused "Red AI". Besides accuracy as a measurement of performance, "Green AI" includes the cost of this model.
 
-Especilly for lidar data of forests not to many pre-trained networks exist. Therfore, we test an approach where the pre-training is done based on synthetically generated lidar data representing individual trees.
+Also, in forest science, deep learning approaches gained popularity for diverse tasks and data sets~(\cite{hamedianfar_2022_deep-learning-for-forest-inventory-and-planning-a-critical-review-on-the-remote-sensing-approaches-so-far-and-prospects-for-further-applications}), such as tree species classification based on lidar data~(\cite{liu_2021_tree-species-classification-of-lidar-data-based-on-3D-deep-learning}, \cite{seidel_2021_predicting-tree-species-from-3D-laser-scanning-point-clouds-using-deep-learning}).
+Further, network architectures optimized for point cloud classification and segmentation were proposed~\cite{2017_qi_pointnet}.
+Often training data is a bottleneck for the application of neural networks. Especially in the field of environmental research, collecting data requires substantial effort. Therefore, Helios++ was developed by~\cite{9906068} to generate synthetic lidar data. This synthetic lidar data can then be used for pre-training a model. In that way, valuable field data can be used for fine-tuning.
+As forest science inherently focuses on sustainability, the application of "Green AI" is obvious.
 
-Simultaniously, the emerging use of deep learning also leads to an increase in energy consumption. This phenomen studied by \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances}. 
-
-
-\cite{white_2016_als-forest-inventory}
-\cite{uba_2020_waldumbau}
+Here, a PyTorch workflow for tree species classification with PointNet and synthetic lidar data will be analyzed, and performance bottlenecks will be identified.
+Different profiling tools will be evaluated and tested to identify performance bottlenecks. 
+Therefore, the following research objectives will be considered:
 
 \begin{itemize}
-    \item Identify \textbf{profiling tools} that can help to \textbf{optimize an existing PyTorch workflow}.
-    \item As this approach should help scientists, the \textbf{usibility is of high importance}. The simplest tool for doing the job is preferred.
-    \item In contrast to training benchmark suites, such as MLPerf, I do not focus on benchmarking hardware but on optimizing an existing PyTorch workflow (viewpoint of a scientist)
+    \item Identification of \textbf{profiling tools} that can help to \textbf{optimize an existing PyTorch workflow}.
+    \item As this tool should help scientists, the \textbf{usibility is highly important}. The most straightforward tool for doing the job is preferred.
+    \item Unlike training benchmark suites like MLPerf, it will not be focused on benchmarking hardware but on optimizing an existing PyTorch workflow.
 \end{itemize}
 
 \iffalse
@@ -329,6 +330,7 @@ func main() {
 \end{lstlisting}
 \fi
 
+\pagebreak
 \section{Methods}
 \label{sec:methods}
 
