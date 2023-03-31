@@ -217,14 +217,15 @@ You may find the following resources useful:
 
 \section*{List of Abbreviations} \addcontentsline{toc}{section}{List of Abbreviations}
 \begin{acronym}[Bash] % Add acronyms such that they are shown in full only on first occurrence
-    \acro{AI}{Artifical Inteligence}
+    \acro{AI}{artifical inteligence}
     \acro{API}{application programming interface}
-    \acro{CPU}{Central processing unit}
+    \acro{CPU}{central processing unit}
     \acro{FLOPS}{floating point operations per second}
-    \acro{GPU}{Graphics processing unit}
-    \acro{HPC}{High-Performance Computing}
+    \acro{GPU}{graphics processing unit}
+    \acro{HPC}{high-performance computing}
     \acro{MACs}{multiply-accumulate operations}
-    \acro{SCC}{Scientific Compute Cluster}
+    \acro{SCC}{scientific compute cluster}
+    \acro{lidar}{light detection and ranging}
 \end{acronym}
 
 \thispagestyle{plain}
@@ -247,14 +248,14 @@ Why is it important to benchmark the training process of neural networks?
 \fi
 
 Recent advances in deep learning, such as image~(\cite{rombach_2022_high-resolution-image-synthesis-with-latent-diffusion-models}) and text generation~(\cite{openai_2023_gpt4-4-technical-report}), lead to an increase in the number of \ac{AI} publications in the world~(\cite{zhang_2022_ai-report}).
-Most of the accuracy gains of these models result from increasingly complex models~(\cite{schwartz_2019_greenai}). From 2013 to 2019, the required to compute power for training deep learning models increased by a factor of $300,000$~(\cite{amodei_2018_ai-and-compute}). This also leads to an increase in required energy and results in significant carbon dioxide emissions. \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances} showed that the training process of a 6 billion parameter transformer model (trained for approximately $13$\% of the total training time) consumes $\sim 10$M $CO_2$ grams. That is equivalent to a US household's yearly home energy demands per year. Further, this massive computing capacity is exclusively accessible by a few organizations, making the developed state-of-the-art models inaccessible to many researchers. To make \ac{AI} more environmental-friendly and inclusive~\cite{schwartz_2019_greenai} proposed "Green AI" as an alternative to the accuracy-focused "Red AI". Besides accuracy as a measurement of performance, "Green AI" includes the cost of this model.
+Most of the accuracy gains of these models result from increasingly complex models~(\cite{schwartz_2019_greenai}). From 2013 to 2019, the required compute power for training deep learning models increased by a factor of $300,000$~(\cite{amodei_2018_ai-and-compute}). This also leads to an increase in required energy and results in significant carbon dioxide emissions. \cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances} showed that the training process of a 6 billion parameter transformer model (trained for approximately $13$\% of the total training time) consumes $\sim 10$M $CO_2$ grams. That is equivalent to a US household's yearly home energy demands per year. Further, this massive computing capacity is exclusively accessible by a few organizations, making the developed state-of-the-art models inaccessible to many researchers. To make \ac{AI} more environmental-friendly and inclusive, \textcite{schwartz_2019_greenai} proposed "Green AI" as an alternative to the accuracy-focused "Red AI". Besides accuracy as a measurement of performance, "Green AI" includes the cost of this model.
 
-Also, in forest science, deep learning approaches gained popularity for diverse tasks and data sets~(\cite{hamedianfar_2022_deep-learning-for-forest-inventory-and-planning-a-critical-review-on-the-remote-sensing-approaches-so-far-and-prospects-for-further-applications}), such as tree species classification based on lidar data~(\cite{liu_2021_tree-species-classification-of-lidar-data-based-on-3D-deep-learning}, \cite{seidel_2021_predicting-tree-species-from-3D-laser-scanning-point-clouds-using-deep-learning}).
-Further, network architectures optimized for point cloud classification and segmentation were proposed~\cite{2017_qi_pointnet}.
-Often training data is a bottleneck for the application of neural networks. Especially in the field of environmental research, collecting data requires substantial effort. Therefore, Helios++ was developed by~\cite{9906068} to generate synthetic lidar data. This synthetic lidar data can then be used for pre-training a model. In that way, valuable field data can be used for fine-tuning.
+Also, in forest science, deep learning approaches gained popularity for diverse tasks and data sets~(\cite{hamedianfar_2022_deep-learning-for-forest-inventory-and-planning-a-critical-review-on-the-remote-sensing-approaches-so-far-and-prospects-for-further-applications}), such as tree species classification based on \ac{lidar} data~(\cite{liu_2021_tree-species-classification-of-lidar-data-based-on-3D-deep-learning}, \cite{seidel_2021_predicting-tree-species-from-3D-laser-scanning-point-clouds-using-deep-learning}).
+Further, network architectures optimized for point cloud classification and segmentation were proposed~(\cite{2017_qi_pointnet}).
+Often training data is a bottleneck for the application of neural networks. Especially in the field of environmental research, collecting data requires substantial effort. Therefore, Helios++ was developed by~\textcite{9906068} to generate synthetic \ac{lidar} data. This synthetic \ac{lidar} data can then be used for pre-training a model. In that way, valuable field data can be used for fine-tuning.
 As forest science inherently focuses on sustainability, the application of "Green AI" is obvious.
 
-Here, a PyTorch workflow for tree species classification with PointNet and synthetic lidar data will be analyzed, and performance bottlenecks will be identified.
+Here, a PyTorch workflow for tree species classification with PointNet and synthetic \ac{lidar} data will be analyzed.
 Different profiling tools will be evaluated and tested to identify performance bottlenecks. 
 Therefore, the following research objectives will be considered:
 
@@ -263,6 +264,8 @@ Therefore, the following research objectives will be considered:
     \item As this tool should help scientists, the \textbf{usibility is highly important}. The most straightforward tool for doing the job is preferred.
     \item Unlike training benchmark suites like MLPerf, it will not be focused on benchmarking hardware but on optimizing an existing PyTorch workflow.
 \end{itemize}
+
+The code and documents produced during this course can be found in the accompanying GitHub repository\footnote{\url{https://github.com/haukekirchner/scap/}, accessed on:31.3.2023}.
 
 \iffalse
 The introduction is the most important part of such a report. Its general structure is similar to the Abstract but with about one paragraph per section as listed again below.
@@ -337,19 +340,19 @@ func main() {
 \subsection{Tree species classification based on synthetic lidar data}
 \label{sec:workflow}
 
-The use case for testing profiling options for PyTorch is lidar-based tree species classification. 
-Several applications of deep learning approaches for analyzing lidar data were recently proposed (~\cite{2017_qi_pointnet, 2021_krisanski_fsct}).
-As the computation cost for 3D convolutions is high, analyzing a workflow for lidar data processing is an ideal real-world example exploring the capabilities of PyTorch profilers.
+The use case for testing profiling options for PyTorch is \ac{lidar}-based tree species classification. 
+Several applications of deep learning approaches for analyzing \ac{lidar} data were recently proposed (~\cite{2017_qi_pointnet, 2021_krisanski_fsct}).
+As the computation cost for 3D convolutions is high, analyzing a workflow for \ac{lidar} data processing is an ideal real-world example exploring the capabilities of PyTorch profilers.
 
-In the project ForestCare~\footnote{https://hps.vi4io.org/research/projects/forestcare/start, accessed on: 13.03.2023}, a pre-training workflow based on synthetic lidar data was developed to overcome the lack of available pre-trained neural networks for tree species classification.
+In the project ForestCare\footnote{https://hps.vi4io.org/research/projects/forestcare/start, accessed on: 13.03.2023}, a pre-training workflow based on synthetic \ac{lidar} data was developed to overcome the lack of available pre-trained neural networks for tree species classification.
 A detailed description of this workflow can be found in~\Cref{fig:lidar-workflow}.
-The code for pre-training the pointnet model can be found in the accompanying GitHub repository~\footnote{\url{https://github.com/haukekirchner/scap/}, accessed on: 22.02.2023}.
+The code for pre-training the pointnet model can be found in the accompanying GitHub repository\footnote{\url{https://github.com/haukekirchner/scap/}, accessed on: 22.02.2023}.
 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.5\textwidth]{assets/workflow_synthetic_data}
-\caption[Workflow for generating synthetic lidar data ]{The workflow for generating synthetic lidar data starts with generating tree models. This is done with the software Arbaro\footnote{\url{https://github.com/wdiestel/arbaro}, accessed on: 22.02.2023}~(\cite{weber_1995_arbaro}). Based on these models, Helios++~(\cite{9906068}) is used to simulate lidar data which is similar to data capture with the Zenmuse L1 sensor from DJI\footnote{\url{https://www.dji.com/de/zenmuse-l1}, accessed on: 22.02.2023}. This generated data is used to pre-train a PointNet model proposed by ~\textcite{2017_qi_pointnet}. The figure is adapted from \textcite{9906068}.}
+\caption[Workflow for generating synthetic lidar data ]{The workflow for generating synthetic \ac{lidar} data starts with generating tree models. This is done with the software Arbaro\footnote{\url{https://github.com/wdiestel/arbaro}, accessed on: 22.02.2023}~(\cite{weber_1995_arbaro}). Based on these models, Helios++~(\cite{9906068}) is used to simulate \ac{lidar} data which is similar to data capture with the Zenmuse L1 sensor from DJI\footnote{\url{https://www.dji.com/de/zenmuse-l1}, accessed on: 22.02.2023}. This generated data is used to pre-train a PointNet model proposed by ~\textcite{2017_qi_pointnet}. The figure is adapted from \textcite{9906068}.}
 \label{fig:lidar-workflow}
 \end{figure}
 
@@ -371,7 +374,7 @@ Analog to \ac{FLOPS} \ac{MACs} do report on the software's efficiency. "Most mod
 
 Further, profiling memory consumption is critical, as deep learning applications depend on massive amounts of data. Therefore, efficiently using \ac{GPU}'s internal memory is critical to the overall performance.
 
-Other important profiling measures in deep learning, which are not considered in this report, are Time to Accuracy (TTA) and Average Time to Multiple Thresholds (ATTMT)~(\cite{verma_2019_metrics-ml-benchmarking}). These metrics were out of scope as the tested tools (\Cref{sec:tools-overview}) do not provide this information. However, setting up a workflow to measure these metrics based on the tools tested here is possible.
+Other important profiling measures in deep learning, which are not considered in this report, are Time to Accuracy (TTA) and Average Time to Multiple Thresholds (ATTMT)~(\cite{verma_2019_metrics-ml-benchmarking}). These metrics were out of scope as the tested tools (\Cref{sec:tools-overview}) do not provide this information. However, setting up a workflow to measure these metrics based on the tools tested here is possible by combining them with early stopping approaches.
 
 % Please add the following required packages to your document preamble:
 % \usepackage{booktabs}
@@ -395,13 +398,13 @@ MACs                                                                            
 \subsubsection{Overview of profiling tools}
 \label{sec:tools-overview}
 
-Many different profiling tools can be used to gain insights into the PyTorch workflow presented in~\Cref{sec:workflow} exist. 
+Many different profiling tools can be used to gain insights into the PyTorch workflow presented in~\Cref{sec:workflow}. 
 ~\Cref{tab:tools} lists some of the considered options.
-General profiling tools such as Intel's Vtune~\footnote{\url{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}, accessed on: 22.11.2022} or the open-source software LIKWID\footnote{\url{https://github.com/RRZE-HPC/likwid}, accessed on: 22.11.2022} can be used to collect valuable metrics of any software.
+General profiling tools such as Intel's Vtune\footnote{\url{https://www.intel.com/content/www/us/en/developer/tools/oneapi/vtune-profiler.html}, accessed on: 22.11.2022} or the open-source software LIKWID\footnote{\url{https://github.com/RRZE-HPC/likwid}, accessed on: 22.11.2022} can be used to collect valuable metrics of any software.
 
 However, tools were developed specifically to the needs one needs to profile PyTorch workflows.
-One popular tool is the in-build PyTorch profiler, which can be combined with Tensorboard~\footnote{\url{https://www.tensorflow.org/tensorboard/}, accessed on: 16.03.2023}. This graphical visualization can be used for beginners and experts to optimize their workflows, as it provides automatic performance recommendations and detailed views such as the call stack or the trace view.
-Another tool specifically designed for PyTorch is DeepSpeed~\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 16.03.2023}. The FlopsProfiler was used here, as the Pytorch Profiler lacks the option to analyze FLOPS.
+One popular tool is the in-build PyTorch profiler, which can be combined with Tensorboard\footnote{\url{https://www.tensorflow.org/tensorboard/}, accessed on: 16.03.2023}. This graphical visualization can be used for beginners and experts to optimize their workflows, as it provides automatic performance recommendations and detailed views such as the call stack or the trace view.
+Another tool specifically designed for PyTorch is DeepSpeed\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 16.03.2023}. The FlopsProfiler was used here, as the Pytorch Profiler lacks the option to analyze FLOPS.
 
 
 General profiling tools could not provide automatic recommendations or useful visualizations to highlight critical aspects and bottlenecks, as they do not have insights into PyTorch. Consequently, more expert knowledge is required to use tools like LIKWID or Vtune.
@@ -428,23 +431,23 @@ tool                              & metrics                                     
 \subsubsection{TensorBoard}
 \label{sec:Tensorboard}
 
-Tensorboard is "TensorFlow's visualization toolkit"~\footnote{\url{https://www.tensorflow.org/tensorboard}, accessed on: 20.3.2023} and is commonly used to visualize the loss and accuracy during the training process of a neural network.
+Tensorboard is "TensorFlow's visualization toolkit"\footnote{\url{https://www.tensorflow.org/tensorboard}, accessed on: 20.3.2023} and is commonly used to visualize the loss and accuracy during the training process of a neural network.
 For most people starting with deep learning, Tensorboard is one of the first tools to get insights into the deep learning workflow.
 Unlike the name implies, this tool is not limited to using TensorFlow but can also be used with PyTorch.
 
 \subsubsection{PyTorch - Profiler}
 \label{sec:m-pytorch-profiler}
 
-A more advanced option to get insights into a PyTorch Workflow is the PyTorch - Profiler, which is "a simple profiler API that is useful when user needs to determine the most expensive operators in the model"~\footnote{\url{https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html}, accessed on: 20.3.2023}.
+A more advanced option to get insights into a PyTorch Workflow is the PyTorch - Profiler, which is "a simple profiler API that is useful when user needs to determine the most expensive operators in the model"\footnote{\url{https://pytorch.org/tutorials/recipes/recipes/profiler_recipe.html}, accessed on: 20.3.2023}.
 With the help of this tool, one can collect general performance metrics, identify expensive operators, and track kernel activity.
-The PyTorch - Profiler can be used with Tensorboard to visualize the profiling outputs~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}.
+The PyTorch - Profiler can be used with Tensorboard to visualize the profiling outputs\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}.
 
 
 \subsubsection{Deepspeed - FlopsProfiler}
 \label{sec:m-FLOPSprofiler}
 
-DeepSpeed is a collection of tools that can help to optimize deep learning workflows~\footnote{\url{https://www.deepspeed.ai/}, accessed on: 20.3.2023}.
-This project's primary interest was on the FlopsProfiler~\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 20.3.2023}. 
+DeepSpeed is a collection of tools that can help to optimize deep learning workflows\footnote{\url{https://www.deepspeed.ai/}, accessed on: 20.3.2023}.
+This project's primary interest was on the FlopsProfiler\footnote{\url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 20.3.2023}. 
 As the name implies, the FlopsProfiler can measure the efficiency (\ac{FLOPS}) for both the training and inference of a deep learning model. Further, it can profile the model's speed (latency, throughput).
 Contrary to the PyTorch Profiler, the output is text-based without a visualization tool.
 
@@ -467,7 +470,7 @@ The main focus is on comparing the PyTorch - Profiler and DeepSpeed's Flops Prof
 
 Based on this experiment design, 16 different runs were executed~(\Cref{tab:experiments-all}).
 Two more runs were included to test the performance recommendations of the PyTorch Profiler (runs 17 and 20).
-Another two runs show the effect of an unoptimized data loading process, where the raw point cloud is loaded every time, and the point sampling process happens afterward (runs 18 and 19).
+Another two runs show the effect of an unoptimized data loading process, where the raw point cloud is loaded every time, and the point sampling process happens afterward (runs 18 and 19) (more details can be found in \Cref{sec:r-data-loading}).
 
 \begin{table}[H]
 \centering
@@ -507,7 +510,7 @@ run & node         & tool           & job\_id  & is\_valid & experiment     \\ \
 
 As we were aware that due to the massive amount of data we want to process, the data loading process is a bottleneck, it was decided to optimize this aspect before doing all remainig runs presented in~\Cref{sec:m-experiments}. This way, it was possible to run more experiments without wasting valuable \ac{GPU} hours for all users on the \ac{SCC}. The idea is to speed up the data-loading process by migrating the point sampling to a pre-processing workflow. Point sampling means selecting the number of points per tree the neural network architecture pointnet expects as input. Thus, it is possible to reduce the data size by a factor of $ 1714.55 $, from $931 GB $ to $543 MB $. 
 
-As the data loading process was the major bottleneck, reducing data that needs to be loaded during the training process significantly speeds up the whole training workflow. For example, while it still took $~4 hours$ to train the network on the GTX 1080 in the unoptimized version, it only took $~16 minutes$ for the optimized version. Similarly, the training process on the \ac{CPU} was decreased from $~14$ hours and $15$ minutes to $~2$ hours and $49$ minutes. This means a speed up for the \ac{CPU} by a factor of $~5$ and for the \ac{GPU} (GTX 1080) a speed up by a factor of $~14$.
+As the data loading process was the major bottleneck, reducing data that needs to be loaded during the training process significantly speeds up the whole training workflow (\Cref{fig:sacct_barplot_by_nodes_sample-points-effect}). For example, while it still took $~4$hours to train the network on the GTX 1080 in the unoptimized version, it only took $~16$minutes for the optimized version. Similarly, the training process on the \ac{CPU} was decreased from $~14$ hours and $15$ minutes to $~2$ hours and $49$ minutes. This means a speed up for the \ac{CPU} by a factor of $~5$ and for the \ac{GPU} (GTX 1080) a speed up by a factor of $~14$.
 
 So far, the optimization problem has been solved by expert knowledge about the workflow and the data. Simultaneously the PyTorch - Profiler was tested to identify the bottleneck in the data loader. Unfortunately, the overview did not help identify the issue. Only an analysis of the trace view revealed that the function for reading the data takes up a large part of the time and thus slows down the workflow (\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}). More details on the PyTorch - Profiler can be found in~\Cref{sec:r-pytorch-profiler}.
 
@@ -522,9 +525,9 @@ So far, the optimization problem has been solved by expert knowledge about the w
 \subsection{Effect of the accelerators and profiling tools on the runtime}
 \label{sec:r-runtime}
 
-The simplest method to get a first estimate for the performance of all different runs is to look at the elapsed time for each analysis. On the \ac{SCC} jobs are executed via SLURM~\footnote{\url{https://slurm.schedmd.com/}, accessed on: 21.3.2023} which provides the tool \texttt{sacct}\footnote{\url{https://slurm.schedmd.com/sacct.html}, accessed on: 21.3.2023} for analyzing accounting information, such as elapsed time of a job. The raw output and the command to get this information can be found in the Appendix (~\Cref{lst:sacct_out}, \Cref{lst:sacct_command}). 
+The simplest method to get a first estimate for the performance of all different runs is to look at the elapsed time for each analysis. On the \ac{SCC} jobs are executed via SLURM\footnote{\url{https://slurm.schedmd.com/}, accessed on: 21.3.2023} which provides the tool \texttt{sacct}\footnote{\url{https://slurm.schedmd.com/sacct.html}, accessed on: 21.3.2023} for analyzing accounting information, such as elapsed time of a job. The raw output and the command to get this information can be found in the Appendix (~\Cref{lst:sacct_out}, \Cref{lst:sacct_command}). 
 
-Most apparent is the difference between runs on the \ac{CPU} and the \ac{GPU}s (\Cref{fig:sacct_barplot_by_nodes_no-experiment}). The mean runtime for jobs on \ac{CPU}s is $9669.333$ seconds, and for runs on the \ac{GPU}s, $513.25$ seconds. Further, it is notable that DeepSpeed is not compatible with \ac{CPU}s. A more detailed view on runs using the \ac{GPU}s (\Cref{fig:sacct_barplot_by_nodes_no-experiment_gpu}) shows that the GTX 1080 node is slower (mean runtime of $13$ minutes) than the RTX 5000 node (mean runtime of $7.65$ minutes). The fastest node is the V100, with a mean runtime of $5.02$ minutes.
+Most apparent is the difference between runs on the \ac{CPU} and the \ac{GPU}s (\Cref{fig:sacct_barplot_by_nodes_no-experiment}). The mean runtime for jobs on \ac{CPU}s is $161.16$ minutes, and for runs on the \ac{GPU}s, $8.55$ minutes. Further, it is notable that DeepSpeed is not compatible with \ac{CPU}s. A more detailed view on runs using the \ac{GPU}s (\Cref{fig:sacct_barplot_by_nodes_no-experiment_gpu}) shows that the GTX 1080 node is slower (mean runtime of $13$ minutes) than the RTX 5000 node (mean runtime of $7.65$ minutes). The fastest node is the V100, with a mean runtime of $5.02$ minutes.
 
 No clear trend can be observed regarding the overhead of the different profiling tools. Generally, the PyTorch - Profiler creates the highest overhead. However, on nodes GTX 1080 and RTX 5000, runs using DeepSpeed's FlopsProfiler or TensorBoard are faster than baseline runs without any tools.
 
@@ -542,7 +545,10 @@ No clear trend can be observed regarding the overhead of the different profiling
 \label{fig:sacct_barplot_by_nodes_no-experiment_gpu}
 \end{figure}
 
+\pagebreak
 \subsection{Results of the profiling tools}
+
+Following the results and outputs from all tested profilers are described individually.
 
 \subsubsection{TensorBoard}
 \label{sec:r-tensorboard}
@@ -554,13 +560,13 @@ The minimal example for using a TensorBoard to keep track of the model's trainin
 
 When visualizing the profiling results of the PyTorch Profiler with Tensorboard, the first view visible is the "Overview". This view is one of six different views, showing different details of the profiler output. If not labeled differently here, the output of the PyTorch - Profiler run on the GTX 1080 with optimized batch size of 64~(run 17 \Cref{tab:experiments-all}) will be discussed.
 
-The "Overview"~(\Cref{fig:scap_gtx1080_profiler-torch_14650076}) gives "a high-level summary of the model performance"~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}. It can be subdivided into five different panes. On top, there are the panes "Configuration", "GPU Summary", and "Execution Summary". In "Configuration", information about the number(s) of workers and device type (\ac{CPU} or \ac{GPU}) are listed. The "GPU Summary" provides information about the GPU utilization by showing different metrices~\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.3.2023}, such as "GPU Utilization" and the "Estimated Stream Multiprocessor Efficiency". Here the metrics indicate that the utilization of the GPU is relatively low for the tested workflow. The same can be seen in the "Execution Summary", where the time spent on the kernel is low. Here, the profiler misses detecting the DataLoader operations and sums up most of the time spent for the workflow in the category "Other". The "Step Time Breakdown" visualizes the same information as the "Execution Summary" per step. However, in the tested example, just the first step was visualized. The last pane, "Performance Recommendation", provides hints for optimizing the PyTorch workflow. Here, the profiler detected a low \ac{GPU} utilization where a common strategy is to increase the batch size. Testing this recommendation showed that increasing the batch size from 32 to 64 improved the GPU utilization by $~10\%$~(\Cref{fig:scap_gtx1080_profiler-torch_comparison-batch-size}). As the utilization is still low, the performance recommendation remains the same. Nevertheless, increasing the batch size to 64 lead to a decrease in GPU utilization.
+The "Overview"~(\Cref{fig:scap_gtx1080_profiler-torch_14650076}) gives "a high-level summary of the model performance"\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}. It can be subdivided into five different panes. On top, there are the panes "Configuration", "GPU Summary", and "Execution Summary". In "Configuration", information about the number(s) of workers and device type (\ac{CPU} or \ac{GPU}) are listed. The "GPU Summary" provides information about the GPU utilization by showing different metrices\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 22.3.2023}, such as "GPU Utilization" and the "Estimated Stream Multiprocessor Efficiency". Details on the metrics can be found in the corresponding Github repository\footnote{\url{https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md}, accessed on: 27.22023}. Here the metrics indicate that the utilization of the GPU is relatively low for the tested workflow. The same can be seen in the "Execution Summary", where the time spent on the kernel is low. Here, the profiler misses detecting the DataLoader operations and sums up most of the time spent for the workflow in the category "Other". The "Step Time Breakdown" visualizes the same information as the "Execution Summary" per step. However, in the tested example, just the first step was visualized. The last pane, "Performance Recommendation", provides hints for optimizing the PyTorch workflow. Here, the profiler detected a low \ac{GPU} utilization where a common strategy is to increase the batch size. Testing this recommendation showed that increasing the batch size from 32 to 64 improved the GPU utilization by $~10\%$~(\Cref{fig:scap_gtx1080_profiler-torch_comparison-batch-size}). As the utilization is still low, the performance recommendation remains the same. Nevertheless, increasing the batch size to 64 lead to a decrease in GPU utilization.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\textwidth]{./assets/scap_gtx1080_profiler-torch_14650076}
 \vspace{-0.5em}
-\caption[PyTorch - Profiler: Overview]{Visualizing the profiling results of the PyTorch - Profiler with Tensorboard provides an overview page. This page summarizes important metrics of the workflow, such as \ac{GPU} utilization. Details on the metrics can be found in the corresponding Github repository~\footnote{\url{https://github.com/pytorch/kineto/blob/main/tb_plugin/docs/gpu_utilization.md}, accessed on: 27.22023}. Further, it offers performance recommendations on how to adress potential bottlenecks. This "Overview" shows the result for run 17 in \Cref{tab:experiments-all}.}
+\caption[PyTorch - Profiler: Overview]{Visualizing the profiling results of the PyTorch - Profiler with Tensorboard provides an overview page. This page summarizes important metrics of the workflow, such as \ac{GPU} utilization. Further, it offers performance recommendations on how to adress potential bottlenecks. This "Overview" shows the result for run 17 in \Cref{tab:experiments-all}.}
 \label{fig:scap_gtx1080_profiler-torch_14650076}
 \end{figure}
 
@@ -579,18 +585,18 @@ As already stated in the "Overview", it can be seen that the GPU is most of the 
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
 \vspace{-6em}
-\caption[PyTorch - Profiler: Trace View of data input]{The "Trace View" provides insights into the operators and GPU kernels over time. Here the read operation of the lidar data based on pre-sampled point clouds is analyzed.}
+\caption[PyTorch - Profiler: Trace View of data input]{The "Trace View" provides insights into the operators and GPU kernels over time. Here the read operation of the \ac{lidar} data based on pre-sampled point clouds is analyzed.}
 \label{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_trace-view-laspy}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=1\textwidth]{./assets/scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
-\caption[PyTorch - Profiler: Trace View of data input for run 18]{The trace view of the unoptimized workflow (run 18~\Cref{tab:experiments-all}), loading the raw lidar data, shows that a significant part of the time is spend on the reading opertions.}
+\caption[PyTorch - Profiler: Trace View of data input for run 18]{The "Trace View" of the unoptimized workflow (run 18~\Cref{tab:experiments-all}), loading the raw \ac{lidar} data, shows that a significant part of the time is spend on the reading opertions.}
 \label{fig:scap_gtx1080_profiler-torch_sample-points_14650750_trace-view-laspy}
 \end{figure}
 
-Different views provided by the PyTorch - Profiler are "Operator", "GPU Kernel", "Memory", and "Module".
+Further views provided by the PyTorch - Profiler are "Operator", "GPU Kernel", "Memory", and "Module".
 The "Operator" view provides insights into the profiling results of PyTorch's operators~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view}). Self-time refers to the duration of the operator without child operators, which are included in the total time. For example, it can be seen that the operator \texttt{aten::copy\_} is expensive. Also, the View CallStack can be shown in this view~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_operator-view-details}).
 The "GPU Kernel" view shows for all kernels the time that was spent on the \ac{GPU}~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_gpu-kernel-view}). More information about the metrics used in this view can be found on the official tutorials website\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}.
 The "Memory" view gives information about memory usages, such as allocation and release events. This view consists of a "memory curve graph, memory events table, and memory statistics table"\footnote{\url{https://pytorch.org/tutorials/intermediate/tensorboard_profiler_tutorial.html}, accessed on: 20.3.2023}~(\Cref{fig:scap_gtx1080_profiler-torch_batch-size-64_14650758_memory-view}).
@@ -600,7 +606,7 @@ The "Module" view shows profiling results (occurrences, time) per PyTorch module
 \subsubsection{DeepSpeed - FlopsProfiler}
 \label{sec:r-flopsprofiler}
 
-The output of the DeepSpeed - Flops Profiler is a textfile~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}), which provides metrics on different levels of the network. The first part summarizes metrics for the whole neural network, such as the model parameters, \ac{MACs}, number of floating-point operations (flops), floating-point operations per second (FLOPS), and latency. Precise definitions of these metrics can be found in the output file~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}). For this example run~(run 8 \Cref{tab:experiments-all}), a total of $14.07$ GMACs ($29.04$ Gflops) were measured. Dividing this by the forward propagation latency shows that for the whole model, the floating-point operations per second are $349.1$ GFLOPS.
+The output of the DeepSpeed - Flops Profiler is a textfile~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}), which provides metrics on different levels of the network. The first part summarizes metrics for the whole neural network, such as the model parameters, \ac{MACs}, number of floating-point operations (flops), floating-point operations per second (FLOPS), and latency. Precise definitions of these metrics can be found in the output file~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-full}). For this example run~(run 8 \Cref{tab:experiments-all}), a total of $14.07$ GMACs ($29.04$ Gflops) was measured. Dividing this by the forward propagation latency shows that for the whole model, the floating-point operations per second are $349.1$ GFLOPS.
 
 \begin{listing}[H]
 \inputminted[xleftmargin=1em,linenos,fontsize=\small, firstline=2,lastline=16, breaklines]{python}{./assets/scap_gtx1080_deepspeed_14615344_4294967294_one-epoch.txt}
@@ -608,7 +614,7 @@ The output of the DeepSpeed - Flops Profiler is a textfile~(\Cref{lst:scap_gtx10
 \label{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-summary}
 \end{listing}
 
-The second part of the DeepSpeed - FlopsProfiler's output~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-aggregated}) reports on the top modules in different depths of the model. Top modules are defined based on the number of parameters, \ac{MACs}, and forward propagation latency are considered. In-depth 0 the whole PointNet model is considered so that the profiling results are the same as in the first part of the output~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-summary}).
+The second part of the DeepSpeed - FlopsProfiler's output~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-aggregated}) reports on the top modules in different depths of the model. Top modules are defined based on the number of parameters, \ac{MACs}, and forward propagation latency. In-depth 0 the whole PointNet model is considered so that the profiling results are the same as in the first part of the output~(\Cref{lst:scap_gtx1080_deepspeed_14615344_4294967294_one-epoch-summary}).
 In depth 1 it can be seen that most of the resources are spent on the Transform module. For example, $14.05$ GMACs out of $14.07$ GMACs are spent on this module.
 The top module in depth 2 is the Tnet with $9.34$ GMACs.
 
@@ -629,7 +635,7 @@ In the detailed profile, the metrics are reported for all submodules of the mode
 \subsubsection{Usability of the different tools}
 \label{sec:r-usability}
 
-The tools provide different \ac{API}s, such as a context manager, as a decorater, or a Python module\footnote{\url{https://www.alcf.anl.gov/sites/default/files/2022-08/Profiling.pdf}, accessed on: 23.3.2023}. For example, the DeepSpeed Flops Profiler can be activated in DeepSpeed's runtime, which would not require to adapt the Python code at all. However, for this project all tools were used as Python packages. This requires to insert a few lines of code (8 to 13). The important parts of the code and their placement in the training code is shown in ~\Cref{lst:tensorboard}, \Cref{lst:profiler-torch}, and \Cref{lst:deepspeed}.
+The tools provide different \ac{API}s, such as a context manager, a decorater, or a Python module\footnote{\url{https://www.alcf.anl.gov/sites/default/files/2022-08/Profiling.pdf}, accessed on: 23.3.2023}. For example, the DeepSpeed Flops Profiler can be activated in DeepSpeed's runtime, which would not require to adapt the Python code at all. However, for this project all tools were used as Python packages. This requires to insert a few lines of code. The important parts of the code and their placement in the training code is shown in ~\Cref{lst:tensorboard}, \Cref{lst:profiler-torch}, and \Cref{lst:deepspeed}.
 %todo how to parse the profiling output
 
 
@@ -638,16 +644,16 @@ The tools provide different \ac{API}s, such as a context manager, as a decorater
 
 Generally, the used profilers, PyTorch Profiler and DeepSpeed's FlopsProfiler, provide interesting and valuable insights into the training process of a PyTorch model, which can be used for optimization purposes. Nevertheless, also with the beginner-friendly TensorBoard approach, tracking the accuracy and loss, details of the training process can be analyzed.
 
-The data loading process was the most apparent bottleneck for the PointNet workflow analyzed for this report. This bottleneck was seen in the PyTorch Profiler's logs and using expert knowledge about the size of the input data and the point data sampling technique within the data loader. 
+The data loading process was the most apparent bottleneck for the PointNet workflow analyzed for this report. This bottleneck could be seen in the PyTorch Profiler's logging output or using expert knowledge about the size of the input data and the point data sampling technique within the data loader. 
 In \Cref{fig:sacct_barplot_by_nodes_sample-points-effect}, two essential aspects for optimizing the PointNet workflow can be seen. First, the speedup for each compute node by migrating the point sampling process to a pre-processing step of the workflow. Second, there is a substantial difference between the runtimes of the \ac{CPU} and \ac{GPU}. Here it can be seen how important the use of accelerators, such as \ac{GPU}s, is for training deep neural networks.
 Further, \Cref{fig:sacct_barplot_by_nodes_no-experiment_gpu} shows the performance gain one can get by using faster \ac{GPU} nodes on the cluster and the compute overhead each tool is generating due to its measurement activities and the writing of logging files. The overhead created by the PyTorch Profiler seems to be the highest. Interestingly, the runs without any tool on the GTX 1080 and RTX 5000 are slower than those profiled with DeepSpeed's FlopsProfiler and TensorBoard.
 However, the mean of several identical runs would be required for a reliable performance comparison. Additionally, a performance comparison between nodes on the \ac{SCC} is more complicated because the compute nodes are shared resources, and computations by other users could affect the measurements. 
 
 An easy starting point for profiling the training process of a PyTorch model is TensorBoard. Most will be familiar with this tool as it is commonly used in beginner introductions to deep learning. In addition, the user-friendly visualization as a dashboard and the interactivity increases the accessibility.
-For example, the loss and accuracy curves shown in TensorBoard make overfitting visible, and the training process could be stopped manually or by early stopping rules. Additionally, checkpoints can prevent the re-training of models in such a case. These easy strategies for reducing the cost of training neural networks are also recommended by the authors of the paper Green AI~\cite{schwartz_2019_greenai} in their interview at the Practical AI podcast\footnote{\url{https://changelog.com/practicalai/124}, accessed on: 30.3.2023}.
+For example, the loss and accuracy curves shown in TensorBoard make overfitting visible, and the training process could be stopped manually or by early stopping rules. Additionally, checkpoints can prevent the re-training of models in such a case. These easy strategies for reducing the cost of training neural networks are also recommended by the authors of the paper Green AI~(\cite{schwartz_2019_greenai}) in their interview at the Practical AI podcast\footnote{\url{https://changelog.com/practicalai/124}, accessed on: 30.3.2023}.
 
 Also, the PyTorch Profiler profits from intuitive visualizations in Tensorboard.
-Especially the Overview page, with its performance recommendations, can be handy for beginners. Nevertheless, the effect of these recommendations should still be checked, as was shown in~\Cref{fig:scap_gtx1080_profiler-torch_comparison-batch-size}.
+Especially the Overview page, with its performance recommendations, can be handy for beginners. Nevertheless, the effect of these recommendations should still be checked, as shown in~\Cref{fig:scap_gtx1080_profiler-torch_comparison-batch-size}.
 Further, the Trace view provided essential insights into the training workflow, highlighting the most resource intense operators. This helped identify the data reading as a bottleneck of the workflow.
 More complicated is the evaluation of the other views, which report on the model's performance on a low level and sometimes require knowledge about the implementation of PyTorch and the model's architecture to make good use of it. 
 
@@ -802,19 +808,19 @@ sacct --format=jobid,elapsed -P -j 14657599, 14617521, 14615343, 14650076, 14615
 
 \begin{listing}[H]
 \inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,9-12,14-16}]{python}{./assets/tensorboard.py}
-\caption[Code example for Tensorboard]{Highlighted parts of the code are required to use Tensorboard for profiling the training process of the neural network.}
+\caption[Code example for Tensorboard]{Highlighted parts of the code are required to use Tensorboard for profiling the training process of the neural network. The implementation can be found in the accompanying GitHub repository: \url{https://github.com/haukekirchner/scap/blob/main/code/pointnet/train.py}}
 \label{lst:tensorboard}
 \end{listing}
 
 \begin{listing}[H]
 \inputminted[breaklines, xleftmargin=1em,linenos,fontsize=\small, highlightlines={4-10,14,15}]{python}{./assets/profiler-torch.py}
-\caption[Code example for PyTorch - Profiler]{Highlighted parts of the code are required to use the PyTorch Profiler for profiling the training process of the neural network.}
+\caption[Code example for PyTorch - Profiler]{Highlighted parts of the code are required to use the PyTorch Profiler for profiling the training process of the neural network. The implementation can be found in the accompanying GitHub repository: \url{https://github.com/haukekirchner/scap/blob/main/code/pointnet/train.py}}
 \label{lst:profiler-torch}
 \end{listing}
 
 \begin{listing}[H]
 \inputminted[xleftmargin=1em,linenos,fontsize=\small, highlightlines={1,3,4,8,9,11-18}]{python}{./assets/deepspeed.py}
-\caption[Code example for Deepspeed - FLOPSProfiler]{Highlighted parts of the code are required to use Deepspeed - FLOPSProfiler for profiling the training process of the neural network.}
+\caption[Code example for Deepspeed - FLOPSProfiler]{Highlighted parts of the code are required to use Deepspeed - FLOPSProfiler for profiling the training process of the neural network. The implementation can be found in the accompanying GitHub repository: \url{https://github.com/haukekirchner/scap/blob/main/code/pointnet/train.py}}.
 \label{lst:deepspeed}
 \end{listing}
 
