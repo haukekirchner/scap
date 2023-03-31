@@ -114,6 +114,11 @@ Linky}}
 	\titlepage
 \end{frame}
 
+\begin{frame}{Course Agenda}
+\centering
+\includegraphics[width=0.9\textwidth]{assets/dlgpu_agenda}
+\end{frame}
+
 \begin{frame}[t]{Table of contents}
   \tableofcontents[subsectionstyle=hide/hide]
 \end{frame}
@@ -363,6 +368,7 @@ Time to Accuracy (TTA)                                                          
     \source{Tutorial: \url{https://www.deepspeed.ai/tutorials/flops-profiler/}, accessed on: 24.03.2023}
 \end{frame}
 
+\section{Practical}
 
 \begin{frame}{Profiling is the first step of optimizing}
 
@@ -387,43 +393,47 @@ Time to Accuracy (TTA)                                                          
 
 \end{frame}
 
-\begin{frame}[fragile]{Try it yourself!}
-\label{pg:lastpage} % Label on last frame to get the page number for footer
+
+\begin{frame}[fragile]{Practical}
 \centering
 
-\begin{block}{Hints}
+\begin{block}{Task 1: Run the training job with the profilers. (15 min)}
     \begin{itemize}
-        \item Set number of epochs to one
+        \item Add the code for using the profilers to \href{https://gitlab-ce.gwdg.de/dmuelle3/deep-learning-with-gpu-cores/-/blob/096a3d35e76d60ab557b150c9c3584a0f2c6e52c/code/train.py}{train.py}\footnote{a solution is provided in \href{https://gitlab-ce.gwdg.de/dmuelle3/deep-learning-with-gpu-cores/-/blob/096a3d35e76d60ab557b150c9c3584a0f2c6e52c/code/train_with_logger.py}{train_with_logger.py}}
+        \item Set the number of epochs to 1 and interrupt the training after 5 batches of data (see \texttt{fast\_run} option in \texttt{train\_with\_logger.py})
+        \item decrease time requested in SLURM to 20 minutes
         \begin{itemize}
-            \item in \texttt{/code/train.py} $\rightarrow$ \texttt{epoch = 1}
-        \end{itemize}
-            \item decrease time requested in SLURM
-        \begin{itemize}
-            \item in \texttt{code/submit\_train.sh} $\rightarrow$ \texttt{#SBATCH -t 00:20:00}
+            \item in \texttt{code/submit\_train.sh} $\rightarrow$ \texttt{\#SBATCH -t 00:20:00}
         \end{itemize}
     \end{itemize}
 \end{block}
 
-\begin{block}{Backup}
-\vspace{-0.5em}
-\begin{lstlisting}[breaklines=true,numbers=none,frame=none,basicstyle=\scriptsize]
-# download example profiling output 
-rsync -avvH <user>@glogin9.hlrn.de:/scratch/projects/\
-workshops/gpu-workshop/profiling_example ~/Downloads
-cd ~/Downloads/profiling_example/train-nn-gpu_4464217
-# open PyTorch Profiler's output with TensorBoard
-tensorboard --logdir=./profiler
-# open DeepSpeed's output with texteditor
-vim slurm-train-nn-gpu-4464217.out
-\end{lstlisting}
-\end{block}
+\end{frame}
 
+\begin{frame}[fragile]{Practical}
+\label{pg:lastpage} % Label on last frame to get the page number for footer
+\centering
+\begin{block}{Task 2: Analyze the profilers output (15 min)}
+\begin{itemize}
+    \item Download the output of the PyTorch profiler and visualize it with TensorBoard
+    \item The output of DeepSpeed's FlopsProfiler is in the slurm output file
+    \item An example output of the profilers can be found in our course directory
+    \begin{itemize}
+        \item Instructions on how to use them can be found in the \href{https://gitlab-ce.gwdg.de/dmuelle3/deep-learning-with-gpu-cores/-/tree/main/#download-and-visualize-profiling-results-of-example-run}{README}
+    \end{itemize}
+\end{itemize}
+\end{block}
 \end{frame}
 
 \begin{frame}{References}
     % References slide in appendix
     \renewcommand*{\bibfont}{\normalfont\scriptsize}
     \printbibliography[heading=none]
+\end{frame}
+
+\begin{frame}{Course Agenda}
+\centering
+\includegraphics[width=0.9\textwidth]{assets/dlgpu_agenda}
 \end{frame}
 
 \end{document}
