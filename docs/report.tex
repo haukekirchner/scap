@@ -171,6 +171,10 @@ Supervisor: \supervisor
 \section*{Abstract}
 
 
+Recent developments in \ac{AI}~(\cite{rombach_2022_high-resolution-image-synthesis-with-latent-diffusion-models, openai_2023_gpt4-4-technical-report}) were achieved with increasingly complex models~(\cite{schwartz_2019_greenai}). These achievements lead to the increasing usage of \ac{AI} in a broad range of industries and research (\cite{zhang_2022_ai-report}), which results in high demand for compute power and a growing energy consumption~(\cite{20220610_dodge_measuring-the-carbon-intensity-of-ai-in-cloud-instances}).
+Especially in environmental research, such as forest science, sustainability is fundamental, and the emerging use of \ac{AI} should not lead to the opposite effect by increasing the researcher's carbon footprint. Further, most researchers depend on fast training and inference. For example, the model should predict tomorrow's weather before tomorrow.
+Therefore, the optimization of deep learning models is essential. The efficient profiling and evaluation of profiling outputs must be done as a first step of optimization. This project will evaluate tools and metrics for profiling a PyTorch model's training process. Here the use case of pre-training the PointNet model~(\cite{2017_qi_pointnet}) with synthetic \ac{lidar} data for tree species classification will be used. It will be shown how a simple bottleneck can slow down the training process by factor 14 and how the profilers can help to identify this bottleneck. Further, standard profiling metrics for the given example will be shown and discussed.
+
 \medskip
 \iffalse
 General structure of an abstract, write 1 to 2 sentences per section
